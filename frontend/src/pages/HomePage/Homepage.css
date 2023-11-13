@@ -1,0 +1,123 @@
+.style {
+    box-sizing:border-box;
+}
+.container {
+    height: 90px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0;
+    padding-right: 0;
+    display: block;
+    justify-content: center;
+}
+.building {
+        width: 33px;
+        height: 29px;
+        display: block;
+        margin-left: 360px;
+        margin-top: -8px;
+    } 
+.title {
+    color: white;
+    font-family: "Open Sans",Arial,sans-serif;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 50px;
+    text-align: center;   
+}
+.crowd {
+        width: 33px;
+        height: 29px;
+        display: block;
+        margin-left: 540px;
+        margin-top: -26px;
+    } 
+.fl {
+        width: 33px;
+        height: 29px;
+        display: block;
+        margin-left: 780px;
+        margin-top: -31px;
+}
+.text {
+    text-align: center;  
+    font-family: "Open Sans",Arial,sans-serif;
+    font-size: 18px;
+    line-height: normal;
+    color: white;
+    
+}
+.logoBK {
+    margin-left: 200px;
+    margin-right: auto;
+    margin-top: 20px; 
+    width: 140px;
+    height: 140px;
+    position: absolute;
+    background-color: white;
+    border-radius: 80px;
+}
+.slide1 {
+    margin-top: 15px;
+}
+.slide2 {
+    width: 1320px;
+    height: 90px;
+    background-color: #2162c2;
+}
+.information {
+    margin-left: 60px;
+    margin-right: auto;
+    padding-left: 0;
+    padding-right: 0;
+    height: 450px;
+    display: block;
+    justify-content: center;
+    margin-top: 30px;
+    .text1 {
+        height: 400px;
+        border: 1px solid #000;
+        
+    }
+    
+    .right {
+        margin-left: 960px;
+        margin-top: -440px;
+    }
+
+}
+.title1 {
+    color: white;
+    font-family: "Open Sans",Arial,sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 42px;
+    text-align: left;   
+    margin-left: 50px;
+}
+.p { 
+    font-family: "Open Sans",Arial,sans-serif;
+    font-size: 15px;
+}
+
+.square {
+    border-radius: 1px;
+    width: 10px;
+    height: 10px;
+    margin-left: 80px;
+    margin-top: -15px;
+}
+.gg {
+    width: 20px;
+    height: 20px;
+    margin-top: 70px;
+    margin-left: 50px;
+}
+.call {
+    width: 20px;
+    height: 20px;
+    margin-top: 10px;
+    margin-left: 50px;
+}
