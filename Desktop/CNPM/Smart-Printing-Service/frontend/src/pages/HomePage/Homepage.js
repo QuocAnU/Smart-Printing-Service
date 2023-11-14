@@ -12,12 +12,13 @@ const HomePage = () => {
     const square = require('./../../assets/Image/square.png')
     const gg = require('./../../assets/Image/google-maps.png')
     const call = require('./../../assets/Image/call.png')
+    const logoBK = require('./../../assets/Image/logoBK.png')
     return (
         <Container>
             <Row xs={12}>
                 <Row>
                     <Container>
-                        <img src={'https://e-learning.hcmut.edu.vn/pluginfile.php/1/core_admin/logocompact/300x300/1685588876/logoBK.png'} alt='' className='logoBK' />
+                        <img src={logoBK} alt='' className='logoBK' />
                         <img src={slide1} alt="" className='container' />
                     </Container>
                 </Row>

@@ -4,13 +4,13 @@ import { Link } from 'react-router-dom';
 import './Header.css';
 import Image from 'react-bootstrap/Image';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useState } from 'react';
+// import { useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 
 const Header = () => {
-
+    const logoBK = require('./../../assets/Image/logoBK.png');
 
     return (
         <div className='header'>
@@ -19,7 +19,7 @@ const Header = () => {
                     <Col xs={2} sm={1}>
                         <Link to="/"   >
                             <button style={{ border: 'none', backgroundColor: 'white' }}>
-                                <Image src={'https://e-learning.hcmut.edu.vn/pluginfile.php/1/core_admin/logocompact/300x300/1685588876/logoBK.png'} alt='' style={{ width: '85px', height: '85px' }} />
+                                <Image src={logoBK} alt='' style={{ width: '85px', height: '85px' }} />
                             </button>
                         </Link>
                     </Col>
