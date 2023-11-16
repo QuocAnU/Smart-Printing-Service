@@ -9,14 +9,55 @@ function Button({value}) {
   };
 
   return (
-    <button 
-      onClick={handleClick}
-      className="mt-6 transition transition-all block py-3 px-4 w-full text-white font-bold rounded cursor-pointer bg-gradient-to-r from-indigo-600 to-purple-400 hover:from-indigo-700 hover:to-purple-500 focus:bg-indigo-900 transform hover:-translate-y-1 hover:shadow-lg">
-      {value}
-  </button>
+    <div>
+      <button 
+        onClick={handleClick}
+        className="button_box w-50 h-40 text-white my-2">
+        {value}
+    </button>
+    </div>
   )
 }
 
+function Input({type, id, name, label, placeholder, autofocus}) {
+  return (
+    <div>
+      <div className="d-flex align-items-start mx-4">{label}</div>
+      <input
+        autoFocus={autofocus}
+        type={type} 
+        id={id} 
+        name={name} 
+        placeholder={placeholder}
+        className="input_box rounded px-4 py-3 w-full mt-1 bg-white text-gray-900 border border-gray-200 focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-100"
+      />
+    </div>
+  );
+}
+
+function InputForm() {
+  return (
+    <div className="d-flex flex-column justify-content-start w-100 rounded-circle">
+      <Input
+        type="email" 
+        id="email" 
+        name="email" 
+        label="Email Address" 
+        placeholder="me@example.com" 
+        autofocus={true}
+      />
+      <Input 
+        type="password" 
+        id="password" 
+        name="password" 
+        label="Password" 
+        placeholder="••••••••••" 
+      />
+      <Button value="Submit">
+      </Button>
+    </div>
+  )
+}
 
 const Login = () => {
   const logoBK = require('./../../assets/Image/logoBK.png')
@@ -39,44 +80,8 @@ const Login = () => {
             </div>
 
             <div className = "input_box_layout">
-              <div className = "input_box_content">
-                <div className = "label_box">
-                  <div className = "label_content">Email</div>
-                </div>
-                <div>
-                <input
-                  type="email"
-                  id="email" 
-                  name="email" 
-                  label="Email Address" 
-                  placeholder="me@example.com" 
-                  autofocus={true}
-                  className="input_box rounded px-4 py-3 w-full mt-1 bg-white text-gray-900 border border-gray-200 focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-100"
-                  />
-                </div>
-                <div className = "label_box">
-                  <div className = "label_content">Password</div>
-                </div>
-                <div>
-                <input
-                  type="email"
-                  id="email" 
-                  name="email" 
-                  label="Email Address" 
-                  placeholder="me@example.com" 
-                  autofocus={true}
-                  className="input_box rounded px-4 py-3 w-full mt-1 bg-white text-gray-900 border border-gray-200 focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-100"
-                  />
-                </div>
-                <div className = "label_box button_box">
-                  <button>
-                    Đăng nhập
-                  </button>
-                </div>
-                <div className = "forget_password_box">
-                  Quên mật khẩu
-                </div>
-              </div>                
+              <InputForm></InputForm>
+                <div className = "label_content">Quên mật khẩu</div>            
             </div>
           </div>
         </div>
