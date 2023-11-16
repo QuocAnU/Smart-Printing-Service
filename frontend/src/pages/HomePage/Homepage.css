@@ -23,7 +23,7 @@
     font-size: 30px;
     font-style: normal;
     font-weight: 600;
-    line-height: 50px;
+    line-height: 45px;
     text-align: center;   
 }
 .crowd {
@@ -42,33 +42,33 @@
 }
 .text {
     text-align: center;  
-    font-family: "Open Sans",Arial,sans-serif;
-    font-size: 18px;
-    line-height: normal;
+    font-family: "Open Sans",Arial,sans-serif, bold;
+    font-size: 15px;
     color: white;
+    margin-left: 10px;
+
     
 }
 .logoBK {
-    margin-left: 200px;
+    display: flex;
+    margin-left: 150px;
     margin-right: auto;
     margin-top: 20px; 
     width: 140px;
     height: 140px;
     position: absolute;
-    background-color: white;
-    border-radius: 80px;
+    background-color: rgb(192 191 197 / 13%);
+    border-radius: 100px;
 }
 .slide1 {
     margin-top: 15px;
 }
 .slide2 {
-    width: 1320px;
+    width: 100%;
     height: 90px;
     background-color: #2162c2;
 }
 .information {
-    margin-left: 60px;
-    margin-right: auto;
     padding-left: 0;
     padding-right: 0;
     height: 450px;
@@ -98,26 +98,42 @@
     margin-left: 50px;
 }
 .p { 
-    font-family: "Open Sans",Arial,sans-serif;
-    font-size: 15px;
+    font-size: 18px;
+    color: #000;
+    font-family: Open Sans Hebrew;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    text-align: left
+    ;
 }
-
+.pq {
+    font-size: 13px;
+    color: #000;
+    font-family: Open Sans Hebrew;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    text-align: left
+}
 .square {
     border-radius: 1px;
     width: 10px;
     height: 10px;
-    margin-left: 80px;
-    margin-top: -15px;
+    display: flex;
+    margin-left: 85px;
+    align-items: center;
+    margin-top: 20px;
 }
 .gg {
     width: 20px;
     height: 20px;
-    margin-top: 70px;
-    margin-left: 50px;
+    margin-top: 38px;
+    margin-left: 20px;
 }
 .call {
     width: 20px;
     height: 20px;
-    margin-top: 10px;
-    margin-left: 50px;
+   margin-top: 22px;
+    margin-left: 20px;
 }
