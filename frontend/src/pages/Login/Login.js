@@ -1,23 +1,7 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 import './Login.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-function Button({value}) {
-  const handleClick = (e) => {
-    e.preventDefault();
-    // Rest of your event handling logic
-  };
-
-  return (
-    <div>
-      <button 
-        onClick={handleClick}
-        className="button_box w-50 h-40 text-white my-2">
-        {value}
-    </button>
-    </div>
-  )
-}
 
 function Input({type, id, name, label, placeholder, autofocus}) {
   return (
@@ -53,8 +37,11 @@ function InputForm() {
         label="Password" 
         placeholder="••••••••••" 
       />
-      <Button value="Submit">
-      </Button>
+      <Link to='/buy'>
+        <button className="button_box w-50 h-40 text-white my-2">
+          Đăng Nhập
+        </button>
+      </Link>
     </div>
   )
 }
