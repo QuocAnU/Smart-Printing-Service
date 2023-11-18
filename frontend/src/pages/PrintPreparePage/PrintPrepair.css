@@ -6,7 +6,7 @@
   border: 2px solid;
   padding: 20px;
   min-height: 600px;
-  width: 70%; 
+  width: 60%; 
   float: left;
   margin-left: 30%;
   margin-top: 20px;
@@ -71,4 +71,27 @@ form select::-ms-expand {
 
 .h2-text {
   margin-left: -20%;
+}
+
+.h2-text-file {
+  margin-left: -25%;
+}
+
+.file {
+  padding: 5px;
+  background-color: #F4F4F4;
+  width: auto;
+  max-width: 50%;
+  margin-left: 20%;
+}
+
+.notification {
+  float: right;
+  padding: 10px;
+  color: green;
+  background-color: #ccc;
+}
+
+.left {
+  margin-left: -10%;
 }

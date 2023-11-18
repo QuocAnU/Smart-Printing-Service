@@ -9,6 +9,7 @@ const PrintPrepare = () => {
     const [pageCount, setPageCount] = useState(0);
     const [duplex, setDuplex] = useState(2);
     const [copyCount, setCopyCount] = useState(1);
+    const [showNotification, setShowNotification] = useState(false);
   
     const handleFileDrop = (event) => {
       event.preventDefault();
@@ -18,6 +19,10 @@ const PrintPrepare = () => {
       const fileSize = file.size;
       // Cập nhật thông số của file
       setPageCount(fileSize);
+      setShowNotification(true);
+      setTimeout(() => {
+      setShowNotification(false);
+      }, 4000);
     };
 
     const handleFileUpload = (event) => {
@@ -27,6 +32,10 @@ const PrintPrepare = () => {
       const fileSize = file.size;
       // Cập nhật thông số của file
       setPageCount(fileSize);
+      setShowNotification(true);
+      setTimeout(() => {
+      setShowNotification(false);
+      }, 4000);
     };
   
     const handlePageSizeChange = (event) => {
@@ -47,8 +56,13 @@ const PrintPrepare = () => {
   
     return (
       <div className="Container">
+        {showNotification && (
+        <div className="notification">
+          Đã tải file thành công
+        </div>
+        )}
         <Row>
-        <Col style={{width: "50%"}}>
+        <Col className="left" style={{width: "50%"}}>
           <h3>Tải file lên hệ thống</h3>
           <div className="uploadFrame" 
             onDrop={handleFileDrop} onDragOver={handleDragOver}>
@@ -117,7 +131,18 @@ const PrintPrepare = () => {
             </Row>
             <br />
             <Row>
-                <h2 className="h2-text">File in</h2>
+                <h2 className="h2-text-file">File in</h2>
+                <br />
+                {selectedFile ? 
+                  (<div>
+                    <p  className="file">{selectedFile.name}</p>
+                    <label className="sodu">
+                        Số dư hiện tại: 
+                        <span className="count">300</span>
+                    </label>
+                  </div>) 
+                  : 
+                  (<div></div>)}
             </Row>
         </Col>  
         </Row>
