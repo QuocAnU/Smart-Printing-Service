@@ -19,6 +19,15 @@ const PrintPrepare = () => {
       // Cập nhật thông số của file
       setPageCount(fileSize);
     };
+
+    const handleFileUpload = (event) => {
+      const file = event.target.files[0];
+      setSelectedFile(file);
+      // Lấy thông số của file
+      const fileSize = file.size;
+      // Cập nhật thông số của file
+      setPageCount(fileSize);
+    };
   
     const handlePageSizeChange = (event) => {
       setPageSize(event.target.value);
@@ -43,8 +52,17 @@ const PrintPrepare = () => {
           <h3>Tải file lên hệ thống</h3>
           <div className="uploadFrame" 
             onDrop={handleFileDrop} onDragOver={handleDragOver}>
-            {selectedFile ? (<h4 className="uploadText">Selected File: {selectedFile.name}</h4>) 
-            : (<h4 className="uploadText"><i className="bi bi-upload"></i>Tải file lên</h4>)}
+            {selectedFile ? 
+            (<h4 className="uploadText">
+              Selected File: 
+              {selectedFile.name}</h4>
+            ) 
+            : 
+            (<div>
+              <h4 className="uploadText">Tải file lên</h4>
+              <input className="upload" type="file" onChange={handleFileUpload} />
+              </div>
+            )}
           </div>
         </Col>
         <Col style={{width: "50%"}}>
