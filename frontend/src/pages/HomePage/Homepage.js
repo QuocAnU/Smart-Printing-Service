@@ -2,6 +2,7 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 
+import CountdownTimer from '../../components/CountdownTimer/CountdownTimer'
 import './Homepage.css'
 
 const HomePage = () => {
@@ -13,10 +14,16 @@ const HomePage = () => {
     const gg = require('./../../assets/Image/google-maps.png')
     const call = require('./../../assets/Image/call.png')
     const logoBK = require('./../../assets/Image/logoBK.png')
+
+    const FIFTEEN_MINUTE_IN_MS = 15 * 60 * 1000;
+    const NOW_IN_MS = new Date().getTime();
+
+    const dateTimeAfterThreeDays = NOW_IN_MS + FIFTEEN_MINUTE_IN_MS;
     return (
         <Container>
             <Row xs={12}>
                 <Row>
+                    {/* Demo of using time counter UI */}
                     <Container>
                         <img src={logoBK} alt='' className='logoBK' />
                         <img src={slide1} alt="" className='container' />
@@ -51,6 +58,8 @@ const HomePage = () => {
                                     <h1 className='title1'>Thông tin chung</h1>
                                 </div>
                                 <div className='text1 style'>
+                                    
+                                <CountdownTimer targetDate={dateTimeAfterThreeDays} />
                                     <p className='p' style={{ margin: '35px 50px 10px 50px' }}>Student Smart Printing Service là dịch vụ in in dành cho sinh viên cho phép bạn in từ xa tới bất kỳ máy in nào bạn chọn. </p>
                                     <p className='p' style={{ margin: '0 50px 10px' }}>          Máy in được đặt ở vị trí thuận tiện tại nhiều địa điểm khác nhau trong khuôn viên trường, bao gồm tất cả các thư viện và tòa nhà trong khuôn viên trường.</p>
                                     <p className='p' style={{ margin: '10px 50px 0px' }}>Student Smart Printing Service cho phép sinh viên:</p>
