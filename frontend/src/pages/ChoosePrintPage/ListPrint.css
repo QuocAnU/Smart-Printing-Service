@@ -53,3 +53,29 @@ font-style: normal;
 font-weight: 700;
 line-height: 24px; /* 120% */
 }
+
+
+.status-indicator {
+    text-align: left;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: inline-block;
+    
+}
+
+.status-indicator.ĐANG-ĐẦY {
+    background-color: red; /* Màu tương ứng với trạng thái "ĐANG ĐẦY" */
+    margin-right: 10px;
+    
+}
+
+.status-indicator.ĐANG-TRỐNG {
+    background-color: green; /* Màu tương ứng với trạng thái "ĐANG TRỐNG" */
+    margin-right: 10px;
+}
+
+.status-indicator.CHƯA-ĐẦY {
+    background-color: yellow; /* Màu tương ứng với trạng thái "CHƯA ĐẦY" */
+    margin-right: 10px;
+}
