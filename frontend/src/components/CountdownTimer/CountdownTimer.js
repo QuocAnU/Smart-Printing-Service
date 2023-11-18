@@ -24,7 +24,7 @@ const ShowCounter = ({ minutes, seconds }) => {
       <Image src={clockImage} alt='Clock image' className='Clock-image'></Image>
       
       <DateTimeDisplay value={minutes} type={'phút'} isDanger={false} />
-      <p className='margin: 0;'>:</p>
+      <p className='m-0'>:</p>
       <DateTimeDisplay value={seconds} type={'giây'} isDanger={false} />
     </Stack>
   );
