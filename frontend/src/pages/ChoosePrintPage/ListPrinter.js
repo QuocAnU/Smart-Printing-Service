@@ -110,14 +110,20 @@ const ListPrinter = () => {
                             <strong style={{ textAlign: "left", fontSize: "40px", fontWeight: "700" }}>MÁY IN KHẢ DỤNG</strong>
                         </Col>
                         <Col xs={5} style={{ display: "flex", alignItems: 'right' }}>
-                            <Col xs={10} >
+                            <Col xs={10} style={{
+                                display: 'flex',
+                                justifyContent: 'center', flexDirection: 'column'
+                            }} >
                                 <ReactSearchBox
                                     width="110%"
                                     placeholder="Search Here..."
                                     onChange={(value) => handleSearch(value)}
                                 />
                             </Col>
-                            <Col xs={2}>
+                            <Col style={{
+                                display: 'flex',
+                                justifyContent: 'center', flexDirection: 'column'
+                            }} xs={2}>
                                 <Button variant="outlined" color="primary" style={{ width: "80px", marginRight: "20px" }}>Search</Button>
                             </Col>
                         </Col>
@@ -146,14 +152,18 @@ const ListPrinter = () => {
                                                 <TableCell id="text_list">{printer.id}</TableCell>
                                                 <TableCell id="text_list">{printer.campuslocation}</TableCell>
                                                 <TableCell id="text_list">{printer.buildinglocation}</TableCell>
-                                                <TableCell id="text_list">{printer.status}</TableCell>
+
+                                                {/* <TableCell id="text_list">{printer.status}</TableCell> */}
+
+                                                <TableCell id="text_list" style={{ display: 'flex', justifyContent: 'center' }}>
+                                                    <span className={`status-indicator ${printer.status.replace(' ', '-')}`} />
+
+                                                </TableCell>
                                                 <TableCell id="text_list" align="center" >
-                                                    {printer.status === "ĐANG ĐẦY" && <Button id="text_full" style={{ padding: '2px' }}
-                                                    >Chọn</Button>}
-                                                    {printer.status === "ĐANG TRỐNG" && <Button id="text_r" style={{ padding: '2px' }}
-                                                    >Chọn</Button>}
-                                                    {printer.status === "CHƯA ĐẦY" && <Button id="text_cd" style={{ padding: '2px' }}
-                                                    >Chọn</Button>}
+
+                                                    <Button id="text_r" style={{ padding: '2px' }}
+                                                    >Chọn</Button>
+
                                                 </TableCell>
                                             </TableRow>
                                         ))}
