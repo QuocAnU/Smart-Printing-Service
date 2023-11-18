@@ -1,0 +1,69 @@
+.Container {
+    margin-top: 20px;
+}
+
+.uploadFrame {
+    border: 2px solid;
+    padding: 20px;
+    min-height: 600px;
+    width: 70%; 
+    float: left;
+    margin-left: 30%;
+    margin-top: 20px;
+    background-color: #f5ebeb;
+}
+
+.uploadText {
+    margin-top: 50%;
+    opacity: 0.5;
+}
+
+.frameConfig {
+    margin-top: 20px;
+    border: 2px solid;
+    width: 70%;
+    margin-left: 20%;
+    padding: 20px;
+  }
+  
+  .config {
+    margin-top: 20px;
+  }
+  
+  form label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .count {
+    display: block;
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  form select,
+  form input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+  }
+  
+  form select {
+    appearance: none;
+    background-size: 16px;
+    background-position-x: calc(100% - 10px);
+    text-align: center;
+  }
+  
+  form select::-ms-expand {
+    display: none;
+  }
+
+  .h2-text {
+    margin-left: -20%;
+  }
