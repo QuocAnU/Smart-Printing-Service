@@ -1,0 +1,17 @@
+.header{
+  box-sizing: border-box;
+  height: 80px;
+  border-bottom: 0.1px solid black;
+  max-width: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+.container {
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 0;
+    padding-right: 0;
+}
