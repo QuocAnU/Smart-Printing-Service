@@ -1,26 +1,92 @@
-import React from "react";
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import './Login.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function Input({ type, id, name, label, placeholder, autofocus }) {
+function Input({ type, id, name, label, placeholder, value, onChange, error, errorMessage }) {
   return (
     <div>
       <div className="d-flex align-items-start mx-4">{label}</div>
       <input
-        autoFocus={autofocus}
         type={type}
         id={id}
         name={name}
         placeholder={placeholder}
-        className="input_box rounded px-4 py-3 w-full mt-1 bg-white text-gray-900 border border-gray-200 focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-100"
+        className={`input_box rounded px-4 py-3 w-full mt-1 bg-white text-gray-900 border ${
+          error ? 'border-red-500' : 'border-gray-200'
+        } focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-100`}
+        value={value}
+        onChange={onChange}
       />
+      {error && <div className="text-red-500 mt-2 mx-4">{errorMessage}</div>}
     </div>
   );
 }
 
 function InputForm() {
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState(false);
+  const [emailErrorMessage, setEmailErrorMessage] = useState('');
+  
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState(false);
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+  const navigate = useNavigate();
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Perform form validation here
+    if (email === '') {
+      setEmailError(true);
+      setEmailErrorMessage('Please enter your email');
+      return;
+    }
+
+    if (password === '') {
+      setEmailError(false);
+      setEmailErrorMessage('');
+      setPasswordError(true);
+      setPasswordErrorMessage('Please enter your password');
+      return;
+    }
+
+    // If form is valid, proceed with login
+    if(true) { // Perform login logic later
+      // Simulate successful login
+      // Reset form fields
+      setEmail('');
+      setEmailError(false);
+      setEmailErrorMessage('');
+
+      setPassword('');
+      setPasswordError(false);
+      setPasswordErrorMessage('');
+      
+      console.log('Email:', email);
+      console.log('Password:', password);
+      navigate("/print");
+      console.log('Login successful');
+    } else {
+      // Simulate failed login
+      setEmailError(true);
+      setEmailErrorMessage('Invalid email or password');
+
+      setPasswordError(false);
+      setPasswordErrorMessage('');
+    }
+  };
+
   return (
+  <div className="input_box_layout">
     <div className="d-flex flex-column justify-content-start w-100 rounded-circle">
       <Input
         type="email"
@@ -28,7 +94,10 @@ function InputForm() {
         name="email"
         label="Email Address"
         placeholder="me@example.com"
-        autofocus={true}
+        value={email}
+        onChange={handleEmailChange}
+        error={emailError}
+        errorMessage={emailErrorMessage}
       />
       <Input
         type="password"
@@ -36,14 +105,18 @@ function InputForm() {
         name="password"
         label="Password"
         placeholder="••••••••••"
+        value={password}
+        onChange={handlePasswordChange}
+        error={passwordError}
+        errorMessage={passwordErrorMessage}
       />
-      <Link to='/'>
-        <button className="button_box w-50 h-40 text-white my-2">
-          Đăng Nhập
-        </button>
-      </Link>
+      <button className="button_box w-50 h-40 text-white my-2" onClick={handleSubmit}>
+        Đăng Nhập
+      </button>
     </div>
-  )
+    <div className="label_content">Quên mật khẩu</div>
+  </div>
+  );
 }
 
 const Login = () => {
@@ -65,11 +138,7 @@ const Login = () => {
               <img src={google} alt='google' className='google' />
               Đăng nhập bằng Google
             </div>
-
-            <div className="input_box_layout">
-              <InputForm></InputForm>
-              <div className="label_content">Quên mật khẩu</div>
-            </div>
+              <InputForm/>
           </div>
         </div>
       </div>
