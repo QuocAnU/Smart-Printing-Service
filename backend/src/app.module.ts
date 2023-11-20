@@ -1,14 +1,18 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AccountModule } from './Account/Account.module';
+import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AccountModule } from './AccountController/Account.module';
+import { UserModule } from './user/user.module';
+
+
 
 @Module({
-  imports: [AccountModule],//MongooseModule.forRoot('mongodb://127.0.0.1:27017'),],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [AccountModule, ConfigModule.forRoot(
+    {
+      isGlobal: true,
+    }
+  ),
+    UserModule,
+    MongooseModule.forRoot('mongodb+srv://duy:vlUd1zZUl3TwK922@cluster0.zqrgg5g.mongodb.net/?retryWrites=true&w=majority')],
 })
-
 export class AppModule {}
-

@@ -39,6 +39,32 @@
     align-items: center;
 }
 
+.errorbox {
+    flex-direction: column;
+    background-color: rgb(192, 0, 0);
+    border-radius: 20px;
+    width: 350px;
+    height: 50px;
+    margin-bottom: 50px;
+    margin-top: 25px;
+    justify-content: center;
+    align-items: center;
+}
+
+.errorcontent{
+    margin: auto;
+    width: 80%;
+    padding: 10px;
+}
+
+
+.title{
+    padding-bottom: 5px;
+    
+    size: 30%;
+    justify-content: center;
+    align-items: center;
+}
 .logo_box {
     display: flex;
     flex-direction: row;

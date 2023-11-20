@@ -6,6 +6,7 @@ import axios from 'axios'
 
 function Input({ type, id, name, label, placeholder, value, onChange, error, errorMessage }) {
   return (
+    
     <div>
       <div className="d-flex align-items-start mx-4">{label}</div>
       <input
@@ -19,7 +20,7 @@ function Input({ type, id, name, label, placeholder, value, onChange, error, err
         value={value}
         onChange={onChange}
       />
-      {error && <div className="text-red-500 mt-2 mx-4">{errorMessage}</div>}
+      
     </div>
   );
 }
@@ -32,6 +33,11 @@ function InputForm() {
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+
+  const [AuthError, setAuthError] = useState(false);
+  const [AuthErrorMessage, setAuthErrorMessage] = useState('');
+
+
   const navigate = useNavigate();
   //useEffect(()=>{})
   const handleEmailChange = (e) => {
@@ -44,9 +50,7 @@ function InputForm() {
   
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:8001/login',{email,password})
-    .then(res=> console.log(res))
-    .catch(err => console.log(err));
+    
     // Perform form validation here
     if (email === '') {
       setEmailError(true);
@@ -63,6 +67,15 @@ function InputForm() {
     }
 
     // If form is valid, proceed with login
+
+    axios.post('http://localhost:8001/acc/login',{BKNetID: email,password: password})
+    .then(res=> console.log(res))
+    .catch(err => {
+      if(err.response.status === 403){
+        setAuthError(true);
+        setAuthErrorMessage("Incorrect Username or Password");
+      }
+    });
     if(true) { // Perform login logic later
       // Simulate successful login
       // Reset form fields
@@ -89,7 +102,12 @@ function InputForm() {
   };
 
   return (
-  <div className="input_box_layout">
+    <div>
+      <ErrorDisplay
+      error = {emailError||passwordError||AuthError}
+      errorMessage = {emailErrorMessage||passwordErrorMessage||AuthErrorMessage}
+    />
+      <div className="input_box_layout">
     <div className="d-flex flex-column justify-content-start w-100 rounded-circle">
       <Input
         type="email"
@@ -119,9 +137,19 @@ function InputForm() {
     </div>
     <div className="label_content">Quên mật khẩu</div>
   </div>
+    </div>
+  
   );
 }
-
+const ErrorDisplay = ({error, errorMessage}) => {
+  return (
+  <div>
+    {error && <div className="errorbox">
+    <div className="errorcontent tw-70 h-40 text-white my-2">{errorMessage}</div>
+    </div>}
+  </div>
+);
+}
 const Login = () => {
   const logoBK = require('./../../assets/Image/logoBK.png')
   const google = require('./../../assets/Image/google-icon.png')
@@ -132,16 +160,18 @@ const Login = () => {
           <div className="logo_box">
             <img src={logoBK} alt='logo_BK' className='logo_BK' />
           </div>
+
           <div className="content_box">
-            <div className="register">
-              Bạn chưa có tài khoản?
-              Đăng kí ngay!
+            <div className="title text-black">
+              Central Authentication Service
             </div>
+            
             <div className="login_using_google">
               <img src={google} alt='google' className='google' />
               Đăng nhập bằng Google
             </div>
               <InputForm/>
+              
           </div>
         </div>
       </div>
