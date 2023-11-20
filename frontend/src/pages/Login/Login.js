@@ -75,29 +75,21 @@ function InputForm() {
       console.log(res);
       navigate("/print");
       console.log('Login successful');
-
-      setEmail('');
-      setEmailError(false);
-      setEmailErrorMessage('');
-  
-      setPassword('');
-      setPasswordError(false);
-      setPasswordErrorMessage('');
     })
     .catch(err => {
-      if(err.response.status === 403){
+      if(err.response.status){
+        console.log(err);
         setAuthError(true);
         setAuthErrorMessage("Incorrect Username or Password");
-
-        setEmail('');
-        setEmailError(false);
-        setEmailErrorMessage('');
-  
-        setPassword('');
-        setPasswordError(false);
-        setPasswordErrorMessage('');
       }
     });
+    setEmail('');
+    setEmailError(false);
+    setEmailErrorMessage('');
+
+    setPassword('');
+    setPasswordError(false);
+    setPasswordErrorMessage('');
   };
 
   return (
