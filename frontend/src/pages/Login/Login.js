@@ -69,36 +69,35 @@ function InputForm() {
     // If form is valid, proceed with login
 
     axios.post('http://localhost:8001/acc/login',{BKNetID: email,password: password})
-    .then(res=> console.log(res))
+    .then((res)=>{
+      console.log('Username:', email);
+      console.log('Password:', password);
+      console.log(res);
+      navigate("/print");
+      console.log('Login successful');
+
+      setEmail('');
+      setEmailError(false);
+      setEmailErrorMessage('');
+  
+      setPassword('');
+      setPasswordError(false);
+      setPasswordErrorMessage('');
+    })
     .catch(err => {
       if(err.response.status === 403){
         setAuthError(true);
         setAuthErrorMessage("Incorrect Username or Password");
+
+        setEmail('');
+        setEmailError(false);
+        setEmailErrorMessage('');
+  
+        setPassword('');
+        setPasswordError(false);
+        setPasswordErrorMessage('');
       }
     });
-    if(true) { // Perform login logic later
-      // Simulate successful login
-      // Reset form fields
-      setEmail('');
-      setEmailError(false);
-      setEmailErrorMessage('');
-
-      setPassword('');
-      setPasswordError(false);
-      setPasswordErrorMessage('');
-      
-      console.log('Username:', email);
-      console.log('Password:', password);
-      //navigate("/print");
-      console.log('Login successful');
-    } else {
-      // Simulate failed login
-      setEmailError(true);
-      setEmailErrorMessage('Invalid email or password');
-
-      setPasswordError(false);
-      setPasswordErrorMessage('');
-    }
   };
 
   return (
