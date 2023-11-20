@@ -14,14 +14,7 @@ export class AuthService {
 
   async signup(dto: SignupDto): Promise<{}> {
     let newUser
-    try {
       newUser = await this.userService.create(dto);
-    }
-    catch (err) {
-      throw err
-    }
-    //TODO: create JWT and add to this request 
-
     return newUser;
   }
 
@@ -32,7 +25,7 @@ export class AuthService {
     if (!user) {
       throw new ForbiddenException("Username does not exists!")
     }
-    let isPasswordMatched = argon.verify(dto.password, user.hashString);
+    let isPasswordMatched = await argon.verify(user.hashString, dto.password);
     if (!isPasswordMatched) {
       throw new UnauthorizedException('Invalid password!');
     }
