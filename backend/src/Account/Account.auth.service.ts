@@ -15,14 +15,7 @@ export class AuthService {
 
   async signup(dto: SignupDto): Promise<{}> {
     let newUser
-    try {
       newUser = await this.userService.create(dto);
-    }
-    catch (err) {
-      throw err
-    }
-    //TODO: create JWT and add to this request 
-
     return newUser;
   }
 

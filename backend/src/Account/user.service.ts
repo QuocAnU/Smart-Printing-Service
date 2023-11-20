@@ -5,6 +5,7 @@ import { User, UserDocument } from 'src/schemas/user.schema';
 import { SignupDto } from './DTO/signup.dto';
 import { LoginDto } from './DTO/login.dto';
 import * as argon from "argon2";
+import { error } from 'console';
 
 @Injectable()
 export class UserService {
@@ -20,7 +21,14 @@ export class UserService {
       PaperBalance: 8,
       StuID: "2110913",
     });
-    return createdUser.save();
+    let newUser;
+    try {
+      newUser = await createdUser.save();
+    }
+    catch (err){
+      return err
+    }
+    return newUser;
   }
 
   async findAll(): Promise<User[]> {

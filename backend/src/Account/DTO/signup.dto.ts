@@ -6,7 +6,7 @@ export class SignupDto{
     Fullname: string;
 
     @IsNotEmpty()
-    @IsEmail({}, {message: "Dont't trick me! Get me a fucking right email!"})
+    @IsEmail()
     Email: string;
 
     @IsNotEmpty()
@@ -14,10 +14,10 @@ export class SignupDto{
     
     @IsNotEmpty()
     @IsString()
-    @MinLength(6, {message: "Too weak! Please type harder or get a more powerful password!"})
+    @MinLength(6)
     Password: string
 
     @IsNumber()
-    @Length(6,6, {message: 'Invalid Student ID!'})
+    @Length(6,6)
     StuID: number
 }
