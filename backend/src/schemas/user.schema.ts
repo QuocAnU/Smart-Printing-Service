@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
-export type CatDocument = HydratedDocument<User>;
+export type UserDocument = HydratedDocument<User>;
 
 @Schema()
 export class User {
@@ -17,7 +17,7 @@ export class User {
 
   @Prop({
       required: true,
-      unique: true,
+      // unique: true,
       lowercase: true,
       maxLength: 200,
   })
@@ -26,10 +26,10 @@ export class User {
   @Prop({
     required: true,
   })
-  password: string;
+  hashString: string;
 
   @Prop({
-    required: true,
+    // required: true,
     maxLength: 120,
   })
   FullName: string;
@@ -37,8 +37,8 @@ export class User {
   @Prop({
     minLength: 7,
     maxLength: 7,
-    required: true,
-    unique: true,
+    // required: true,
+    // unique: true,
   })
   StuID: string;
 
