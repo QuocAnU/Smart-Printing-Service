@@ -13,8 +13,6 @@ function App() {
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path="/login" element={<Login />} />
-          <Route path='/print' element={<PrintPrepare />} />
-          <Route path='/listprinter' element={<ListPrinter />} />
         </Routes>
       </Router>
     </div>

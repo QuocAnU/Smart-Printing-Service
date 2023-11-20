@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import './Login.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios'
 
 function Input({ type, id, name, label, placeholder, value, onChange, error, errorMessage }) {
   return (
@@ -32,7 +33,7 @@ function InputForm() {
   const [passwordError, setPasswordError] = useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
   const navigate = useNavigate();
-
+  //useEffect(()=>{})
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
@@ -40,14 +41,16 @@ function InputForm() {
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    axios.post('http://localhost:8001/login',{email,password})
+    .then(res=> console.log(res))
+    .catch(err => console.log(err));
     // Perform form validation here
     if (email === '') {
       setEmailError(true);
-      setEmailErrorMessage('Please enter your email');
+      setEmailErrorMessage('Please enter your BKNetID');
       return;
     }
 
@@ -71,9 +74,9 @@ function InputForm() {
       setPasswordError(false);
       setPasswordErrorMessage('');
       
-      console.log('Email:', email);
+      console.log('Username:', email);
       console.log('Password:', password);
-      navigate("/print");
+      //navigate("/print");
       console.log('Login successful');
     } else {
       // Simulate failed login
@@ -92,8 +95,8 @@ function InputForm() {
         type="email"
         id="email"
         name="email"
-        label="Email Address"
-        placeholder="me@example.com"
+        label="Username"
+        placeholder=""
         value={email}
         onChange={handleEmailChange}
         error={emailError}
