@@ -4,15 +4,16 @@ import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module';
 
-
-
 @Module({
-  imports: [AccountModule, ConfigModule.forRoot(
-    {
+  imports: [
+    AccountModule,
+    ConfigModule.forRoot({
       isGlobal: true,
-    }
-  ),
+    }),
     UserModule,
-    MongooseModule.forRoot('mongodb+srv://duy:vlUd1zZUl3TwK922@cluster0.zqrgg5g.mongodb.net/?retryWrites=true&w=majority')],
+    MongooseModule.forRoot(
+      'mongodb+srv://duy:vlUd1zZUl3TwK922@cluster0.zqrgg5g.mongodb.net/?retryWrites=true&w=majority',
+    ),
+  ],
 })
 export class AppModule {}

@@ -1,25 +1,21 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { IsEmail } from 'class-validator';
 import { HydratedDocument } from 'mongoose';
 import * as mongoose from 'mongoose';
 export type UserDocument = HydratedDocument<User>;
 
 @Schema()
 export class User {
-  @Prop(
-    {
-      required: true,
-      index: true,
-      unique: true,
-      maxlength: 200,
-      lowercase: true
-    })
+  @Prop({
+    required: true,
+    index: true,
+    unique: true,
+    lowercase: true,
+  })
   BKNetID: string;
 
   @Prop({
-      required: true,
-      // unique: true,
-      lowercase: true,
-      maxLength: 200,
+    required: true,
   })
   Email: string;
 
@@ -29,26 +25,19 @@ export class User {
   hashString: string;
 
   @Prop({
-    // required: true,
     maxLength: 120,
   })
   FullName: string;
 
   @Prop({
-    minLength: 7,
-    maxLength: 7,
-    // required: true,
-    // unique: true,
+    required: true,
+    unique: true,
   })
   StuID: string;
 
   @Prop({
-    required: true
+    required: true,
   })
   PaperBalance: number;
-
-
-
 }
-
 export const UserSchema = SchemaFactory.createForClass(User);

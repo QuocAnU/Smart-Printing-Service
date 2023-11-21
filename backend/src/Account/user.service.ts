@@ -4,12 +4,11 @@ import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from 'src/schemas/user.schema';
 import { SignupDto } from './DTO/signup.dto';
 import { LoginDto } from './DTO/login.dto';
-import * as argon from "argon2";
-import { error } from 'console';
+import * as argon from 'argon2';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel('User') private userModel: Model<UserDocument>) { }
+  constructor(@InjectModel('User') private userModel: Model<UserDocument>) {}
 
   async create(dto: SignupDto) {
     let hastPw = await argon.hash(dto.Password);
@@ -19,23 +18,35 @@ export class UserService {
       BKNetID: dto.BKNetID,
       hashString: hastPw,
       PaperBalance: 8,
-      StuID: "2110913",
+      StuID: dto.StuID,
+      isNew: true,
     });
     let newUser;
     try {
       newUser = await createdUser.save();
+      let rtInfor = dto;
+      delete rtInfor.Password;
+      rtInfor['msg'] = 'Sign in success';
+      return rtInfor;
+    } catch (err) {
+      if (err.code === 11000) {
+        return { msg: 'StuID or BKNetID was used!' };
+      } else {
+        return err;
+      }
     }
-    catch (err){
-      return err
-    }
-    return newUser;
   }
 
   async findAll(): Promise<User[]> {
     return this.userModel.find().exec();
   }
-  async findUserByID(dto: LoginDto) {
-    let user = this.userModel.findOne({ BKNetID: dto.BKNetID });
-    return user
+  //BKNetID is username at this context
+  async findUserByUsername(dto: LoginDto) {
+    let user = await this.userModel.findOne({ BKNetID: dto.BKNetID });
+    return user;
+  }
+  public async findUserById(id) {
+    const user = await this.userModel.findOne({ _id: id });
+    return user;
   }
 }
