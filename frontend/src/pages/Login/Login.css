@@ -11,7 +11,7 @@
     isolation: isolate;
     flex-direction: row;
     width: 100%;
-    height: 1024px;
+    /* height: 1024px; */
     justify-content: flex-start;
     align-items: flex-start;
     padding: 0px;

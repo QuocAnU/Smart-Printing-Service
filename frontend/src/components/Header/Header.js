@@ -9,7 +9,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 
-const Header = () => {
+const Header = ({ isLoggedIn, setIsLoggedIn }) => {
     const logoBK = require('./../../assets/Image/logoBK.png');
 
     return (
@@ -52,8 +52,8 @@ const Header = () => {
 
 
                     <Col xs={2} className='lg' >
-                        <Link to='/login'  >
-                            <button className="login site-title " style={{ border: 'none', textDecoration: 'none' }} >
+                        <Link to='/login'   >
+                            <button onClick={() => setIsLoggedIn(false)} className="login site-title " style={{ border: 'none', textDecoration: 'none' }} >
                                 Đăng nhập
                             </button>
                         </Link>

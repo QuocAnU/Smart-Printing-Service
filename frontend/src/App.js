@@ -1,21 +1,18 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './components/Header/Header';
-import Login from './pages/Login/Login';
-import HomePage from './pages/HomePage/Homepage';
+
+import { useState } from 'react';
+
 import './App.css';
-import PrintPrepare from './pages/PrintPreparePage/PrintPrepare';
-import ListPrinter from './pages/ChoosePrintPage/ListPrinter';
+
+import AppRoutes from './routes/index.js';
+
 function App() {
+  // State to track login status
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+
   return (
     <div className="App">
-      <Router>
-        <Header />
-        <Routes>
-          <Route path='/' element={<HomePage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/print" element={<PrintPrepare/>}/>
-        </Routes>
-      </Router>
+      {/* Pass isLoggedIn as a prop to AppRoutes */}
+      <AppRoutes isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
     </div>
   );
 }
