@@ -93,7 +93,7 @@ function InputForm() {
   };
 
   return (
-    <div>
+    <div className="w-100">
       <ErrorDisplay
       error = {emailError||passwordError||AuthError}
       errorMessage = {emailErrorMessage||passwordErrorMessage||AuthErrorMessage}
@@ -135,7 +135,7 @@ function InputForm() {
 const ErrorDisplay = ({error, errorMessage}) => {
   return (
   <div>
-    {error && <div className="errorbox">
+    {error && <div className="errorbox justify-content-center align-items-center w-75">
     <div className="errorcontent tw-70 h-40 text-white my-2">{errorMessage}</div>
     </div>}
   </div>
@@ -157,12 +157,13 @@ const Login = () => {
               Central Authentication Service
             </div>
             
-            <div className="login_using_google">
+            <div className="login_using_google w-50">
               <img src={google} alt='google' className='google' />
-              Đăng nhập bằng Google
+              <div className="google_input">
+                Đăng nhập bằng Google 
+              </div>
             </div>
-              <InputForm/>
-              
+            <InputForm/>
           </div>
         </div>
       </div>
