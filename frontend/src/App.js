@@ -7,12 +7,14 @@ import AppRoutes from './routes/index.js';
 
 function App() {
   // State to track login status
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [showHeader, setShowHeader] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
 
   return (
     <div className="App">
       {/* Pass isLoggedIn as a prop to AppRoutes */}
-      <AppRoutes isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+      <AppRoutes showHeader={showHeader} setShowHeader={setShowHeader} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
     </div>
   );
 }

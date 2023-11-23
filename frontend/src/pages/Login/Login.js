@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+
+
+import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import './Login.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import axios from 'axios'
+import axios from 'axios';
 
 function Input({ type, id, name, label, placeholder, value, onChange, error, errorMessage }) {
   return (
-
     <div>
       <div className="d-flex align-items-start mx-4">{label}</div>
       <input
@@ -19,96 +20,69 @@ function Input({ type, id, name, label, placeholder, value, onChange, error, err
         value={value}
         onChange={onChange}
       />
-
     </div>
   );
 }
 
-function InputForm() {
-  const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = useState('');
+function InputForm({ onSubmit, showHeader, setShowHeader, AuthError, AuthErrorMessage }) {
+  const [BKNetID, setBKNetID] = useState('');
+  const [BKNetIDError, setBKNetIDError] = useState(false);
+  const [BKNetIDErrorMessage, setBKNetIDErrorMessage] = useState('');
 
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
 
-  const [AuthError, setAuthError] = useState(false);
-  const [AuthErrorMessage, setAuthErrorMessage] = useState('');
 
 
-  const navigate = useNavigate();
-  //useEffect(()=>{})
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
+  const handleBKNetIDChange = (e) => {
+    setBKNetID(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
 
     // Perform form validation here
-    if (email === '') {
-      setEmailError(true);
-      setEmailErrorMessage('Please enter your BKNetID');
+    if (BKNetID === '') {
+      setBKNetIDError(true);
+      setBKNetIDErrorMessage('Please enter your BKNetID');
       return;
     }
 
     if (password === '') {
-      setEmailError(false);
-      setEmailErrorMessage('');
+      setBKNetIDError(false);
+      setBKNetIDErrorMessage('');
       setPasswordError(true);
       setPasswordErrorMessage('Please enter your password');
       return;
     }
 
     // If form is valid, proceed with login
-
-    axios.post('http://localhost:3001/acc/login', { BKNetID: email, password: password })
-      .then((res) => {
-        console.log('Username:', email);
-        console.log('Password:', password);
-        console.log(res);
-        navigate("/");
-        console.log('Login successful');
-      })
-      .catch(err => {
-        if (err.response.status) {
-          console.log(err);
-          setAuthError(true);
-          setAuthErrorMessage("Incorrect Username or Password");
-        }
-      });
-    setEmail('');
-    setEmailError(false);
-    setEmailErrorMessage('');
-
-    setPassword('');
-    setPasswordError(false);
-    setPasswordErrorMessage('');
+    onSubmit(BKNetID, password);
   };
 
   return (
     <div className="w-100">
       <ErrorDisplay
-        error={emailError || passwordError || AuthError}
-        errorMessage={emailErrorMessage || passwordErrorMessage || AuthErrorMessage}
+        error={BKNetIDError || passwordError || AuthError}
+        errorMessage={BKNetIDErrorMessage || passwordErrorMessage || AuthErrorMessage}
       />
       <div className="input_box_layout">
         <div className="d-flex flex-column justify-content-start w-100 rounded-circle">
           <Input
-            type="email"
-            id="email"
-            name="email"
+            type="text"
+            id="BKNetID"
+            name="BKNetID"
             label="Username"
             placeholder=""
-            value={email}
-            onChange={handleEmailChange}
-            error={emailError}
-            errorMessage={emailErrorMessage}
+            value={BKNetID}
+            onChange={handleBKNetIDChange}
+            error={BKNetIDError}
+            errorMessage={BKNetIDErrorMessage}
           />
           <Input
             type="password"
@@ -121,28 +95,71 @@ function InputForm() {
             error={passwordError}
             errorMessage={passwordErrorMessage}
           />
-          <button className="button_box w-50 h-40 text-white my-2" onClick={handleSubmit}>
+          <button className="button_box w-50 h-40 text-white my-2" onClick={handleFormSubmit}>
             Đăng Nhập
           </button>
         </div>
         <div className="label_content">Quên mật khẩu</div>
       </div>
     </div>
-
   );
 }
+
 const ErrorDisplay = ({ error, errorMessage }) => {
   return (
     <div>
-      {error && <div className="errorbox justify-content-center align-items-center w-75">
-        <div className="errorcontent tw-70 h-40 text-white my-2">{errorMessage}</div>
-      </div>}
+      {error && (
+        <div className="errorbox justify-content-center align-items-center w-75">
+          <div className="errorcontent tw-70 h-40 text-white my-2">
+            <p>{errorMessage}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
-const Login = () => {
-  const logoBK = require('./../../assets/Image/logoBK.png')
-  const google = require('./../../assets/Image/google-icon.png')
+
+const Login = ({ showHeader, setShowHeader, isLoggedIn, setIsLoggedIn }) => {
+  const logoBK = require('./../../assets/Image/logoBK.png');
+  const google = require('./../../assets/Image/google-icon.png');
+
+  const [AuthError, setAuthError] = useState(false);
+  const [AuthErrorMessage, setAuthErrorMessage] = useState('');
+  const navigate = useNavigate();
+
+  const handleSuccessfulLogin = () => {
+    setShowHeader(true);
+    setIsLoggedIn(true);
+    navigate("/");
+    console.log('Login successful');
+  };
+
+  const handleLoginError = (errorMessage) => {
+    setShowHeader(false); // or leave it as it is based on your logic
+    console.log(errorMessage);
+    setAuthErrorMessage(errorMessage); // Set the specific error message
+    setAuthError(true); // Set AuthError to true to trigger the ErrorDisplay
+  };
+
+  const handleSubmit = (BKNetID, password) => {
+    axios.post('http://localhost:8001/acc/login', { BKNetID, password })
+      .then((res) => {
+        console.log('Username:', BKNetID);
+        console.log('Password:', password);
+        console.log(res);
+        console.log(res.data.access_token);
+        const token = res.data.access_token;
+        localStorage.setItem('accessToken', token);
+        handleSuccessfulLogin();
+      })
+      .catch(err => {
+        if (err.response && err.response.status) {
+          console.log(err);
+          handleLoginError("Incorrect Username or Password");
+        }
+      });
+  };
+
   return (
     <div className="login_bg">
       <div className="login_form">
@@ -162,7 +179,13 @@ const Login = () => {
                 Đăng nhập bằng Google
               </div>
             </div>
-            <InputForm />
+            <InputForm
+              onSubmit={handleSubmit}
+              showHeader={showHeader}
+              setShowHeader={setShowHeader}
+              AuthError={AuthError}
+              AuthErrorMessage={AuthErrorMessage}
+            />
           </div>
         </div>
       </div>
