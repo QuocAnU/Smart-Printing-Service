@@ -1,5 +1,5 @@
 import { Model } from 'mongoose';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from 'src/schemas/user.schema';
 import { SignupDto } from './DTO/signup.dto';
@@ -26,11 +26,14 @@ export class UserService {
       newUser = await createdUser.save();
       let rtInfor = dto;
       delete rtInfor.Password;
-      rtInfor['msg'] = 'Sign in success';
+      rtInfor['message'] = 'Sign up success';
       return rtInfor;
     } catch (err) {
       if (err.code === 11000) {
-        return { msg: 'StuID or BKNetID was used!' };
+        throw new HttpException(
+          'BKNetID or StuID was used.',
+          HttpStatus.BAD_REQUEST,
+        );
       } else {
         return err;
       }
@@ -45,8 +48,7 @@ export class UserService {
     let user = await this.userModel.findOne({ BKNetID: dto.BKNetID });
     return user;
   }
-  public async findUserById(id) {
-    const user = await this.userModel.findOne({ _id: id });
-    return user;
+  public findUserById(id) {
+    return this.userModel.findOne({ _id: id });
   }
 }

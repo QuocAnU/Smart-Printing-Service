@@ -1,7 +1,8 @@
 import {
   ForbiddenException,
+  HttpException,
+  HttpStatus,
   Injectable,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { LoginDto } from './DTO/login.dto';
@@ -9,7 +10,6 @@ import { SignupDto } from './DTO/signup.dto';
 import * as argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import * as bcrypt from 'bcryptjs';
 
 @Injectable({})
 export class AuthService {
@@ -35,7 +35,7 @@ export class AuthService {
     //waiting argon for verify password and user hastring
     let isPasswordMatched = await argon.verify(user.hashString, dto.password);
     if (!isPasswordMatched) {
-      throw new UnauthorizedException('Invalid password!');
+      throw new HttpException('Invalid password!', HttpStatus.UNAUTHORIZED);
     }
     //if passwork match, attach a JWT for the next request
     return this.signinToken(user.BKNetID, user.id);
@@ -46,12 +46,12 @@ export class AuthService {
       username,
     };
     const token = await this.jwt.signAsync(payload, {
-      expiresIn: '15m',
+      expiresIn: '1h',
       secret: this.config.get('JWT_SECRET'),
     });
     return {
       access_token: token,
-      msg: 'signin success',
+      message: 'login success',
     };
   }
 }

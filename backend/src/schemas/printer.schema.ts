@@ -1,114 +1,133 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
-import * as mongoose from 'mongoose';
-import {FileP} from './File.schema'
-import { User } from './user.schema';
+import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
+import { HydratedDocument } from "mongoose";
+import * as mongoose from "mongoose";
+import { FileP } from "./File.schema";
+import { PrinterLocationDto } from "src/Account/DTO/printer.dto";
 
-export type CatDocument = HydratedDocument<Printer>;
+export type PrinterDocument = HydratedDocument<Printer>;
 
 @Schema()
 export class Printer {
-  @Prop({
-    required: true,
-    index: true,
-    unique: true,
-    min: 0,
-  })
-  ID: number;
+  // @Prop({
+  //   required: true,
+  //   index: true,
+  //   unique: true,
+  //   min: 0,
+  // })
+  // ID: number;
 
   @Prop()
   Brand: string;
-  
+
   @Prop()
   PrinterModel: string;
 
   @Prop()
   ShortDescription: string;
 
-  @Prop({
-    required: true
-  })
-  CampusLocation: string;
+  // @Prop({
+  //   required: true,
+  // })
+  // CampusLocation: string;
+
+  // @Prop({
+  //   required: true,
+  // })
+  // BuildingLocation: string;
+
+  // @Prop({
+  //   required: true,
+  // })
+  // RoomLocation: string;
 
   @Prop({
-    required: true
+    type: Object,
+    required: true,
   })
-  BuildingLocation: string;
+  location: Object;
 
-  @Prop({
-    required: true
-  })
-  RoomLocation: string;
-
-  @Prop({required: true, default: true})
+  @Prop({ required: true, default: true })
   Enabled: boolean;
 
-  @Prop({required:true,enum: { values: ['Idle', 'Printing', 'Error'], message: '{VALUE} is not supported' }})
-  PrinterStatus: string //isIn: ['Idle', 'Printing', 'Error']
-  
-  @Prop([{type: mongoose.Schema.Types.ObjectId, ref: 'FileP'}])
+  @Prop({
+    required: true,
+    enum: {
+      values: ["Idle", "Printing", "Error"],
+      message: "{VALUE} is not supported",
+    },
+  })
+  PrinterStatus: string; //isIn: ['Idle', 'Printing', 'Error']
+
+  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: "FileP" }])
   PrinterQueue: FileP[];
 
-  @Prop({default: '0.0.0.0'})
+  @Prop({ default: "0.0.0.0" })
   IPAddress: string;
 
-  @Prop({default:'255.255.0.0'})
+  @Prop({ default: "255.255.0.0" })
   IPMask: string;
-  
-  @Prop({methods: Function})
-  AddToQueue: Function;
 
-  @Prop({methods: Function})
-  GetLength: Function;
+  AddToQueue(file: FileP): any {
+    this.PrinterQueue.push(file);
+  }
 
-  @Prop({methods: Function})
-  GetTop: Function;
+  GetQueueLength() {
+    return this.PrinterQueue.length;
+  }
+  GetTop() {
+    return this.PrinterQueue[0];
+  }
 
-  @Prop({methods: Function})
-  Pop: Function;
+  Pop() {
+    var Top = this.PrinterQueue[0];
+    this.PrinterQueue.shift();
+    return Top;
+  }
 
-  @Prop({methods: Function})
-  Enable: Function;
+  Enable() {
+    this.Enabled = true;
+  }
 
-  @Prop({methods: Function})
-  Disable: Function;
+  Disable = function () {
+    this.Enabled = false;
+  };
 
-  @Prop({methods: Function})
-  UpdateStatus: Function;
-
-  @Prop({methods: Function})
-  UpdateLocation: Function;
+  UpdateLocation = function (newLocation: PrinterLocationDto) {
+    this.location = newLocation;
+  };
 }
 
-export const UserSchema = SchemaFactory.createForClass(Printer);
-UserSchema.methods.AddToQueue = async function (object: FileP){
+export const PrinterSchema = SchemaFactory.createForClass(Printer);
+
+PrinterSchema.methods.AddToQueue = function (object: FileP) {
+  console.log(object);
   this.PrinterQueue.push(object);
+  console.log(this.PrinterQueue);
+  this.save();
 };
 
-UserSchema.methods.GetLength = async function (): Promise<Number> {
+PrinterSchema.methods.GetQueueLength = function () {
   return this.PrinterQueue.length;
-}
+};
 
-UserSchema.methods.GetTop = async function (): Promise<FileP> {
+PrinterSchema.methods.GetTop = async function (): Promise<FileP> {
   return this.PrinterQueue[0];
-}
+};
 
-UserSchema.methods.Pop = async function (): Promise<FileP> {
+PrinterSchema.methods.Pop = async function (): Promise<FileP> {
   var Top = this.PrinterQueue[0];
   this.PrinterQueue.shift();
   return Top;
-}
+};
 
-UserSchema.methods.Enable = async function (){
+PrinterSchema.methods.Enable = async function () {
   this.Enabled = true;
-}
+};
 
-UserSchema.methods.Disable = async function (){
+PrinterSchema.methods.Disable = async function () {
   this.Enabled = false;
-}
+};
 
-UserSchema.methods.UpdateLocation = async function (Campus: string, Building: string, Room: string) {
-  this.CampusLocation = (Campus==undefined?this.CampusLocation:Campus);
-  this.BuildingLocation = (Building==undefined?this.BuildingLocation:Building);
-  this.RoomLocation = (Room==undefined?this.RoomLocation:Room);
-}
+PrinterSchema.methods.UpdateLocation = function (newLocation: PrinterLocationDto) {
+  this.location = newLocation;
+};
