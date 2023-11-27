@@ -25,6 +25,8 @@ import { Cache } from "cache-manager";
 import { FilePService } from "./file.service";
 import { PrinterService } from "./printer.service";
 import { PrinterDto, PrinterLocationDto } from "src/Account/DTO/printer.dto";
+import * as fs from "file-system";
+import { ConfigService } from "@nestjs/config";
 
 @Controller("printing-setup")
 export class PrintingSetupController {
@@ -66,9 +68,24 @@ export class PrintingSetupController {
     file: Express.Multer.File,
   ) {
     await this.cacheManager.set(req.user["BKNetID"], file, 2000000);
-    return {
-      message: `Upload ${file.filename} success.`,
-    };
+    //TODO: call convert to pdf: fileName
+    if (file.mimetype != "application/pdf") {
+      let pdf_filename = undefined;
+      try {
+        pdf_filename = await this.fileService.transferFileToPdf(file.filename);
+      } catch (error) {
+        throw error;
+      }
+      await this.cacheManager.set(req.user["BKNetID"], pdf_filename, 2000000);
+      return {
+        message: `Upload ${pdf_filename} success.`,
+      };
+    } else {
+      await this.cacheManager.set(req.user["BKNetID"], file.filename, 2000000);
+      return {
+        message: `Upload ${file.filename} success.`,
+      };
+    }
   }
 
   @UseGuards(JwtGuard)
@@ -79,10 +96,15 @@ export class PrintingSetupController {
     @Body()
     dto: PrintConfigDto,
   ) {
-    const up_file = await this.cacheManager.get(req.user["BKNetID"]);
-    if (up_file == null) throw new HttpException("Not uploaded file yet!", HttpStatus.FORBIDDEN);
+    let file_name = await this.cacheManager.get(req.user["BKNetID"]);
+    if (file_name == null) throw new HttpException("Not uploaded file yet!", HttpStatus.FORBIDDEN);
     await this.cacheManager.del(req.user["BKNetID"]);
-    let newFileP = await this.fileService.createFileP(up_file, req.user, dto);
+    let newFileP;
+    try {
+      newFileP = await this.fileService.createFileP(file_name, req.user, dto);
+    } catch (error) {
+      throw error;
+    }
 
     const userPaperBalance = req.user["PaperBalance"];
 

@@ -53,7 +53,6 @@ export class PrinterService {
     let printers;
     try {
       printers = await this.printerModel.find({ location: _location });
-      console.log(printers[0]);
     } catch (error) {
       throw error;
     }
