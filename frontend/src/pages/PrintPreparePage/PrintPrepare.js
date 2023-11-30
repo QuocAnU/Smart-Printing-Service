@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import './PrintPrepair.css'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import { Link } from 'react-router-dom';
 
 const PrintPrepare = () => {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -136,10 +137,20 @@ const PrintPrepare = () => {
                 {selectedFile ? 
                   (<div>
                     <p  className="file">{selectedFile.name}</p>
-                    <label className="sodu">
+                    <div>
+                      <label className="sodu">
                         Số dư hiện tại: 
                         <span className="count">300</span>
-                    </label>
+                      </label>
+                      <label className="sotrangin">
+                        Số dư hiện tại: 
+                        <span className="count">{pageCount*(2/duplex)}</span>
+                      </label>
+                      <br></br>
+                      <br></br>
+                      <Link to='/listprinter' class="btn-cp">Chọn máy in</Link>
+                    </div>
+                    
                   </div>) 
                   : 
                   (<div></div>)}

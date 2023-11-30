@@ -45,7 +45,7 @@ form label {
   margin-bottom: 10px;
   width: 100%;
   padding: 8px;
-  border: 1px solid #ccc;
+  border: 2px solid green;
   border-radius: 5px;
 }
 
@@ -94,4 +94,21 @@ form select::-ms-expand {
 
 .left {
   margin-left: -10%;
+}
+
+.sodu{
+  margin-right: 10%;
+}
+
+.sotrangin{
+  margin-left: 10%;
+}
+
+.btn-cp{
+  margin-bottom: 10px;
+  width: 100%;
+  padding: 12px;
+  border: 2px solid blue;
+  border-radius: 5px;
+  text-decoration: none;
 }
