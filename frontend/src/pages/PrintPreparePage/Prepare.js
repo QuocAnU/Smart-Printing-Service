@@ -7,8 +7,8 @@ const PreparePrint = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const setDefaultCount = "All"
     const [printConfig, setPrintConfig] = useState({
-        pageSize: 'A4',
-        duplex: 2,
+        pageSize: 2,
+        duplex: 1,
         copyCount: 1,
     });
     const handleFileChange = (e) => {
@@ -37,30 +37,59 @@ const PreparePrint = () => {
 
     const handleUpload = async () => {
         try {
+            const accessToken = localStorage.getItem('accessToken');
+            console.log(accessToken);
+            if (accessToken) {
+
+                console.log("Test File", selectedFile)
+
+                const formData = new FormData();
+                formData.append('file', selectedFile);
+
+                const responseApi = await axios.post(
+                    'http://localhost:8001/printing-setup/upload',
+                    formData,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data', // Đặt loại nội dung là multipart/form-data
+                            Authorization: `Bearer ${accessToken}`,
+                        },
+                        withCredentials: true,
+                    }
+                );
+
+
+
+                console.log('Response from API:', responseApi.data);
+
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+    const handleSetupConfig = async () => {
+        try {
             // Gửi selectedFile lên API1
             const accessToken = localStorage.getItem('accessToken');
-
+            console.log(accessToken);
             if (accessToken) {
-                const responseApi1 = await axios.post('http://localhost:8001/printing-setup/upload', {
+                console.log("Test config", printConfig)
+                const formData = new FormData();
+
+                formData.append('pageSize', printConfig.pageSize);
+                formData.append('duplex', printConfig.duplex);
+                formData.append('copyCount', printConfig.copyCount);
+
+                const responseApi = await axios.post('http://localhost:8001/printing-setup/setup-config',
+                    formData, {
                     headers: {
+                        'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${accessToken}`,
                     },
                     withCredentials: true,
-                    file: selectedFile,  // Chắc chắn rằng API1 có thể xử lý đúng định dạng file mà bạn muốn
                 });
 
-                // Gửi printConfig lên API2
-                const responseApi2 = await axios.post('http://localhost:8001/printing-setup/setup-cpnfig', {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                    withCredentials: true,
-                    printConfig: printConfig,
-                });
-
-                // Xử lý phản hồi từ cả hai API (responseApi1 và responseApi2)
-                console.log('Response from API1:', responseApi1.data);
-                console.log('Response from API2:', responseApi2.data);
+                console.log('Response from API:', responseApi);
             }
         } catch (error) {
             console.error('Error:', error);
@@ -80,9 +109,9 @@ const PreparePrint = () => {
             <Row className="mb-3">
                 <Col xs={3}>
                     <h2 className="mb-4"   >Tải file lên hệ thống</h2> </Col>
-                <Col xs={1}></Col>
+
                 {selectedFile ? (
-                    <Col xs={3} style={{ textAlign: 'right' }}>
+                    <Col xs={2} style={{ textAlign: 'right' }}>
                         <Form.Control
                             style={{ width: '34%' }}
                             type="file"
@@ -92,9 +121,13 @@ const PreparePrint = () => {
                     </Col>
 
                 ) : (
-                    <Col xs={3}></Col>
+                    <Col xs={2}>
+                    </Col>
                 )}
-
+                <Col xs={2} style={{ textAlign: 'left' }}>
+                    <Button variant="primary" onClick={handleUpload}>
+                        Upload File
+                    </Button></Col>
                 <Col style={{ textAlign: 'left' }} >  <h2 className="mb-4"   >Thông số in </h2> </Col>
 
             </Row>
@@ -127,17 +160,14 @@ const PreparePrint = () => {
                             <Form.Group controlId="pageSize" style={{ marginTop: '10px' }}>
                                 <Form.Label>Kích thước trang:</Form.Label>
                                 <Form.Control
-
+                                    // type="number"
                                     as="select"
                                     className="text-center"
                                     value={printConfig.pageSize}
                                     onChange={(e) => handlePrintConfigChange('pageSize', e.target.value)}
                                 >
-                                    <option value="A4">A4</option>
-                                    <option value="A0">A0</option>
-                                    <option value="A1">A1</option>
-                                    <option value="A2">A2</option>
-                                    <option value="A3">A3</option>
+                                    <option value={2}>2</option>
+                                    <option value={3}>3</option>
                                 </Form.Control>
                             </Form.Group>
                         </Col>
@@ -163,12 +193,13 @@ const PreparePrint = () => {
                                 <Form.Label>In hai mặt:</Form.Label>
                                 <Form.Control
                                     as="select"
+                                    type='boolean'
                                     className="text-center"
                                     value={printConfig.duplex}
                                     onChange={(e) => handlePrintConfigChange('duplex', parseInt(e.target.value))}
                                 >
-                                    <option value={1}>2</option>
-                                    <option value={2}>1</option>
+                                    <option value={1}>Có</option>
+                                    <option value={0}>Không</option>
                                 </Form.Control>
                             </Form.Group>
                         </Col>
@@ -187,8 +218,8 @@ const PreparePrint = () => {
                     <Row>
                         <Col xs={12} style={{ marginTop: '80px' }} >
                             {/* Upload button */}
-                            <Button variant="primary" onClick={handleUpload}>
-                                Upload
+                            <Button variant="primary" onClick={handleSetupConfig}>
+                                Setup Config
                             </Button>
                         </Col>
                     </Row>
