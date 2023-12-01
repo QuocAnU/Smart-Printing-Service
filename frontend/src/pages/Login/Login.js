@@ -130,6 +130,7 @@ const Login = ({ showHeader, setShowHeader, isLoggedIn, setIsLoggedIn }) => {
   const handleSuccessfulLogin = () => {
     setShowHeader(true);
     setIsLoggedIn(true);
+    localStorage.setItem('isLoggedIn', true);
     navigate("/");
     console.log('Login successful');
   };

@@ -18,31 +18,34 @@ const Header = ({ showHeader, setShowHeader, isLoggedIn, setIsLoggedIn }) => {
     const [fullname, setFullname] = useState("");
 
     console.log("Test:", isLoggedIn)
-    if (isLoggedIn) {
-        console.log("Token:", `Bearer ${localStorage.getItem('accessToken')}`)
-
-        const accessToken = localStorage.getItem('accessToken');
-        if (accessToken) {
-            axios.get('http://localhost:8001/user/profile', {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            })
-                .then((response) => {
-                    console.log('User Profile:', response.data);
-                    setProfile(response.data);
+    useEffect(() => {
+        if (isLoggedIn) {
+            const accessToken = localStorage.getItem('accessToken');
+            if (accessToken) {
+                axios.get('http://localhost:8001/user/profile', {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                    withCredentials: true,
                 })
-                .catch((error) => {
-                    console.error('Error fetching user profile:', error);
-                });
-        }
+                    .then((response) => {
+                        console.log('User Profile:', response.data);
+                        setProfile(response.data);
 
-    }
+                    })
+                    .catch((error) => {
+                        console.error('Error fetching user profile:', error);
+                    });
+            }
+        }
+    }, [isLoggedIn]);
 
 
 
     const handleLogout = () => {
         setProfile(null);
+        setIsLoggedIn(false);
+        localStorage.setItem('isLoggedIn', false);
     };
 
 
@@ -60,7 +63,7 @@ const Header = ({ showHeader, setShowHeader, isLoggedIn, setIsLoggedIn }) => {
                     </Col>
                     <Col sx={2} sm={1}></Col>
                     <Col sx={2} className='lg' >
-                        <Link to='/print'  >
+                        <Link to='/prepare'  >
                             <button className='print'>
                                 Thực hiện in
                             </button>
@@ -84,19 +87,13 @@ const Header = ({ showHeader, setShowHeader, isLoggedIn, setIsLoggedIn }) => {
                             >Thông báo</button>
                         </Link>
                     </Col>
-                    {/* <Col xs={2} className='lg'>
-                        <Link to='/login'>
-                            <button onClick={() => setShowHeader(false)} className="login site-title" style={{ border: 'none', textDecoration: 'none' }}>
-                                Đăng nhập
-                            </button>
-                        </Link>
-                    </Col> */}
+
                     <Col xs={2} className='lg'>
                         {profile ? (
                             // User is logged in, display name and logout button
-                            <div>
-                                <p>profile.fullname</p>
-                                <Link to='/' onClick={handleLogout} > logout
+                            <div className='styles' style={{ display: 'flex' }}>
+                                <div style={{ marginRight: '20px' }}>{profile.FullName}</div>
+                                <Link to='/' onClick={handleLogout} > Logout
                                 </Link>
 
                             </div>
