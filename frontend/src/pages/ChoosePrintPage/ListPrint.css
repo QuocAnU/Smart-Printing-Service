@@ -70,12 +70,17 @@ line-height: 24px; /* 120% */
     
 }
 
-.status-indicator.ĐANG-TRỐNG {
+.status-indicator.Printing {
     background-color: green; /* Màu tương ứng với trạng thái "ĐANG TRỐNG" */
     margin-right: 10px;
 }
 
 .status-indicator.CHƯA-ĐẦY {
     background-color: yellow; /* Màu tương ứng với trạng thái "CHƯA ĐẦY" */
+    margin-right: 10px;
+}
+
+.status-indicator.Idle {
+    background-color:rgb(94, 94, 92); /* Màu tương ứng với trạng thái "CHƯA ĐẦY" */
     margin-right: 10px;
 }

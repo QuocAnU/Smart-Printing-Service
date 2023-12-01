@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
@@ -7,39 +7,37 @@ import Col from "react-bootstrap/Col"
 // import ReactSearchBox from "react-search-box";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import './ListPrint.css'
-
+import SearchBox from "../../components/Search/Search";
 
 const ListPrinter = () => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8;
 
-    const [printer, setPrinter] = useState([
-        { model: 'HP - MFP M236SDW', id: '001', campuslocation: 'CS1', buildinglocation: 'C6202', status: 'ĐANG ĐẦY' },
-        { model: 'HP - MFP M236SDW', id: '002', campuslocation: 'CS1', buildinglocation: 'C6202', status: 'ĐANG ĐẦY' },
-        { model: 'HP - MFP M236SDW', id: '003', campuslocation: 'CS1', buildinglocation: 'C6202', status: 'ĐANG ĐẦY' },
-        { model: 'HP - MFP M236SDW', id: '004', campuslocation: 'CS1', buildinglocation: 'C6202', status: 'ĐANG TRỐNG' },
-        { model: 'HP - MFP M236SDW', id: '005', campuslocation: 'CS1', buildinglocation: 'C6202', status: 'ĐANG TRỐNG' },
-        { model: 'HP - MFP M236SDW', id: '006', campuslocation: 'CS1', buildinglocation: 'C6202', status: 'CHƯA ĐẦY' },
-        { model: 'HP - MFP M236SDW', id: '007', campuslocation: 'CS1', buildinglocation: 'C6202', status: 'CHƯA ĐẦY' },
-        { model: 'HP - MFP M236SDW', id: '008', campuslocation: 'CS1', buildinglocation: 'C6202', status: 'CHƯA ĐẦY' },
-        { model: 'HP - MFP M236SDW', id: '009', campuslocation: 'CS1', buildinglocation: 'C6202', status: 'CHƯA ĐẦY' },
-        { model: 'HP - MFP M236SDW', id: '010', campuslocation: 'CS1', buildinglocation: 'C6202', status: 'CHƯA ĐẦY' },
-        { model: 'HP - MFP M236SDW', id: '011', campuslocation: 'CS1', buildinglocation: 'C6202', status: 'ĐANG TRỐNG' },
-        { model: 'HP - MFP M236SDW', id: '012', campuslocation: 'CS1', buildinglocation: 'C6202', status: 'ĐANG TRỐNG' },
-        { model: 'HP - MFP M236SDW', id: '013', campuslocation: 'CS1', buildinglocation: 'C6202', status: 'ĐANG TRỐNG' },
-        { model: 'HP - MFP M236SDW', id: '014', campuslocation: 'CS1', buildinglocation: 'C6202', status: 'ĐANG TRỐNG' },
-        { model: 'HP - MFP M236SDW', id: '015', campuslocation: 'CS1', buildinglocation: 'C6202', status: 'ĐANG TRỐNG' },
-        { model: 'HP - MFP M236SDW', id: '016', campuslocation: 'CS1', buildinglocation: 'C6202', status: 'ĐANG TRỐNG' },
-        { model: 'HP - MFP M236SDW', id: '017', campuslocation: 'CS1', buildinglocation: 'C6202', status: 'ĐANG ĐẦY' },
-        { model: 'HP - MFP M236SDW', id: '018', campuslocation: 'CS1', buildinglocation: 'C6202', status: 'ĐANG ĐẦY' },
-        { model: 'HP - MFP M236SDW', id: '019', campuslocation: 'CS1', buildinglocation: 'C6202', status: 'ĐANG ĐẦY' },
-        { model: 'HP - MFP M236SDW', id: '020', campuslocation: 'CS1', buildinglocation: 'C6202', status: 'ĐANG ĐẦY' },
-        { model: 'HP - MFP M236SDW', id: '021', campuslocation: 'CS1', buildinglocation: 'C6202', status: 'CHƯA ĐẦY' },
+    const [printer, setPrinter] = useState([]);
+    const [choossePrinter, setChoosePrinter] = useState([]);
 
+    useEffect(() => {
+        const accessToken = localStorage.getItem('accessToken');
+        if (accessToken) {
+            axios.get('http://localhost:8001/printing-setup/get-list-printer', {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                withCredentials: true,
+            })
+                .then((response) => {
+                    console.log('List Printer:', response.data);
+                    setPrinter(response.data);
 
+                })
+                .catch((error) => {
+                    console.error('Error fetching user profile:', error);
+                });
+        }
 
-    ]);
+    }, []);
+
 
     const [searchKeyword, setSearchKeyword] = useState('');
 
@@ -53,15 +51,22 @@ const ListPrinter = () => {
 
     const handleSearch = (keyword) => {
         setCurrentPage(1); // Reset trang về 1 khi bắt đầu tìm kiếm mới
-        setSearchKeyword(keyword);
+        const searchString = keyword.toString().toLowerCase();
+        setSearchKeyword(searchString);
     };
 
-    const filteredPrinters = printer.filter((printer) =>
-        Object.values(printer).some((value) =>
-            value.toLowerCase().includes(searchKeyword.toLowerCase())
-        )
+    const filteredPrinters = printer.filter((printer) => {
+        const mainInfoMatch = Object.values(printer).some((value) =>
+            typeof value === 'string' && value.toLowerCase().includes(searchKeyword.toLowerCase())
+        );
+        const locationMatch = Object.values(printer.location).some((value) =>
+            typeof value === 'string' && value.toLowerCase().includes(searchKeyword.toLowerCase())
+        );
+        const locationString = `${printer.location.BuildingLocation}_${printer.location.RoomLocation}`;
+        const locationMatch1 = typeof locationString === 'string' && locationString.toLowerCase().includes(searchKeyword.toLowerCase());
+        return mainInfoMatch || locationMatch || locationMatch1;
+    }
     );
-
     const totalFilteredResults = filteredPrinters.length;
 
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -73,28 +78,41 @@ const ListPrinter = () => {
 
     const displayedPrinters = filteredPrinters.slice(startIndex, endIndex);
 
+    const handleChoosePrinter = async (id) => {
+        try {
+            const accessToken = localStorage.getItem('accessToken');
+            // console.log(accessToken);
+            if (accessToken) {
+
+                const PrinterToChoose = printer.find((print) => print._id === id);
+
+                const formData = new FormData();
+                formData.append("CampusLocation", PrinterToChoose.location.CampusLocation)
+                formData.append("BuildingLocation", PrinterToChoose.location.BuildingLocation)
+                formData.append("RoomLocation", PrinterToChoose.location.RoomLocation)
+
+                const responseApi = await axios.post(
+                    'http://localhost:8001/printing-setup/set-printer',
+                    formData,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data', // Đặt loại nội dung là multipart/form-data
+                            Authorization: `Bearer ${accessToken}`,
+                        },
+                        withCredentials: true,
+                    }
+                );
+
+                console.log('Response from API:', responseApi.data);
+
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-    // const handleEdit = (bookId) => {
-    //     console.log(`Edit book with ID ${bookId}`);
-    // };
-
-    // const handleDelete = (bookId) => {
-    //     console.log(`Delete book with ID ${bookId}`);
-    // };
     return (
 
         <Container>
@@ -114,11 +132,9 @@ const ListPrinter = () => {
                                 display: 'flex',
                                 justifyContent: 'center', flexDirection: 'column'
                             }} >
-                                {/* <ReactSearchBox
-                                    width="110%"
-                                    placeholder="Search Here..."
-                                    onChange={(value) => handleSearch(value)}
-                                /> */}
+
+                                <SearchBox style={{ borderRadius: '8px' }} onSearch={handleSearch} />
+
                             </Col>
                             <Col style={{
                                 display: 'flex',
@@ -138,7 +154,7 @@ const ListPrinter = () => {
                                     <TableHead>
                                         <TableRow style={{ backgroundColor: '#3C8DBC', textAlign: 'center', padding: '5px' }} >
                                             <TableCell id="text" >Model</TableCell>
-                                            <TableCell id="text" >ID</TableCell>
+                                            {/* <TableCell id="text" >ID</TableCell> */}
                                             <TableCell id="text" >CƠ SỞ</TableCell>
                                             <TableCell id="text" > VỊ TRÍ</TableCell>
                                             <TableCell id="text" >TÌNH TRẠNG</TableCell>
@@ -147,21 +163,22 @@ const ListPrinter = () => {
                                     </TableHead>
                                     <TableBody>
                                         {displayedPrinters.map((printer) => (
-                                            <TableRow key={printer.id}>
-                                                <TableCell id="text_list">{printer.model}</TableCell>
-                                                <TableCell id="text_list">{printer.id}</TableCell>
-                                                <TableCell id="text_list">{printer.campuslocation}</TableCell>
-                                                <TableCell id="text_list">{printer.buildinglocation}</TableCell>
+                                            <TableRow key={printer._id}>
+                                                <TableCell id="text_list">{printer.PrinterModel}</TableCell>
+                                                {/* <TableCell id="text_list">{printer.id}</TableCell> */}
+                                                <TableCell id="text_list">{printer.location.CampusLocation}</TableCell>
+                                                {/* <TableCell id="text_list">{printer.location.BuildingLocation} {printer.location.RoomLocation}</TableCell> */}
+                                                <TableCell id="text_list">{`${printer.location.BuildingLocation}_${printer.location.RoomLocation}`}</TableCell>
 
                                                 {/* <TableCell id="text_list">{printer.status}</TableCell> */}
 
                                                 <TableCell id="text_list" style={{ display: 'flex', justifyContent: 'center' }}>
-                                                    <span className={`status-indicator ${printer.status.replace(' ', '-')}`} />
+                                                    <span className={`status-indicator ${printer.PrinterStatus}`} />
 
                                                 </TableCell>
                                                 <TableCell id="text_list" align="center" >
 
-                                                    <Button id="text_r" style={{ padding: '2px' }}
+                                                    <Button id="text_r" style={{ padding: '2px' }} onClick={() => handleChoosePrinter(printer._id)}
                                                     >Chọn</Button>
 
                                                 </TableCell>
