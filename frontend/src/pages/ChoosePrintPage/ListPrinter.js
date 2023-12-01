@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 
-import ReactSearchBox from "react-search-box";
+// import ReactSearchBox from "react-search-box";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import './ListPrint.css'
 
@@ -114,11 +114,11 @@ const ListPrinter = () => {
                                 display: 'flex',
                                 justifyContent: 'center', flexDirection: 'column'
                             }} >
-                                <ReactSearchBox
+                                {/* <ReactSearchBox
                                     width="110%"
                                     placeholder="Search Here..."
                                     onChange={(value) => handleSearch(value)}
-                                />
+                                /> */}
                             </Col>
                             <Col style={{
                                 display: 'flex',

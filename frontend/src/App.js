@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import './App.css';
 
@@ -9,6 +9,16 @@ function App() {
   // State to track login status
   const [showHeader, setShowHeader] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      const storedLoggedIn = await localStorage.getItem('isLoggedIn') === 'true';
+      setIsLoggedIn(storedLoggedIn);
+    };
+
+    checkLoginStatus();
+  }, []);
+
 
 
   return (

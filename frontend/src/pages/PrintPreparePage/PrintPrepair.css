@@ -3,12 +3,12 @@
 }
 
 .uploadFrame {
-  border: 2px solid;
+  /* border: 2px solid; */
   padding: 20px;
   min-height: 600px;
-  width: 60%; 
+  width: 100%; 
   float: left;
-  margin-left: 30%;
+  margin-bottom: 20px;
   margin-top: 20px;
   background-color: #F4F4F4;
 }
@@ -111,4 +111,18 @@ form select::-ms-expand {
   border: 2px solid blue;
   border-radius: 5px;
   text-decoration: none;
+}
+
+.printconfig {
+  /* display: flex; */
+  border: 1px solid black;
+  padding: 20px;
+  min-height: 100px;
+  height: 215px;
+  /* width: 100%;  */
+  float: left;
+  /* margin-bottom: 20px;
+  margin-top: 20px; */
+  /* background-color: #F4F4F4; */
+  border-radius: 10px;
 }
