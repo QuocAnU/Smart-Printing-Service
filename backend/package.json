@@ -28,6 +28,7 @@
     "@nestjs/mongoose": "^10.0.2",
     "@nestjs/passport": "^10.0.2",
     "@nestjs/platform-express": "^10.0.0",
+    "@npmcli/fs": "^3.1.0",
     "argon2": "^0.31.2",
     "basic-ftp": "^5.0.3",
     "bcryptjs": "^2.4.3",

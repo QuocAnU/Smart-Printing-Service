@@ -85,21 +85,32 @@ export class PrintingSetupController {
         await this.cacheManager.set(req.user["BKNetID"], file, 2000000);
         //TODO: call convert to pdf: fileName
         if (file.mimetype != "application/pdf") {
-            let pdf_filename = undefined;
             try {
-                pdf_filename = await this.fileService.transferFileToPdf(file.filename);
+                let pdf_filename = undefined;
+                pdf_filename = await this.fileService.transferFileToPdf(
+                    file.filename,
+                    req.user["BKNetID"],
+                );
+                await this.cacheManager.set(req.user["BKNetID"], pdf_filename, 2000000);
+                return {
+                    message: `Upload ${pdf_filename} success.`,
+                };
             } catch (error) {
-                throw error;
+                console.log(error);
+                throw new HttpException(
+                    error.message + ". Can not upload this file! Try to upload pdf format instead!",
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                );
             }
-            await this.cacheManager.set(req.user["BKNetID"], pdf_filename, 2000000);
-            return {
-                message: `Upload ${pdf_filename} success.`,
-            };
         } else {
-            await this.cacheManager.set(req.user["BKNetID"], file.filename, 2000000);
-            return {
-                message: `Upload ${file.filename} success.`,
-            };
+            try {
+                await this.cacheManager.set(req.user["BKNetID"], file.filename, 2000000);
+                return {
+                    message: `Upload ${file.filename} success.`,
+                };
+            } catch (error) {
+                throw new HttpException("Upload file error", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 
@@ -138,6 +149,7 @@ export class PrintingSetupController {
             );
             let rtPostFileInfor = post_file.toObject({ versionKey: true, virtuals: false });
             delete rtPostFileInfor["Owner"]["hashString"];
+            return rtPostFileInfor
         } catch (error) {
             throw error;
         }

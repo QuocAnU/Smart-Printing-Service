@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { FilePDocument } from "src/schemas/File.schema";
@@ -8,7 +8,6 @@ import * as fs from "file-system";
 import * as groupdocs from "groupdocs-conversion-cloud";
 import * as ftp from "basic-ftp";
 import * as pdf from "pdf-parse";
-
 @Injectable()
 export class FilePService {
     constructor(
@@ -27,7 +26,6 @@ export class FilePService {
             CopyNum: dto.NumberCopy,
             FileNumberOfPage: fileData["numpages"],
         });
-
         return newFileP;
     }
     async saveFileP(filePDoc: FilePDocument): Promise<FilePDocument> {
@@ -41,58 +39,69 @@ export class FilePService {
     async findFilePById(id) {
         return this.filePModel.findById(id);
     }
-    async transferFileToPdf(filename: string): Promise<String> {
+    async transferFileToPdf(filename: string, username: string): Promise<String> {
         //config api
-        const config = new groupdocs.Configuration(
-            this.configService.get("GROUP_DOCS_ID"),
-            this.configService.get("GROUP_DOCS_SECRECT"),
-        );
-        config.apiBaseUrl = this.configService.get("GROUP_DOCS_BASE_URL");
+        try {
+            const config = new groupdocs.Configuration(
+                this.configService.get("GROUP_DOCS_ID"),
+                this.configService.get("GROUP_DOCS_SECRECT"),
+            );
+            config.apiBaseUrl = this.configService.get("GROUP_DOCS_BASE_URL");
 
-        //upload file to api cloud
-        let resourcesFolder = this.configService.get("UPLOAD_DIR") + "/" + filename;
-        fs.readFile(resourcesFolder, (err, fileStream) => {
+            //upload file to api cloud
+            let resourcesFolder = this.configService.get("UPLOAD_DIR") + "/" + filename;
+            fs.readFile(resourcesFolder, async (err, fileStream) => {
+                try {
+                    let fileApi = groupdocs.FileApi.fromConfig(config);
+                    // create upload request
+                    let request = new groupdocs.UploadFileRequest(filename, fileStream, "uploads");
+                    await fileApi.uploadFile(request);
+                } catch (error) {
+                    console.log(error);
+                    throw error;
+                }
+                // construct FileApi
+            });
+
+            //convert to pdf
+            let converApi = groupdocs.ConvertApi.fromKeys(
+                this.configService.get("GROUP_DOCS_ID"),
+                this.configService.get("GROUP_DOCS_SECRECT"),
+            );
+
+            let settings = new groupdocs.ConvertSettings();
+            settings.filePath = filename;
+            settings.format = "pdf";
+            settings.outputPath = "output";
+
+            let up_request = new groupdocs.ConvertDocumentRequest(settings);
+            let rs = await converApi.convertDocument(up_request);
+            console.log("Document converted successfully: " + rs[0].url);
+
+            //download the converted file
             // construct FileApi
             let fileApi = groupdocs.FileApi.fromConfig(config);
-            // create upload request
-            let request = new groupdocs.UploadFileRequest(filename, fileStream, "uploads");
-            fileApi.uploadFile(request);
-        });
+            // download file request
+            let pdf_filename =
+                (filename.substring(0, filename.lastIndexOf(".")) || filename) + ".pdf";
+            let request = new groupdocs.DownloadFileRequest("output/" + pdf_filename, "uploads");
+            let response = await fileApi.downloadFile(request);
 
-        //convert to pdf
-        let converApi = groupdocs.ConvertApi.fromKeys(
-            this.configService.get("GROUP_DOCS_ID"),
-            this.configService.get("GROUP_DOCS_SECRECT"),
-        );
+            await fs.writeFile(
+                this.configService.get("UPLOAD_DIR") + "/" + pdf_filename,
+                response,
+                "binary",
+                function (err) {},
+            );
 
-        let settings = new groupdocs.ConvertSettings();
-        settings.filePath = filename;
-        settings.format = "pdf";
-        settings.outputPath = "output";
-
-        let up_request = new groupdocs.ConvertDocumentRequest(settings);
-        let rs = await converApi.convertDocument(up_request);
-        console.log("Document converted successfully: " + rs[0].url);
-
-        //download the converted file
-        // construct FileApi
-        let fileApi = groupdocs.FileApi.fromConfig(config);
-        // download file request
-        let pdf_filename = (filename.substring(0, filename.lastIndexOf(".")) || filename) + ".pdf";
-        let request = new groupdocs.DownloadFileRequest("output/" + pdf_filename, "uploads");
-        let response = await fileApi.downloadFile(request);
-
-        await fs.writeFile(
-            this.configService.get("UPLOAD_DIR") + "/" + pdf_filename,
-            response,
-            "binary",
-            function (err) {},
-        );
-
-        fs.unlink(this.configService.get("UPLOAD_DIR") + "/" + filename, function (err) {
-            if (err) throw err;
-        });
-        return pdf_filename;
+            await fs.unlink(this.configService.get("UPLOAD_DIR") + "/" + filename, function (err) {
+                if (err) throw err;
+            });
+            return pdf_filename;
+        } catch (err) {
+            console.log(err);
+            throw new HttpException("Convert to Pdf fail!", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     async uploadToPrintServer(filename) {
         const client = new ftp.Client(60000);

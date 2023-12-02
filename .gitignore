@@ -1,0 +1,9 @@
+
+*.pack
+*.old
+*.old
+*.pack
+*.pdf
+*.pdf
+*.docx
+frontend/node_modules/.cache/.eslintcache
