@@ -91,6 +91,7 @@ const ListPrinter = () => {
                 formData.append("BuildingLocation", PrinterToChoose.location.BuildingLocation)
                 formData.append("RoomLocation", PrinterToChoose.location.RoomLocation)
 
+                console.log("Forms Data printer:", ...formData);
                 const responseApi = await axios.post(
                     'http://localhost:8001/printing-setup/set-printer',
                     formData,

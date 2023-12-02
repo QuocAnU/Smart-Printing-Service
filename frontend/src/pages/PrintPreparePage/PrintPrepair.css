@@ -82,7 +82,13 @@ form select::-ms-expand {
   background-color: #F4F4F4;
   width: auto;
   max-width: 50%;
-  margin-left: 20%;
+  
+}
+.modal-header {
+  background-color: #045a2f; /* Header background color */
+  color: #fff; /* Header text color */
+  border-bottom: 1px solid #ddd;
+  border-radius: 8px 8px 0 0;
 }
 
 .notification {
@@ -92,9 +98,7 @@ form select::-ms-expand {
   background-color: #ccc;
 }
 
-.left {
-  margin-left: -10%;
-}
+
 
 .sodu{
   margin-right: 10%;

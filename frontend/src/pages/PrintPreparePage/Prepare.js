@@ -1,10 +1,12 @@
 import React, { useState, useRef } from 'react';
 import './PrintPrepair.css';
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, Modal } from 'react-bootstrap';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const PreparePrint = () => {
     const [selectedFile, setSelectedFile] = useState(null);
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
     const setDefaultCount = "All"
     const [printConfig, setPrintConfig] = useState({
         pageSize: 2,
@@ -34,7 +36,9 @@ const PreparePrint = () => {
     const handleFileReset = () => {
         setSelectedFile(null);
     };
+    // const handleSelectPrinter = () => {
 
+    // };
     const handleUpload = async () => {
         try {
             const accessToken = localStorage.getItem('accessToken');
@@ -45,7 +49,7 @@ const PreparePrint = () => {
 
                 const formData = new FormData();
                 formData.append('file', selectedFile);
-
+                console.log("Data Test:", ...formData);
                 const responseApi = await axios.post(
                     'http://localhost:8001/printing-setup/upload',
                     formData,
@@ -61,11 +65,18 @@ const PreparePrint = () => {
 
 
                 console.log('Response from API:', responseApi.data);
-
+                setShowSuccessModal(true);
+                setTimeout(() => {
+                    setShowSuccessModal(false);
+                }, 2000);
             }
         } catch (error) {
             console.error('Error:', error);
         }
+    };
+    const handleCloseSuccessModal = () => {
+        setShowSuccessModal(false);
+
     };
     const handleSetupConfig = async () => {
         try {
@@ -73,13 +84,14 @@ const PreparePrint = () => {
             const accessToken = localStorage.getItem('accessToken');
             console.log(accessToken);
             if (accessToken) {
-                console.log("Test config", printConfig)
+                console.log("Test config", printConfig.pageSize)
+
                 const formData = new FormData();
+                formData.append('PageSize', printConfig.pageSize);
+                formData.append('IsTwoSide', printConfig.duplex);
+                formData.append('NumberCopy', printConfig.copyCount);
 
-                formData.append('pageSize', printConfig.pageSize);
-                formData.append('duplex', printConfig.duplex);
-                formData.append('copyCount', printConfig.copyCount);
-
+                console.log("Data", ...formData);
                 const responseApi = await axios.post('http://localhost:8001/printing-setup/setup-config',
                     formData, {
                     headers: {
@@ -113,7 +125,7 @@ const PreparePrint = () => {
                 {selectedFile ? (
                     <Col xs={2} style={{ textAlign: 'right' }}>
                         <Form.Control
-                            style={{ width: '34%' }}
+                            style={{ width: '53%' }}
                             type="file"
                             accept=".pdf"
                             onChange={handleFileChange}
@@ -129,7 +141,12 @@ const PreparePrint = () => {
                         Upload File
                     </Button></Col>
                 <Col style={{ textAlign: 'left' }} >  <h2 className="mb-4"   >Thông số in </h2> </Col>
-
+                <Col xs={2} style={{}} >
+                    {/* Upload button */}
+                    <Button variant="primary" onClick={handleSetupConfig}>
+                        Setup Config
+                    </Button>
+                </Col>
             </Row>
             <Row className="mb-3">
                 <Col xs={6} style={{ border: '1px solid', borderRadius: '10px' }}>
@@ -215,15 +232,24 @@ const PreparePrint = () => {
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Row>
-                        <Col xs={12} style={{ marginTop: '80px' }} >
-                            {/* Upload button */}
-                            <Button variant="primary" onClick={handleSetupConfig}>
-                                Setup Config
-                            </Button>
-                        </Col>
+                    <Row style={{ marginTop: '100px' }} >
+                        {selectedFile && (
+                            <Row>
+                                <Col xs={12} md={6}>
+                                    <h2 className="mb-4 " style={{ textAlign: 'left' }}> File in:</h2>
+                                    <span className='file'>{selectedFile.name}</span>
+                                </Col>
+                            </Row>
+                        )}
                     </Row>
+                    <Row>
+                        <Link to='/listprinter'>
+                            <Button variant="primary" >
+                                Chọn máy in
+                            </Button>
+                        </Link>
 
+                    </Row>
 
 
                 </Col>
@@ -231,18 +257,17 @@ const PreparePrint = () => {
             <Row style={{ height: '20px' }}>
 
             </Row>
-
+            <Row>
+                {/* Success Modal */}
+                <Modal show={showSuccessModal} onHide={handleCloseSuccessModal}>
+                    <Modal.Header className='modal-header'>
+                        <Modal.Title >File Uploaded Successfully!</Modal.Title>
+                    </Modal.Header>
+                </Modal>
+            </Row>
 
             {/* Display selected file variable */}
-            {selectedFile && (
-                <Row>
-                    <Col xs={12} md={6}>
-                        <p>
-                            Selected File: <span>{selectedFile.name}</span>
-                        </p>
-                    </Col>
-                </Row>
-            )}
+
         </Container>
     );
 };

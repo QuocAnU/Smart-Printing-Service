@@ -1,10 +1,14 @@
 
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import './Login.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import { hideHeader, showHeader } from './../../components/Store/action.js';
+
+import { useDispatch } from 'react-redux';
 
 function Input({ type, id, name, label, placeholder, value, onChange, error, errorMessage }) {
   return (
@@ -24,7 +28,8 @@ function Input({ type, id, name, label, placeholder, value, onChange, error, err
   );
 }
 
-function InputForm({ onSubmit, showHeader, setShowHeader, AuthError, AuthErrorMessage }) {
+function InputForm({ onSubmit, AuthError, AuthErrorMessage }) {
+  // function InputForm({ onSubmit, showHeader, setShowHeader, AuthError, AuthErrorMessage }) {
   const [BKNetID, setBKNetID] = useState('');
   const [BKNetIDError, setBKNetIDError] = useState(false);
   const [BKNetIDErrorMessage, setBKNetIDErrorMessage] = useState('');
@@ -119,24 +124,32 @@ const ErrorDisplay = ({ error, errorMessage }) => {
   );
 }
 
-const Login = ({ showHeader, setShowHeader, isLoggedIn, setIsLoggedIn }) => {
+// const Login = ({ showHeader, setShowHeader, isLoggedIn, setIsLoggedIn, hideHeader }) => {
+const Login = ({ isLoggedIn, setIsLoggedIn, hideHeader }) => {
   const logoBK = require('./../../assets/Image/logoBK.png');
   const google = require('./../../assets/Image/google-icon.png');
 
   const [AuthError, setAuthError] = useState(false);
   const [AuthErrorMessage, setAuthErrorMessage] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    hideHeader(); // Gọi hideHeader trong useEffect để đảm bảo rằng trạng thái đã được cập nhật
+  }, [hideHeader]);
 
   const handleSuccessfulLogin = () => {
-    setShowHeader(true);
+    // setShowHeader(true);
+    dispatch(showHeader());
     setIsLoggedIn(true);
     localStorage.setItem('isLoggedIn', true);
+    // localStorage.setItem('showHeader', true);
     navigate("/");
     console.log('Login successful');
   };
 
   const handleLoginError = (errorMessage) => {
-    setShowHeader(false); // or leave it as it is based on your logic
+    // setShowHeader(false); // or leave it as it is based on your logic
     console.log(errorMessage);
     setAuthErrorMessage(errorMessage); // Set the specific error message
     setAuthError(true); // Set AuthError to true to trigger the ErrorDisplay
@@ -182,8 +195,8 @@ const Login = ({ showHeader, setShowHeader, isLoggedIn, setIsLoggedIn }) => {
             </div>
             <InputForm
               onSubmit={handleSubmit}
-              showHeader={showHeader}
-              setShowHeader={setShowHeader}
+              // showHeader={showHeader}
+              // setShowHeader={setShowHeader}
               AuthError={AuthError}
               AuthErrorMessage={AuthErrorMessage}
             />
@@ -194,4 +207,4 @@ const Login = ({ showHeader, setShowHeader, isLoggedIn, setIsLoggedIn }) => {
   );
 };
 
-export default Login;
+export default connect(null, { hideHeader })(Login);
