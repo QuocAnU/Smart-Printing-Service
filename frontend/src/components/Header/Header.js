@@ -8,19 +8,25 @@ import { useState, useEffect } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
-import Dropdown from 'react-bootstrap/Dropdown';
+// import Dropdown from 'react-bootstrap/Dropdown';
+import { useDispatch } from 'react-redux';
 import axios from 'axios'
+import { connect } from 'react-redux';
+import { logout } from '../Store/action';
+const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
+    // const Header = ({ showHeader, setShowHeader, isLoggedIn, setIsLoggedIn }) => {
 
-const Header = ({ showHeader, setShowHeader, isLoggedIn, setIsLoggedIn }) => {
+
     const logoBK = require('./../../assets/Image/logoBK.png');
 
     const [profile, setProfile] = useState(null);
-    const [fullname, setFullname] = useState("");
+    const dispatch = useDispatch();
 
-    console.log("Test:", isLoggedIn)
+    // console.log("Tests:", isLoggedIn)
     useEffect(() => {
         if (isLoggedIn) {
             const accessToken = localStorage.getItem('accessToken');
+            console.log("Access token:", accessToken);
             if (accessToken) {
                 axios.get('http://localhost:8001/user/profile', {
                     headers: {
@@ -46,8 +52,12 @@ const Header = ({ showHeader, setShowHeader, isLoggedIn, setIsLoggedIn }) => {
         setProfile(null);
         setIsLoggedIn(false);
         localStorage.setItem('isLoggedIn', false);
+        dispatch(logout());
     };
 
+    if (!showHeader) {
+        return null; // hoặc hiển thị một header khác hoặc không hiển thị gì cả
+    }
 
 
     return (
@@ -101,7 +111,10 @@ const Header = ({ showHeader, setShowHeader, isLoggedIn, setIsLoggedIn }) => {
                         ) : (
                             // User is not logged in, display login button
                             <Link to='/login'>
-                                <button onClick={() => setShowHeader(false)} className="login site-title" style={{ border: 'none', textDecoration: 'none' }}>
+                                <button onClick={() => {
+                                    // setShowHeader(false)
+                                    localStorage.setItem('showHeader', 'false')
+                                }} className="login site-title" style={{ border: 'none', textDecoration: 'none' }}>
                                     Đăng nhập
                                 </button>
                             </Link>
@@ -115,7 +128,13 @@ const Header = ({ showHeader, setShowHeader, isLoggedIn, setIsLoggedIn }) => {
     );
 }
 
-export default Header
+
+const mapStateToProps = (state) => ({
+    showHeader: state.showHeader,
+});
+
+export default connect(mapStateToProps)(Header);
+//export default Header
 
 
 
