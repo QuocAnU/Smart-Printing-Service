@@ -84,3 +84,16 @@ line-height: 24px; /* 120% */
     background-color:rgb(94, 94, 92); /* Màu tương ứng với trạng thái "CHƯA ĐẦY" */
     margin-right: 10px;
 }
+
+.modal-header {
+  background-color: #045a2f; /* Header background color */
+  color: #fff; /* Header text color */
+  border-bottom: 1px solid #ddd;
+  border-radius: 8px 8px 0 0;
+}
+.modal-header-error {
+  background-color: #b72a0a; /* Header background color */
+  color: #fff; /* Header text color */
+  border-bottom: 1px solid #ddd;
+  border-radius: 8px 8px 0 0;
+}

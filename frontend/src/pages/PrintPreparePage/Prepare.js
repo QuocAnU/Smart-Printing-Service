@@ -7,6 +7,9 @@ import { Link } from 'react-router-dom';
 const PreparePrint = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [showSuccessModal1, setShowSuccessModal1] = useState(false);
+    const [showErrorModal, setShowErrorModal] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     const setDefaultCount = "All"
     const [printConfig, setPrintConfig] = useState({
         pageSize: 2,
@@ -49,7 +52,7 @@ const PreparePrint = () => {
 
                 const formData = new FormData();
                 formData.append('file', selectedFile);
-                console.log("Data Test:", ...formData);
+                console.log("Data Test:", formData);
                 const responseApi = await axios.post(
                     'http://localhost:8001/printing-setup/upload',
                     formData,
@@ -72,6 +75,8 @@ const PreparePrint = () => {
             }
         } catch (error) {
             console.error('Error:', error);
+            setErrorMessage('File upload failed. Please try again.'); // Set an appropriate error message
+            setShowErrorModal(true);
         }
     };
     const handleCloseSuccessModal = () => {
@@ -87,11 +92,11 @@ const PreparePrint = () => {
                 console.log("Test config", printConfig.pageSize)
 
                 const formData = new FormData();
-                formData.append('PageSize', printConfig.pageSize);
+                formData.append('PaperSize', printConfig.pageSize);
                 formData.append('IsTwoSide', printConfig.duplex);
                 formData.append('NumberCopy', printConfig.copyCount);
 
-                console.log("Data", ...formData);
+                console.log("Data", formData);
                 const responseApi = await axios.post('http://localhost:8001/printing-setup/setup-config',
                     formData, {
                     headers: {
@@ -102,9 +107,15 @@ const PreparePrint = () => {
                 });
 
                 console.log('Response from API:', responseApi);
+                setShowSuccessModal1(true);
+                setTimeout(() => {
+                    setShowSuccessModal1(false);
+                }, 2000);
             }
         } catch (error) {
             console.error('Error:', error);
+            setErrorMessage('Config setup failed. Please try again.'); // Set an appropriate error message
+            setShowErrorModal(true);
         }
     };
     const handleChooseFile = (e) => {
@@ -113,6 +124,11 @@ const PreparePrint = () => {
         e.target.value = null;
         e.target.click();
 
+    };
+
+    const handleCloseModal = () => {
+        setShowSuccessModal(false);
+        setShowErrorModal(false);
     };
 
 
@@ -259,10 +275,40 @@ const PreparePrint = () => {
             </Row>
             <Row>
                 {/* Success Modal */}
-                <Modal show={showSuccessModal} onHide={handleCloseSuccessModal}>
+                {/* <Modal show={showSuccessModal} onHide={handleCloseSuccessModal}>
                     <Modal.Header className='modal-header'>
                         <Modal.Title >File Uploaded Successfully!</Modal.Title>
                     </Modal.Header>
+                </Modal> */}
+                <Modal show={showSuccessModal} onHide={handleCloseSuccessModal}>
+                    <Modal.Header className='modal-header'>
+                        <Modal.Title>Successful!</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        {selectedFile && <p>File Uploaded Successfully: {selectedFile.name}</p>}
+
+                    </Modal.Body>
+
+                </Modal>
+                <Modal show={showSuccessModal1} onHide={handleCloseSuccessModal}>
+                    <Modal.Header className='modal-header'>
+                        <Modal.Title>Successful!</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p>Configuration Setup Successful</p>
+                    </Modal.Body>
+
+                </Modal>
+                <Modal show={showErrorModal} onHide={handleCloseModal}>
+                    <Modal.Header className='modal-header-error'>
+                        <Modal.Title>Error!</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>{errorMessage}</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleCloseModal}>
+                            Close
+                        </Button>
+                    </Modal.Footer>
                 </Modal>
             </Row>
 

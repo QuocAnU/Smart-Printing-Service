@@ -90,6 +90,12 @@ form select::-ms-expand {
   border-bottom: 1px solid #ddd;
   border-radius: 8px 8px 0 0;
 }
+.modal-header-error {
+  background-color: #b72a0a; /* Header background color */
+  color: #fff; /* Header text color */
+  border-bottom: 1px solid #ddd;
+  border-radius: 8px 8px 0 0;
+}
 
 .notification {
   float: right;

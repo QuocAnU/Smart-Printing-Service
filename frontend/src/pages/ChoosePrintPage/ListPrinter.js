@@ -3,6 +3,7 @@ import axios from "axios";
 import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
+import Modal from "react-bootstrap/Modal"
 
 // import ReactSearchBox from "react-search-box";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
@@ -16,7 +17,9 @@ const ListPrinter = () => {
 
     const [printer, setPrinter] = useState([]);
     const [choossePrinter, setChoosePrinter] = useState([]);
-
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [showErrorModal, setShowErrorModal] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     useEffect(() => {
         const accessToken = localStorage.getItem('accessToken');
         if (accessToken) {
@@ -65,6 +68,7 @@ const ListPrinter = () => {
         const locationString = `${printer.location.BuildingLocation}_${printer.location.RoomLocation}`;
         const locationMatch1 = typeof locationString === 'string' && locationString.toLowerCase().includes(searchKeyword.toLowerCase());
         return mainInfoMatch || locationMatch || locationMatch1;
+        // return mainInfoMatch;
     }
     );
     const totalFilteredResults = filteredPrinters.length;
@@ -86,33 +90,51 @@ const ListPrinter = () => {
 
                 const PrinterToChoose = printer.find((print) => print._id === id);
 
-                const formData = new FormData();
-                formData.append("CampusLocation", PrinterToChoose.location.CampusLocation)
-                formData.append("BuildingLocation", PrinterToChoose.location.BuildingLocation)
-                formData.append("RoomLocation", PrinterToChoose.location.RoomLocation)
+                if (PrinterToChoose && PrinterToChoose.location) {
+                    const { CampusLocation, BuildingLocation, RoomLocation } = PrinterToChoose.location;
+                    console.log(`PrinterToChoose:`, RoomLocation)
+                    const formData = new FormData();
+                    formData.append("CampusLocation", CampusLocation);
+                    formData.append("BuildingLocation", BuildingLocation);
+                    formData.append("RoomLocation", RoomLocation);
 
-                console.log("Forms Data printer:", ...formData);
-                const responseApi = await axios.post(
-                    'http://localhost:8001/printing-setup/set-printer',
-                    formData,
-                    {
-                        headers: {
-                            'Content-Type': 'multipart/form-data', // Đặt loại nội dung là multipart/form-data
-                            Authorization: `Bearer ${accessToken}`,
-                        },
-                        withCredentials: true,
-                    }
-                );
 
-                console.log('Response from API:', responseApi.data);
+                    console.log("Forms Data printer:", formData);
 
+                    const responseApi = await axios.post(
+                        'http://localhost:8001/printing-setup/set-printer',
+                        formData,
+                        {
+                            headers: {
+                                'Content-Type': 'multipart/form-data',
+                                Authorization: `Bearer ${accessToken}`,
+                            },
+                            withCredentials: true,
+                        }
+                    );
+
+                    console.log('Response from API:', responseApi.data);
+                    setShowSuccessModal(true);
+                    setTimeout(() => {
+                        setShowSuccessModal(false);
+                    }, 2000);
+                }
             }
         } catch (error) {
             console.error('Error:', error);
+            setErrorMessage('Choose Printer failed. Please try again.'); // Set an appropriate error message
+            setShowErrorModal(true);
         }
     };
 
+    const handleCloseSuccessModal = () => {
+        setShowSuccessModal(false);
 
+    };
+    const handleCloseModal = () => {
+        setShowSuccessModal(false);
+        setShowErrorModal(false);
+    };
 
     return (
 
@@ -228,6 +250,28 @@ const ListPrinter = () => {
                     </Col>
                 </Row>
             </Row>
+            <Modal show={showSuccessModal} onHide={handleCloseSuccessModal}>
+                <Modal.Header className='modal-header'>
+                    <Modal.Title>Successful!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Gửi file in thành công</p>
+
+                </Modal.Body>
+
+            </Modal>
+
+            <Modal show={showErrorModal} onHide={handleCloseModal}>
+                <Modal.Header className='modal-header-error'>
+                    <Modal.Title>Error!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>{errorMessage}</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseModal}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
 
 
         </Container>
