@@ -135,12 +135,7 @@ function Print() {
     };
 
 
-    const handleFileReset = () => {
-        setSelectedFile(null);
-    };
-    // const handleSelectPrinter = () => {
 
-    // };
     const handleUpload = async () => {
         try {
             const accessToken = localStorage.getItem('accessToken');

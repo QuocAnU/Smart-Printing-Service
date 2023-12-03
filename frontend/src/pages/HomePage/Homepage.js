@@ -1,7 +1,7 @@
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import Header from './../../components/Header/Header.js'
+
 // import CountdownTimer from '../../components/CountdownTimer/CountdownTimer'
 import './Homepage.css'
 
