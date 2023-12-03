@@ -12,6 +12,7 @@ import reducer from './components/Store/reducer.js';
 
 const store = createStore(reducer);
 
+
 function App() {
   // State to track login status
   // const [showHeader, setShowHeader] = useState(true);

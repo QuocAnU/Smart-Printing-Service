@@ -8,12 +8,15 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 
+import CountDownTimer from '../../components/CountdownTimer/CountdownTimer';
 
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import SearchBox from "../../components/Search/Search";
 
 function Print() {
-
+    
+    const targetDate = Date.now() + 15 * 60 * 1000;
+    
     const [selectedFile, setSelectedFile] = useState(null);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [showSuccessModal1, setShowSuccessModal1] = useState(false);
@@ -380,6 +383,9 @@ function Print() {
                             }
                         </Col>
                         <Col xs={1}></Col>
+                        <Col xs={3}>
+                            <CountDownTimer targetDate={targetDate}/>
+                        </Col>
                         <Col xs={5} className='printconfig'>
                             {/* <div className='printconfig'> */}
                             <Row>
@@ -600,6 +606,9 @@ function Print() {
                                 </Button>
                             </Col>
                         </Row>
+                        <Col xs={3}>
+                            <CountDownTimer targetDate={targetDate} />  {/* Add the CountDownTimer component */}
+                        </Col>
                     </Row>
                     <Modal show={showSuccessModal2} onHide={handleCloseSuccessModal2}>
                         <Modal.Header className='modal-header'>

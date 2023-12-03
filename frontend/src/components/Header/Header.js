@@ -52,6 +52,10 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
         setProfile(null);
         setIsLoggedIn(false);
         localStorage.setItem('isLoggedIn', false);
+
+        if (sessionStorage.getItem('countdownTargetDate')) {
+            sessionStorage.removeItem('countdownTargetDate');
+        }
         dispatch(logout());
     };
 
