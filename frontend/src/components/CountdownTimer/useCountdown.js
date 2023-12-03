@@ -1,19 +1,26 @@
 import { useEffect, useState } from 'react';
 
 const useCountdown = (targetDate) => {
-  const countDownDate = new Date(targetDate).getTime();
+  // Retrieve targetDate from localStorage or use the provided targetDate
+  const storedTargetDate = localStorage.getItem('countdownTargetDate');
+  const initialTargetDate = storedTargetDate ? new Date(storedTargetDate) : new Date(targetDate);
+
+  const countDownDate = initialTargetDate.getTime();
 
   const [countDown, setCountDown] = useState(
     countDownDate - new Date().getTime()
   );
 
   useEffect(() => {
+    // Save targetDate to localStorage
+    localStorage.setItem('countdownTargetDate', initialTargetDate.toISOString());
+
     const interval = setInterval(() => {
       setCountDown(countDownDate - new Date().getTime());
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [countDownDate]);
+  }, [countDownDate, initialTargetDate]);
 
   return getReturnValues(countDown);
 };

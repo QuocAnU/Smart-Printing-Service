@@ -1,6 +1,6 @@
 .login_bg {
     background-image: url("https://hcmut.edu.vn/img/carouselItem/07531069.jpg?t=07531113");
-    height: 100vh;
+    height: 100%;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -11,7 +11,7 @@
     isolation: isolate;
     flex-direction: row;
     width: 100%;
-    /* height: 1024px; */
+    height: 1024px;
     justify-content: flex-start;
     align-items: flex-start;
     padding: 0px;

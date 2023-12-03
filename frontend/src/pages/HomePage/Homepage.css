@@ -1,6 +1,8 @@
+
 .style {
-    box-sizing:border-box;
+    box-sizing: border-box;
 }
+
 .container {
     height: 90px;
     margin-left: auto;
@@ -10,130 +12,161 @@
     display: block;
     justify-content: center;
 }
+
 .building {
-        width: 33px;
-        height: 29px;
-        display: block;
-        margin-left: 360px;
-        margin-top: -8px;
-    } 
+    width: 33px;
+    height: 29px;
+    display: block;
+    margin-left: 10%; /* Adjust according to your design */
+    margin-top: -8px;
+}
+
 .title {
     color: white;
-    font-family: "Open Sans",Arial,sans-serif;
-    font-size: 30px;
+    font-family: "Open Sans", Arial, sans-serif;
+    font-size: 2rem; /* Responsive font size */
     font-style: normal;
     font-weight: 600;
-    line-height: 45px;
-    text-align: center;   
+    line-height: 2.8rem; /* Responsive line height */
+    text-align: center;
+    padding-bottom: none;
 }
+
 .crowd {
-        width: 33px;
-        height: 29px;
-        display: block;
-        margin-left: 540px;
-        margin-top: -26px;
-    } 
-.fl {
-        width: 33px;
-        height: 29px;
-        display: block;
-        margin-left: 780px;
-        margin-top: -31px;
+    width: 33px;
+    height: 29px;
+    display: block;
+    margin-left: 15%; /* Adjust according to your design */
+    margin-top: -26px;
 }
+
+.fl {
+    width: 33px;
+    height: 29px;
+    display: block;
+    margin-left: 25%; /* Adjust according to your design */
+    margin-top: -31px;
+}
+
 .text {
-    text-align: center;  
-    font-family: "Open Sans",Arial,sans-serif, bold;
-    font-size: 15px;
+    text-align: center;
+    font-family: "Open Sans", Arial, sans-serif, bold;
+    font-size: 1rem; /* Responsive font size */
     color: white;
     margin-left: 10px;
-
-    
 }
+
 .logoBK {
     display: flex;
-    margin-left: 150px;
+    margin-left: 5%; /* Adjust according to your design */
     margin-right: auto;
-    margin-top: 20px; 
+    margin-top: 1%; /* Adjust according to your design */
     width: 140px;
     height: 140px;
     position: absolute;
     background-color: rgb(192 191 197 / 13%);
     border-radius: 100px;
 }
+
 .slide1 {
     margin-top: 15px;
 }
+
 .slide2 {
     width: 100%;
     height: 90px;
     background-color: #2162c2;
 }
+
 .information {
     padding-left: 0;
     padding-right: 0;
-    height: 450px;
+    height: auto; /* Adjust according to your design */
     display: block;
     justify-content: center;
-    margin-top: 30px;
+    margin-top: 3%; /* Adjust according to your design */
     .text1 {
-        height: 400px;
+        height: auto; /* Adjust according to your design */
         border: 1px solid #000;
-        
-    }
-    
-    .right {
-        margin-left: 960px;
-        margin-top: -440px;
     }
 
 }
+
 .title1 {
     color: white;
-    font-family: "Open Sans",Arial,sans-serif;
-    font-size: 18px;
+    font-family: "Open Sans", Arial, sans-serif;
+    font-size: 1.2rem; /* Responsive font size */
     font-style: normal;
     font-weight: 600;
-    line-height: 42px;
-    text-align: left;   
-    margin-left: 50px;
+    line-height: 2rem; /* Responsive line height */
+    text-align: left;
+    margin-left: 5%; /* Adjust according to your design */
 }
-.p { 
-    font-size: 18px;
+
+.p {
+    font-size: 1rem; /* Responsive font size */
     color: #000;
     font-family: Open Sans Hebrew;
     font-style: normal;
     font-weight: 400;
-    line-height: 24px;
-    text-align: left
-    ;
+    line-height: 1.5rem; /* Responsive line height */
+    text-align: left;
 }
+
 .pq {
-    font-size: 13px;
+    font-size: 0.8rem; /* Responsive font size */
     color: #000;
     font-family: Open Sans Hebrew;
     font-style: normal;
     font-weight: 400;
-    line-height: 24px;
-    text-align: left
+    line-height: 1.5rem; /* Responsive line height */
+    text-align: left;
 }
+
 .square {
     border-radius: 1px;
     width: 10px;
     height: 10px;
     display: flex;
-    margin-left: 85px;
+    margin-left: 10%; /* Adjust according to your design */
     align-items: center;
     margin-top: 20px;
 }
+
 .gg {
     width: 20px;
     height: 20px;
     margin-top: 38px;
-    margin-left: 20px;
+    margin-left: 5%; /* Adjust according to your design */
 }
+
 .call {
     width: 20px;
     height: 20px;
-   margin-top: 22px;
-    margin-left: 20px;
+    margin-top: 22px;
+    margin-left: 5%; /* Adjust according to your design */
+}
+
+/* Responsive media queries */
+@media (max-width: 768px) {
+    .building,
+    .crowd,
+    .fl {
+        margin-left: 5%; /* Adjust according to your design */
+    }
+
+    .title,
+    .text,
+    .title1,
+    .p,
+    .pq,
+    .square,
+    .gg,
+    .call {
+        margin-left: 5%; /* Adjust according to your design */
+    }
+
+    .right {
+        margin-left: 5%; /* Adjust according to your design */
+    }
 }
