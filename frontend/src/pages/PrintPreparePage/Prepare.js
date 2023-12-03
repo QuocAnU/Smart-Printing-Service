@@ -52,11 +52,12 @@ const PreparePrint = () => {
 
                 const formData = new FormData();
                 formData.append('file', selectedFile);
-                console.log("Data Test:", formData);
+                console.log("Data Test:", [...formData]);
                 const responseApi = await axios.post(
                     'http://localhost:8001/printing-setup/upload',
                     formData,
                     {
+
                         headers: {
                             'Content-Type': 'multipart/form-data', // Đặt loại nội dung là multipart/form-data
                             Authorization: `Bearer ${accessToken}`,
@@ -91,22 +92,30 @@ const PreparePrint = () => {
             if (accessToken) {
                 console.log("Test config", printConfig.pageSize)
 
-                const formData = new FormData();
-                formData.append('PaperSize', printConfig.pageSize);
-                formData.append('IsTwoSide', printConfig.duplex);
-                formData.append('NumberCopy', printConfig.copyCount);
+                // const formData = new FormData();
+                // formData.append('PaperSize', printConfig.pageSize);
+                // // formData.append('IsTwoSide', printConfig.duplex);
+                // formData.append('IsTwoSide', Boolean(printConfig.duplex));
+                // formData.append('NumberCopy', printConfig.copyCount);
 
-                console.log("Data", formData);
+                // console.log("Data", [...formData]);
+                const configData = {
+                    PaperSize: printConfig.pageSize,
+                    IsTwoSide: Boolean(printConfig.duplex),
+                    NumberCopy: printConfig.copyCount,
+                };
+
+                console.log("Data", configData);
                 const responseApi = await axios.post('http://localhost:8001/printing-setup/setup-config',
-                    formData, {
+                    configData, {
                     headers: {
-                        'Content-Type': 'multipart/form-data',
+                        'Content-Type': 'application/json',
                         Authorization: `Bearer ${accessToken}`,
                     },
                     withCredentials: true,
                 });
 
-                console.log('Response from API:', responseApi);
+                console.log('Response from API:', responseApi.data);
                 setShowSuccessModal1(true);
                 setTimeout(() => {
                     setShowSuccessModal1(false);

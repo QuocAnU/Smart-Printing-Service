@@ -4,6 +4,7 @@ import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Modal from "react-bootstrap/Modal"
+import Buttons from "react-bootstrap/Button"
 
 // import ReactSearchBox from "react-search-box";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
@@ -25,7 +26,9 @@ const ListPrinter = () => {
         if (accessToken) {
             axios.get('http://localhost:8001/printing-setup/get-list-printer', {
                 headers: {
+
                     Authorization: `Bearer ${accessToken}`,
+
                 },
                 withCredentials: true,
             })
@@ -91,24 +94,26 @@ const ListPrinter = () => {
                 const PrinterToChoose = printer.find((print) => print._id === id);
 
                 if (PrinterToChoose && PrinterToChoose.location) {
-                    const { CampusLocation, BuildingLocation, RoomLocation } = PrinterToChoose.location;
-                    console.log(`PrinterToChoose:`, RoomLocation)
-                    const formData = new FormData();
-                    formData.append("CampusLocation", CampusLocation);
-                    formData.append("BuildingLocation", BuildingLocation);
-                    formData.append("RoomLocation", RoomLocation);
+                    const dataJson = {
+                        CampusLocation: PrinterToChoose.location.CampusLocation,
+                        BuildingLocation: PrinterToChoose.location.BuildingLocation,
+                        RoomLocation: PrinterToChoose.location.RoomLocation,
+
+                    };
 
 
-                    console.log("Forms Data printer:", formData);
+
+                    console.log("Data printer:", dataJson);
 
                     const responseApi = await axios.post(
                         'http://localhost:8001/printing-setup/set-printer',
-                        formData,
+                        dataJson,
                         {
                             headers: {
-                                'Content-Type': 'multipart/form-data',
+                                'Content-Type': 'application/json',
                                 Authorization: `Bearer ${accessToken}`,
                             },
+
                             withCredentials: true,
                         }
                     );
@@ -267,9 +272,9 @@ const ListPrinter = () => {
                 </Modal.Header>
                 <Modal.Body>{errorMessage}</Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseModal}>
+                    <Buttons variant="secondary" onClick={handleCloseModal}>
                         Close
-                    </Button>
+                    </Buttons>
                 </Modal.Footer>
             </Modal>
 
