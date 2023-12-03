@@ -7,3 +7,5 @@
 *.pdf
 *.docx
 frontend/node_modules/.cache/.eslintcache
+backend/node_modules/
+frontend/node_modules/
