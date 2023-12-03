@@ -3,12 +3,12 @@
 }
 
 .uploadFrame {
-  border: 2px solid;
+  /* border: 2px solid; */
   padding: 20px;
   min-height: 600px;
-  width: 60%; 
+  width: 100%; 
   float: left;
-  margin-left: 30%;
+  margin-bottom: 20px;
   margin-top: 20px;
   background-color: #F4F4F4;
 }
@@ -45,7 +45,7 @@ form label {
   margin-bottom: 10px;
   width: 100%;
   padding: 8px;
-  border: 1px solid #ccc;
+  border: 2px solid green;
   border-radius: 5px;
 }
 
@@ -82,7 +82,19 @@ form select::-ms-expand {
   background-color: #F4F4F4;
   width: auto;
   max-width: 50%;
-  margin-left: 20%;
+  
+}
+.modal-header {
+  background-color: #045a2f; /* Header background color */
+  color: #fff; /* Header text color */
+  border-bottom: 1px solid #ddd;
+  border-radius: 8px 8px 0 0;
+}
+.modal-header-error {
+  background-color: #b72a0a; /* Header background color */
+  color: #fff; /* Header text color */
+  border-bottom: 1px solid #ddd;
+  border-radius: 8px 8px 0 0;
 }
 
 .notification {
@@ -92,6 +104,35 @@ form select::-ms-expand {
   background-color: #ccc;
 }
 
-.left {
-  margin-left: -10%;
+
+
+.sodu{
+  margin-right: 10%;
+}
+
+.sotrangin{
+  margin-left: 10%;
+}
+
+.btn-cp{
+  margin-bottom: 10px;
+  width: 100%;
+  padding: 12px;
+  border: 2px solid blue;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.printconfig {
+  /* display: flex; */
+  border: 1px solid black;
+  padding: 20px;
+  min-height: 100px;
+  height: 215px;
+  /* width: 100%;  */
+  float: left;
+  /* margin-bottom: 20px;
+  margin-top: 20px; */
+  /* background-color: #F4F4F4; */
+  border-radius: 10px;
 }
