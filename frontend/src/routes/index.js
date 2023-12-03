@@ -4,9 +4,7 @@ import { connect } from 'react-redux';
 import Header from './../components/Header/Header.js';
 import Login from './../pages/Login/Login.js';
 import HomePage from './../pages/HomePage/Homepage.js';
-import PrintPrepare from './../pages/PrintPreparePage/PrintPrepare.js';
-import ListPrinter from './../pages/ChoosePrintPage/ListPrinter.js';
-import PreparePrint from '../pages/PrintPreparePage/Prepare.js';
+import Print from '../pages/Print/Print.js';
 
 const AppRoutes = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
     return (
@@ -18,9 +16,7 @@ const AppRoutes = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
                 {/* Pass isLoggedIn and setIsLoggedIn to the Login component */}
                 <Route path="/login" element={<Login showHeader={showHeader} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
                 <Route path="/" element={<HomePage />} />
-                <Route path="/print" element={<PrintPrepare />} />
-                <Route path="/prepare" element={<PreparePrint />} />
-                <Route path="/listprinter" element={<ListPrinter />} />
+                <Route path='/print' element={<Print />} />
             </Routes>
         </Router>
     );

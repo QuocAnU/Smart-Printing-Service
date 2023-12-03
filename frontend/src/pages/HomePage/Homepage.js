@@ -1,7 +1,7 @@
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import Header from './../../components/Header/Header.js'
+
 // import CountdownTimer from '../../components/CountdownTimer/CountdownTimer'
 import './Homepage.css'
 
@@ -21,7 +21,7 @@ const HomePage = ({ isLoggedIn, setIsLoggedIn }) => {
     // const dateTimeAfterThreeDays = NOW_IN_MS + FIFTEEN_MINUTE_IN_MS;
     return (
         <>
-            <Container>
+            <Container className='mt-12'>
                 <Row xs={12}>
                     <Row>
                         {/* Demo of using time counter UI */}
@@ -52,38 +52,41 @@ const HomePage = ({ isLoggedIn, setIsLoggedIn }) => {
                         </div>
                     </Row>
                     <Row>
-                        <div className='style information'>
-                            <div style={{ width: '1320px' }}>
-                                <div style={{ width: '900px' }} >
-                                    <div style={{ height: '40px', backgroundColor: '#2162c2' }}>
-                                        <h1 className='title1'>Thông tin chung</h1>
-                                    </div>
-                                    <div className='text1 style'>
+                        <Col xs={7} className='style information'>
+                            <div>
+                                <div style={{ height: '40px', backgroundColor: '#2162c2' }}>
+                                    <h1 className='title1'>Thông tin chung</h1>
+                                </div>
+                                <div className='text1 style'>
 
-                                        {/* <CountdownTimer targetDate={dateTimeAfterThreeDays} /> */}
-                                        <p className='p' style={{ margin: '35px 50px 10px 50px' }}>Student Smart Printing Service là dịch vụ in in dành cho sinh viên cho phép bạn in từ xa tới bất kỳ máy in nào bạn chọn. </p>
-                                        <p className='p' style={{ margin: '0 50px 10px' }}>          Máy in được đặt ở vị trí thuận tiện tại nhiều địa điểm khác nhau trong khuôn viên trường, bao gồm tất cả các thư viện và tòa nhà trong khuôn viên trường.</p>
-                                        <p className='p' style={{ margin: '10px 50px 0px' }}>Student Smart Printing Service cho phép sinh viên:</p>
-                                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                                            <img src={square} alt='' className='square' />
-                                            <p className='p' style={{ margin: ' 20px 0px 0px 16px' }}>Gửi lệnh in trực tiếp.</p>
-                                        </div>
-                                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                                            <img src={square} alt='' className='square' />
-                                            <p className='p' style={{ margin: ' 20px 0px 0px 16px' }}>In miễn phí tối đa 600 trang mỗi học kì. Có thể mua thêm theo nhu cầu.</p>
-                                        </div>
-                                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                                            <img src={square} alt='' className='square' />
-                                            <p className='p' style={{ margin: ' 20px 0px 0px 16px' }}>Bảo mật và riêng tư. Chỉ có bạn mới có thể in và xem lịch sử của mình.</p>
-                                        </div>
-                                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                                            <img src={square} alt='' className='square' />
-                                            <p className='p' style={{ margin: ' 20px 0px 0px 16px' }}>Mỗi lệnh in được mặc định là in hai mặt để tiết kiệm giấy.</p>
-                                        </div>
+                                    {/* <CountdownTimer targetDate={dateTimeAfterThreeDays} /> */}
+                                    <p className='p' style={{ margin: '35px 50px 10px 50px' }}>Student Smart Printing Service là dịch vụ in in dành cho sinh viên cho phép bạn in từ xa tới bất kỳ máy in nào bạn chọn. </p>
+                                    <p className='p' style={{ margin: '0 50px 10px' }}>          Máy in được đặt ở vị trí thuận tiện tại nhiều địa điểm khác nhau trong khuôn viên trường, bao gồm tất cả các thư viện và tòa nhà trong khuôn viên trường.</p>
+                                    <p className='p' style={{ margin: '10px 50px 0px' }}>Student Smart Printing Service cho phép sinh viên:</p>
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <img src={square} alt='' className='square' />
+                                        <p className='p' style={{ margin: ' 20px 0px 0px 16px' }}>Gửi lệnh in trực tiếp.</p>
+                                    </div>
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <img src={square} alt='' className='square' />
+                                        <p className='p' style={{ margin: ' 20px 0px 0px 16px' }}>In miễn phí tối đa 600 trang mỗi học kì. Có thể mua thêm theo nhu cầu.</p>
+                                    </div>
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <img src={square} alt='' className='square' />
+                                        <p className='p' style={{ margin: ' 20px 0px 0px 16px' }}>Bảo mật và riêng tư. Chỉ có bạn mới có thể in và xem lịch sử của mình.</p>
+                                    </div>
+                                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '30px' }}>
+                                        <img src={square} alt='' className='square' />
+                                        <p className='p' style={{ margin: ' 20px 0px 0px 16px' }}>Mỗi lệnh in được mặc định là in hai mặt để tiết kiệm giấy.</p>
                                     </div>
                                 </div>
                             </div>
-                            <div className='right' style={{ width: '360px' }} >
+
+                        </Col>
+                        <Col xs={1}></Col>
+                        <Col xs={4} className='style information'>
+                            <div >
+
                                 <div style={{ height: '40px', backgroundColor: '#2162c2' }} >
                                     <h1 className='title1'>Thông tin liên hệ</h1>
                                 </div>
@@ -108,13 +111,14 @@ const HomePage = ({ isLoggedIn, setIsLoggedIn }) => {
                                         <img src={square} alt='' className='square' />
                                         <p className='pq' style={{ margin: '13px 0px 0px 10px' }}>Email: pdt@hcmut.edu.vn</p>
                                     </div>
-                                    <div style={{ display: 'flex' }}>
+                                    <div style={{ display: 'flex', marginBottom: '30px' }}>
                                         <img src={square} alt='' className='square' />
                                         <p className='pq' style={{ margin: '13px 0px 0px 10px' }}>Phone: 0288 345 345</p>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+
+                        </Col>
 
                     </Row>
                 </Row>

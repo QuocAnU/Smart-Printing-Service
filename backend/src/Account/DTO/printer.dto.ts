@@ -55,5 +55,6 @@ export class PrinterLocationDto {
   BuildingLocation: string;
 
   @IsNotEmpty()
+  @IsString()
   RoomLocation: string;
 }
