@@ -56,6 +56,7 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
     };
 
     if (!showHeader) {
+        dispatch({ type: 'HIDE_HEADER' });
         return null; // hoặc hiển thị một header khác hoặc không hiển thị gì cả
     }
 
