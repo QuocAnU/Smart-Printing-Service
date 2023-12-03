@@ -73,7 +73,7 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
                     </Col>
                     <Col sx={2} sm={1}></Col>
                     <Col sx={2} className='lg' >
-                        <Link to='/prepare'  >
+                        <Link to='/print'  >
                             <button className='print'>
                                 Thực hiện in
                             </button>
