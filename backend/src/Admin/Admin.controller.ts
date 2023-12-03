@@ -37,7 +37,7 @@ export class AdminController {
   constructor(private adminService: AdminService) {}
   @Post('getlog')
   async get_log_from_user(@Req() req){
-    return this.adminService.get_log(req.body["username"])
+    return this.adminService.get_log(req.body.username)
 
   }
 }
