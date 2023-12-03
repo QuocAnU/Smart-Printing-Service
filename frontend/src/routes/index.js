@@ -14,7 +14,7 @@ const AppRoutes = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
 
             <Routes>
                 {/* Pass isLoggedIn and setIsLoggedIn to the Login component */}
-                <Route path="/login" element={<Login showHeader={showHeader} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
+                <Route path="/login" element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
                 <Route path="/" element={<HomePage />} />
                 <Route path='/print' element={<Print />} />
             </Routes>
