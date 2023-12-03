@@ -82,6 +82,7 @@ export class PrintingSetupController {
         )
         file: Express.Multer.File,
     ) {
+        console.log("Received request file :", req.body);
         await this.cacheManager.set(req.user["BKNetID"], file, 2000000);
         //TODO: call convert to pdf: fileName
         if (file.mimetype != "application/pdf") {
@@ -123,6 +124,9 @@ export class PrintingSetupController {
         dto: PrintConfigDto,
     ) {
         try {
+            
+            console.log("Received request:", req.body);
+            console.log("Received data:", dto);
             let file_name = await this.cacheManager.get(req.user["BKNetID"]);
             if (file_name == null)
                 throw new HttpException("Not uploaded file yet!", HttpStatus.FORBIDDEN);
@@ -160,11 +164,14 @@ export class PrintingSetupController {
     async setPrinter(
         @Req()
         req: Request,
+        
         @Body()
         dto: PrinterLocationDto,
     ) {
         try {
             //TODO: check printer status
+            console.log("Received request:", req.body);
+            console.log("Received data:", dto);
             const chosenPrinter = await this.printerService.getPrinterStatus(dto);
             if (chosenPrinter == null)
                 throw new HttpException(
