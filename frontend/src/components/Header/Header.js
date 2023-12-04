@@ -52,10 +52,15 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
         setProfile(null);
         setIsLoggedIn(false);
         localStorage.setItem('isLoggedIn', false);
+
+        if (sessionStorage.getItem('countdownTargetDate')) {
+            sessionStorage.removeItem('countdownTargetDate');
+        }
         dispatch(logout());
     };
 
     if (!showHeader) {
+        dispatch({ type: 'HIDE_HEADER' });
         return null; // hoặc hiển thị một header khác hoặc không hiển thị gì cả
     }
 
@@ -134,7 +139,3 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps)(Header);
-//export default Header
-
-
-

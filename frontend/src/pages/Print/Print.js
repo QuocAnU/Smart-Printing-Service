@@ -8,16 +8,21 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 
+import CountDownTimer from '../../components/CountdownTimer/CountdownTimer';
 
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import SearchBox from "../../components/Search/Search";
 
 function Print() {
-
+    
+    const targetDate = Date.now() + 15 * 60 * 1000;
+    
     const [selectedFile, setSelectedFile] = useState(null);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [showSuccessModal1, setShowSuccessModal1] = useState(false);
     const [showErrorModal, setShowErrorModal] = useState(false);
+
+    const [showErrorModalBuy, setShowErrorModalBuy] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [activeTab, setActiveTab] = useState('upload');
     const setDefaultCount = "All"
@@ -203,9 +208,14 @@ function Print() {
                 setShowSuccessModal1(true);
             }
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error:', error.response.data.message);
+            if (error.response.data.message === "Not enough pasge!") {
+                setShowErrorModalBuy(true)
+            } else {
+                setShowErrorModal(true);
+            }
             setErrorMessage('Config setup failed. Please try again.'); // Set an appropriate error message
-            setShowErrorModal(true);
+
         }
     };
     useEffect(() => {
@@ -234,6 +244,8 @@ function Print() {
     const handleCloseModal = () => {
         setShowSuccessModal(false);
         setShowErrorModal(false);
+        setShowErrorModalBuy(false);
+        setActiveTab('upload');
     };
 
     const handleCloseModalUpload = () => {
@@ -251,6 +263,7 @@ function Print() {
 
     };
     return (
+
         <Tabs
             activeKey={activeTab}
             onSelect={(tab) => setActiveTab(tab)}
@@ -380,6 +393,9 @@ function Print() {
                             }
                         </Col>
                         <Col xs={1}></Col>
+                        <Col xs={3}>
+                            <CountDownTimer targetDate={targetDate}/>
+                        </Col>
                         <Col xs={5} className='printconfig'>
                             {/* <div className='printconfig'> */}
                             <Row>
@@ -482,6 +498,20 @@ function Print() {
                                 </Buttons>
                             </Modal.Footer>
                         </Modal>
+                        <Modal show={showErrorModalBuy} onHide={handleCloseModal}>
+                            <Modal.Header className='modal-header-error'>
+                                <Modal.Title>Error!</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>{errorMessage}</Modal.Body>
+                            <Modal.Footer style={{ justifyContent: 'center' }}>
+                                <Buttons variant="secondary" color='error' onClick={handleCloseModal} style={{ marginRight: '10px' }} >
+                                    Mua thêm giấy
+                                </Buttons>
+                                <Buttons variant="secondary" onClick={handleCloseModal}>
+                                    Close
+                                </Buttons>
+                            </Modal.Footer>
+                        </Modal>
                     </Row>
                 </Container>
             </Tab>
@@ -489,6 +519,7 @@ function Print() {
 
 
             <Tab eventKey="printer" title="Choose Printer">
+
                 <Container>
                     <Row xs={12}>
                         <Row style={{ marginTop: '30px' }}>
@@ -600,6 +631,9 @@ function Print() {
                                 </Button>
                             </Col>
                         </Row>
+                        <Col xs={3}>
+                            <CountDownTimer targetDate={targetDate} />  {/* Add the CountDownTimer component */}
+                        </Col>
                     </Row>
                     <Modal show={showSuccessModal2} onHide={handleCloseSuccessModal2}>
                         <Modal.Header className='modal-header'>

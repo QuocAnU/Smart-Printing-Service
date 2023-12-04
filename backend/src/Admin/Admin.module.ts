@@ -7,11 +7,14 @@ import { PrintingSetupModule } from "src/printing-setup/printing-setup.module";
 
 @Module({
     imports: [
-        JwtModule.register({}),
         MongooseModule.forFeature([
             {
                 name: "User",
                 schema: UserSchema,
+            },
+            {
+                name: "PrintLog",
+                schema: PrintLogSchema,
             },
         ]),
         PrintingSetupModule,
@@ -19,4 +22,5 @@ import { PrintingSetupModule } from "src/printing-setup/printing-setup.module";
     controllers: [AdminController],
     providers: [],
 })
+export class AdminModule {}
 export class AdminModule {}
