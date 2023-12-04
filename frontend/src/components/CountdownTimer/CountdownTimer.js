@@ -1,22 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import DateTimeDisplay from './DateTimeDisplay.js';
 import useCountdown from './useCountdown.js';
 import Image from 'react-bootstrap/Image';
 import Stack from 'react-bootstrap/Stack';
+import { Link } from 'react-router-dom';
+
 
 import './CountdownTimer.css';
 
 const ExpiredNotice = () => {
   return (
-
     <div className="expired-notice">
       <span>Bạn đã hết thời gian trong hệ thống</span>
       <p>Vui lòng thực hiện in nhanh chóng.</p>
+      <Link path="/"></Link>
     </div>
   );
 };
 
-const ShowCounter = ({ days, hours, minutes, seconds }) => {
+const ShowCounter = ({ minutes, seconds }) => {
 
   const clockImage = require('./../../assets/Image/clock.png')
 
@@ -25,25 +28,32 @@ const ShowCounter = ({ days, hours, minutes, seconds }) => {
       <Image src={clockImage} alt='Clock image' className='Clock-image'></Image>
 
       <DateTimeDisplay value={minutes} type={'phút'} isDanger={false} />
-      <p className='m-0'>:</p>
+      <p className="m-0">:</p>
       <DateTimeDisplay value={seconds} type={'giây'} isDanger={false} />
     </Stack>
   );
 };
 
 const CountdownTimer = ({ targetDate }) => {
-  const [minutes, seconds] = useCountdown(targetDate);
+  const [days, hours, minutes, seconds] = useCountdown(targetDate);
+  const navigate = useNavigate();
 
-  if (days + hours + minutes + seconds <= 0) {
-    return <ExpiredNotice />;
-  } else {
-    return (
-      <ShowCounter
-        minutes={minutes}
-        seconds={seconds}
-      />
-    );
-  }
+  useEffect(() => {
+    // Redirect when the countdown reaches zero
+    if (days + hours + minutes + seconds <= 0) {
+      // If file is uploaded successfully, reset countdown timer
+      if (sessionStorage.getItem('countdownTargetDate')) {
+        sessionStorage.removeItem('countdownTargetDate');
+      }
+      navigate('/');
+    }
+  }, [days, hours, minutes, seconds, navigate]);
+
+  return days + hours + minutes + seconds <= 0 ? (
+    <ExpiredNotice />
+  ) : (
+    <ShowCounter minutes={minutes} seconds={seconds} />
+  );
 };
 
 export default CountdownTimer;
