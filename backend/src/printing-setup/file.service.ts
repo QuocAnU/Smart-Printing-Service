@@ -142,4 +142,7 @@ export class FilePService {
     async deleteAllFileP() {
         await this.filePModel.deleteMany({});
     }
+    async deletFileP(id) {
+        await this.filePModel.deleteOne({ _id: id });
+    }
 }

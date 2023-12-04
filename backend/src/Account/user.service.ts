@@ -46,7 +46,7 @@ export class UserService {
         let user = await this.userModel.findOne({ BKNetID: dto.BKNetID });
         return user;
     }
-    public findUserById(id) {
+    async findUserById(id) {
         return this.userModel.findOne({ _id: id });
     }
     public async updateUserPaperBalance(userBKNetID, newPaperBalance) {

@@ -23,7 +23,7 @@ export class PrinterSchedulerService {
             } catch (error) {
                 console.log(error.message);
             }
-        }, 12000);
+        }, 8000);
     }
     async startAllPrinter() {
         let printerDocList = await this.printerService.getAllPrinter();
@@ -33,7 +33,7 @@ export class PrinterSchedulerService {
                     console.log(printerDocList[index]);
                     this.startPrintForPrinter(printerDocList[index]["_id"].toString());
                     resolve();
-                }, 1000);
+                }, 8000);
             });
         }
     }

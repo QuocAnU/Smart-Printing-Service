@@ -52,8 +52,8 @@ export class Printer {
     @Prop({ default: "255.255.0.0" })
     IPMask: string;
 
-    AddToQueue(file: FileP): any {
-        this.PrinterQueue.push(file);
+    async AddToQueue(file: FileP) {
+        await this.PrinterQueue.push(file);
     }
 
     GetQueueLength() {
@@ -84,11 +84,9 @@ export class Printer {
 
 export const PrinterSchema = SchemaFactory.createForClass(Printer);
 
-PrinterSchema.methods.AddToQueue = function (object: FileP) {
-    console.log(object);
-    this.PrinterQueue.push(object);
-    console.log(this.PrinterQueue);
-    this.save();
+PrinterSchema.methods.AddToQueue = async function (object: FileP) {
+    await this.PrinterQueue.push(object);
+    await this.save();
 };
 
 PrinterSchema.methods.GetQueueLength = function () {

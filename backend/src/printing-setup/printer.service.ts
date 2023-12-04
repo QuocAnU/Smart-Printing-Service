@@ -51,7 +51,7 @@ export class PrinterService {
             throw error;
         }
     }
-    addQueue(file, printer: PrinterDocument) {
+    async addQueue(file, printer: PrinterDocument) {
         return printer.AddToQueue(file);
     }
     async getLength(printer: PrinterDocument) {
@@ -79,11 +79,10 @@ export class PrinterService {
         return this.printerModel.findById(printerID);
     }
 
-    public async printInPrinterDoc(printer: PrinterDocument) {
+    async printInPrinterDoc(printer: PrinterDocument) {
         try {
             //dequeue the first fileP in printer
             let filePId = await printer.Pop();
-            console.log("file poped:" + filePId);
             await printer.save();
             let fileP = await this.filePService.findFilePById(filePId);
             if (fileP == null) {
@@ -105,7 +104,7 @@ export class PrinterService {
                 currentdate.getSeconds();
             //send file to ftp server
             await this.filePService.uploadToPrintServer(fileP["name"]);
-            let user = this.userService.findUserById(fileP.Owner);
+            let user = await this.userService.findUserById(fileP.Owner["_id"].toString());
             //save log
             await this.prLogService.createNewPrintLog(
                 user,
@@ -114,6 +113,7 @@ export class PrinterService {
                 fileP.FileNumberOfPage,
                 fileP.name,
             );
+            await this.filePService.deletFileP(fileP._id);
         } catch (error) {
             throw error;
         }
