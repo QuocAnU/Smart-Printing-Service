@@ -8,7 +8,13 @@ import { PrinterService } from "./printer.service";
 export class PrintLogService {
     constructor(@InjectModel("PrintLog") private readonly model: Model<PrintLogDocument>) {}
 
-    async createNewPrintLog(user, printer, _timeStart: string, _numPrintedPge) {
+    async createNewPrintLog(
+        user,
+        printer,
+        _timeStart: string,
+        _numPrintedPge: number,
+        _filename: string,
+    ) {
         let currentdate = new Date();
         var datetime =
             "" +
@@ -29,6 +35,8 @@ export class PrintLogService {
             Owner: user,
             Printer: printer,
             numPrintedPage: _numPrintedPge,
+            userBalance: user["PaperBalance"],
+            fileName: _filename,
         });
         return newPrLog.save();
     }
@@ -38,9 +46,7 @@ export class PrintLogService {
         for (let index = 0; index < ret.length; index++) {
             userLogList.push(ret[index].toObject());
         }
-        for (let index = 0; index < userLogList.length; index++) {
-            delete userLogList[index]["_id"];
-        }
+        for (let index = 0; index < userLogList.length; index++) {}
         return userLogList;
     }
 }

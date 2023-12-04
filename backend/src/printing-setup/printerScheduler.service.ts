@@ -14,24 +14,16 @@ export class PrinterSchedulerService {
             throw error;
         }
     }
-    public isPrinting: object = {};
 
     async startPrintForPrinter(printerID: string) {
-        this.isPrinting[printerID] = false;
-        //flush out all file in printer
-
         setInterval(async () => {
-            if (!this.isPrinting[printerID]) {
-                this.isPrinting[printerID] = true;
-                const printerDoc = await this.printerService.getPrinterByID(printerID);
-                try {
-                    let rs = await this.printerService.printInPrinterDoc(printerDoc);
-                } catch (error) {
-                    console.log(error.message);
-                }
-                this.isPrinting[printerID] = false;
+            const printerDoc = await this.printerService.getPrinterByID(printerID);
+            try {
+                let rs = await this.printerService.printInPrinterDoc(printerDoc);
+            } catch (error) {
+                console.log(error.message);
             }
-        }, 8000);
+        }, 12000);
     }
     async startAllPrinter() {
         let printerDocList = await this.printerService.getAllPrinter();

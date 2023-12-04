@@ -25,10 +25,7 @@ import { FilePService } from "./file.service";
 import { PrinterService } from "./printer.service";
 import { PrinterDto, PrinterLocationDto } from "src/Account/DTO/printer.dto";
 import { UserService } from "src/Account/user.service";
-import { userInfo } from "os";
-import mongoose, { Mongoose } from "mongoose";
 import { PrinterSchedulerService } from "./printerScheduler.service";
-import { Http2ServerResponse } from "http2";
 import { PrintLogService } from "./print.log.service";
 
 @Controller("printing-setup")
@@ -138,7 +135,7 @@ export class PrintingSetupController {
 
             if (dto.IsTwoSide) {
                 if (Math.floor(newFileP.FileNumberOfPage / 2) > userPaperBalance)
-                    throw new HttpException("Not enough pasge!", HttpStatus.FORBIDDEN);
+                    throw new HttpException("Not enough page!", HttpStatus.FORBIDDEN);
             } else {
                 if (newFileP.FileNumberOfPage > userPaperBalance)
                     throw new HttpException("Not enough page!", HttpStatus.FORBIDDEN);
@@ -164,8 +161,6 @@ export class PrintingSetupController {
     ) {
         try {
             //TODO: check printer status
-            console.log("Received request:", req.body);
-            console.log("Received data:", dto);
             const chosenPrinter = await this.printerService.getPrinterStatus(dto);
             if (chosenPrinter == null)
                 throw new HttpException(
@@ -174,6 +169,11 @@ export class PrintingSetupController {
                 );
             //update user page balance
             const user_fileP = await this.fileService.findFilePByUser(req.user);
+            if (!user_fileP) {
+                return {
+                    message: "You have not uploaded file yet.",
+                };
+            }
             let newUserPaperBalance = user_fileP.TwoSide
                 ? req.user["PaperBalance"] - Math.floor(user_fileP.FileNumberOfPage / 2)
                 : req.user["PaperBalance"] - user_fileP.FileNumberOfPage;
@@ -244,6 +244,28 @@ export class PrintingSetupController {
             return userLogList;
         } catch (error) {
             throw new HttpException(error, HttpStatus.AMBIGUOUS);
+        }
+    }
+
+    @UseGuards(JwtGuard)
+    @Get("get-latest-print-log")
+    async getLatestPrintLog(@Req() req: Request) {
+        try {
+            let user_log_list = await this.printLogService.get_log(req.user["_id"]);
+            if (!user_log_list)
+                return {
+                    message: "Empty",
+                };
+            let latestLog = user_log_list[user_log_list.length - 1];
+            if (!latestLog) {
+                return {
+                    message: "Empty",
+                };
+            } else {
+                return latestLog;
+            }
+        } catch (error) {
+            throw error;
         }
     }
 }

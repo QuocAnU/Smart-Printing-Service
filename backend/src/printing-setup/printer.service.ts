@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { PrinterDocument } from "src/schemas/printer.schema";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
@@ -6,6 +6,9 @@ import { PrinterLocationDto } from "src/Account/DTO/printer.dto";
 import { FilePService } from "./file.service";
 
 import { PrintLogService } from "./print.log.service";
+import { CACHE_MANAGER } from "@nestjs/cache-manager";
+import { Cache } from "cache-manager";
+import { UserService } from "src/Account/user.service";
 
 @Injectable()
 export class PrinterService {
@@ -17,6 +20,7 @@ export class PrinterService {
         private readonly printerModel: Model<PrinterDocument>,
         private readonly filePService: FilePService,
         private readonly prLogService: PrintLogService,
+        private readonly userService: UserService,
     ) {}
     async createPrinter(dto) {
         const newPrinter = new this.printerModel({
@@ -79,6 +83,7 @@ export class PrinterService {
         try {
             //dequeue the first fileP in printer
             let filePId = await printer.Pop();
+            console.log("file poped:" + filePId);
             await printer.save();
             let fileP = await this.filePService.findFilePById(filePId);
             if (fileP == null) {
@@ -100,14 +105,14 @@ export class PrinterService {
                 currentdate.getSeconds();
             //send file to ftp server
             await this.filePService.uploadToPrintServer(fileP["name"]);
-
+            let user = this.userService.findUserById(fileP.Owner);
             //save log
-
             await this.prLogService.createNewPrintLog(
-                fileP.Owner,
+                user,
                 printer,
                 datetime,
                 fileP.FileNumberOfPage,
+                fileP.name,
             );
         } catch (error) {
             throw error;

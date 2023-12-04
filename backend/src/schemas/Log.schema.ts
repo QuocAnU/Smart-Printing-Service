@@ -15,6 +15,11 @@ export class PrintLog {
     @Prop({ required: true })
     numPrintedPage: number;
 
+    @Prop({})
+    fileName: string;
+    @Prop({})
+    userBalance: number;
+
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "User" })
     Owner: User;
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "Printer" })
