@@ -241,12 +241,13 @@ function Print() {
             }
         } catch (error) {
             console.error('Error:', error.response.data.message);
-            if (error.response.data.message === "Not enough pasge!") {
+            if (error.response.data.message === "Not enough page!") {
                 setShowErrorModalBuy(true)
+                setErrorMessage('Không đủ giấy, bạn có muốn mua thêm không?');
             } else {
                 setShowErrorModal(true);
+                setErrorMessage('Config setup failed. Please try again.');
             }
-            setErrorMessage('Config setup failed. Please try again.'); // Set an appropriate error message
 
         }
     };

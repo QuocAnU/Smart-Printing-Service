@@ -102,7 +102,7 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
                             </button>
                         </Link>
                     </Col>
-                    
+
                     <Col xs={2} className='lg' >
                         <Link to={isLoggedIn ? '/history' : '/login'} >
                             <button className='styles'
@@ -112,20 +112,20 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
                     <Col xs={2} className='lg' >
                         <Link to={isLoggedIn === false && '/login'} >
                             <button className='styles' onClick={handleNotificationClick}
-                            ><img src={bell} className = 'bell' alt='Thông Báo'/></button>
+                            ><img src={bell} className='bell' alt='Thông Báo' /></button>
                         </Link>
                     </Col>
                     <Col xs={2} className='lg' >
-                        
+
                         <div style={{ display: 'flex' }}>
-                                        <img src={paper} className = 'balance' alt=''/>
-                                        <p className='balance_text'>{profile.PaperBalance}</p>
-                                        <Link to={isLoggedIn ? '/' : '/login'} >
-                                            <button className='styles'>
-                                        <img src={plus} className = 'balance' alt=''/></button>
-                                        </Link>
+                            <img src={paper} className='balance' alt='' />
+                            <p className='balance_text'>{profile?.PaperBalance}</p>
+                            <Link to={isLoggedIn ? '/' : '/login'} >
+                                <button className='styles'>
+                                    <img src={plus} className='balance' alt='' /></button>
+                            </Link>
                         </div>
-                        
+
                     </Col>
                     <Col xs={2} className='lg'>
                         {profile ? (
