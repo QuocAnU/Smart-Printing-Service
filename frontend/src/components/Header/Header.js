@@ -53,6 +53,7 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
         setIsLoggedIn(false);
         localStorage.setItem('isLoggedIn', false);
 
+        // When user logged out the system, clear countdownTargetDate stored in the session
         if (sessionStorage.getItem('countdownTargetDate')) {
             sessionStorage.removeItem('countdownTargetDate');
         }
