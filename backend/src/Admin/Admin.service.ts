@@ -4,7 +4,6 @@ import {
   HttpStatus,
   Injectable,
 } from '@nestjs/common';
-import { UserService } from 'src/Account/user.service';
 import {User, UserDocument} from 'src/schemas/user.schema'
 import { JwtService } from '@nestjs/jwt';
 import {PrintLog, PrintLogDocument} from 'src/schemas/Log.schema'
@@ -13,7 +12,6 @@ import {Model} from 'mongoose'
 @Injectable({})
 export class AdminService {
   constructor(
-    private userService: UserService,
     @InjectModel('PrintLog')
     private readonly printlogModel: Model<PrintLogDocument>,
 

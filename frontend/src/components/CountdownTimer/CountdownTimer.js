@@ -8,6 +8,7 @@ import './CountdownTimer.css';
 
 const ExpiredNotice = () => {
   return (
+    
     <div className="expired-notice">
       <span>Bạn đã hết thời gian trong hệ thống</span>
       <p>Vui lòng thực hiện in nhanh chóng.</p>
@@ -33,7 +34,7 @@ const ShowCounter = ({ minutes, seconds }) => {
 const CountdownTimer = ({ targetDate }) => {
   const [minutes, seconds] = useCountdown(targetDate);
 
-  if (minutes + seconds <= 0) {
+  if (days + hours + minutes + seconds <= 0) {
     return <ExpiredNotice />;
   } else {
     return (
