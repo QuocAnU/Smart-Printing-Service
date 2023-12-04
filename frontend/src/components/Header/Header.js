@@ -40,7 +40,13 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
 
                     })
                     .catch((error) => {
-                        console.error('Error fetching user profile:', error);
+                        console.error('Error fetching user profile:', error.response.status);
+                        if (error.response.status === 401){
+                            localStorage.setItem('accessToken','')
+                            localStorage.setItem('isLoggedIn',false)
+                            
+                        }
+                            
                     });
             }
         }
