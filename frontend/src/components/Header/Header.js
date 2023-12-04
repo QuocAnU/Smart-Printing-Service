@@ -123,7 +123,8 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
                         {profile ? (
                             // User is logged in, display name and logout button
                             <div className='styles' style={{ display: 'flex' }}>
-                                <div style={{ marginRight: '20px' }}>{profile.FullName}</div>
+                                <div style={{ marginRight: '20px', color: 'black', fontWeight: 'bold', }}>
+                                    {profile.FullName}</div>
                                 <Link to='/' onClick={handleLogout} > Logout
                                 </Link>
 

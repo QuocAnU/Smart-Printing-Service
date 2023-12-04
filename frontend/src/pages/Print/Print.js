@@ -15,7 +15,7 @@ import SearchBox from "../../components/Search/Search";
 
 function Print() {
 
-    const targetDate = Date.now() + 5 * 60 * 1000;
+    const targetDate = Date.now() + 15 * 60 * 1000;
 
     const [selectedFile, setSelectedFile] = useState(null);
     const [confirm, setConfirm] = useState(null);
@@ -353,7 +353,7 @@ function Print() {
                         <Col xs={5} style={{ marginTop: '100px' }} >
                             {selectedFile && (
                                 <Row>
-                                    <Col xs={12} md={6}>
+                                    <Col xs={12} md={10}>
                                         <h2 className="mb-4 " style={{ textAlign: 'left' }}> File in:</h2>
                                         <span className='file'>{selectedFile.name}</span>
                                     </Col>

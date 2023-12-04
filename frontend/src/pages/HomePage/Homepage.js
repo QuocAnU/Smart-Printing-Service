@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -14,10 +14,11 @@ const HomePage = ({ showHeader }) => {
     const gg = require('./../../assets/Image/google-maps.png')
     const call = require('./../../assets/Image/call.png')
     const logoBK = require('./../../assets/Image/logoBK.png')
+
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log(localStorage.getItem('isLoggedIn'))
+        // console.log(localStorage.getItem('isLoggedIn'))
         if (localStorage.getItem('accessToken') === '') {
             navigate("/login");
         }
