@@ -1,5 +1,4 @@
 
-
 import { Link } from 'react-router-dom';
 import './Header.css';
 import Image from 'react-bootstrap/Image';
@@ -43,7 +42,13 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
 
                     })
                     .catch((error) => {
-                        console.error('Error fetching user profile:', error);
+                        console.error('Error fetching user profile:', error.response.status);
+                        if (error.response.status === 401) {
+                            localStorage.setItem('accessToken', '')
+                            localStorage.setItem('isLoggedIn', false)
+
+                        }
+
                     });
             }
         }
@@ -102,13 +107,13 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
                         </Link>
                     </Col>
                     <Col xs={2} className='lg' >
-                        <Link to={isLoggedIn ? '/print' : '/login'} >
+                        <Link to={isLoggedIn ? '/' : '/login'} >
                             <button className='styles'
                             >Mua thêm giấy</button>
                         </Link>
                     </Col>
                     <Col xs={2} className='lg' >
-                        <Link to={isLoggedIn ? '/print' : '/login'} >
+                        <Link to={isLoggedIn ? '/history' : '/login'} >
                             <button className='styles'
                             >Xem lịch sử</button>
                         </Link>
