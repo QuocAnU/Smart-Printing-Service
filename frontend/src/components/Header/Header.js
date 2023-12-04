@@ -1,5 +1,5 @@
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 import './Header.css';
 import Image from 'react-bootstrap/Image';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -23,6 +23,7 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
     const plus = require('./../../assets/Image/plus_icon.png')
     const bell = require('./../../assets/Image/bell_icon.png')
     const [profile, setProfile] = useState(null);
+    const navigate = useNavigate();
     const [showNotificationModal, setShowNotificationModal] = useState(false);
     const dispatch = useDispatch();
 
@@ -57,12 +58,14 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
         setIsLoggedIn(false);
         localStorage.setItem('isLoggedIn', false);
         localStorage.setItem('accessToken', '');
-
+        
         // When user logged out the system, clear countdownTargetDate stored in the session
         if (sessionStorage.getItem('countdownTargetDate')) {
             sessionStorage.removeItem('countdownTargetDate');
         }
+        
         dispatch(logout());
+        //navigate("/login");
     };
 
     if (!showHeader) {
@@ -136,7 +139,7 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
                             <div className='styles' style={{ display: 'flex' }}>
                                 <div style={{ marginRight: '20px', color: 'black', fontWeight: 'bold', }}>
                                     {profile.FullName}</div>
-                                <Link to='/' onClick={handleLogout} > Logout
+                                <Link to='/login' onClick={handleLogout} > Logout
                                 </Link>
 
                             </div>
