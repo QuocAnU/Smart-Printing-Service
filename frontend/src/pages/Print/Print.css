@@ -81,7 +81,8 @@ form select::-ms-expand {
   padding: 5px;
   background-color: #F4F4F4;
   width: auto;
-  max-width: 50%;
+  /* max-width: 50%; */
+  margin-left: 30px;
   
 }
 .modal-header {
@@ -210,17 +211,17 @@ line-height: 24px; /* 120% */
 }
 
 .status-indicator.Printing {
-    background-color: green; /* Màu tương ứng với trạng thái "ĐANG TRỐNG" */
+    background-color: rgb(220, 220, 8); /* Màu tương ứng với trạng thái "ĐANG TRỐNG" */
     margin-right: 10px;
 }
 
-.status-indicator.CHƯA-ĐẦY {
-    background-color: yellow; /* Màu tương ứng với trạng thái "CHƯA ĐẦY" */
+.status-indicator.Error {
+    background-color: rgb(255, 38, 0); /* Màu tương ứng với trạng thái "CHƯA ĐẦY" */
     margin-right: 10px;
 }
 
 .status-indicator.Idle {
-    background-color:rgb(94, 94, 92); /* Màu tương ứng với trạng thái "CHƯA ĐẦY" */
+    background-color:green; /* Màu tương ứng với trạng thái "CHƯA ĐẦY" */
     margin-right: 10px;
 }
 

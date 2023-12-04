@@ -31,7 +31,7 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
     useEffect(() => {
         if (isLoggedIn) {
             const accessToken = localStorage.getItem('accessToken');
-            console.log("Access token:", accessToken);
+            // console.log("Access token:", accessToken);
             if (accessToken) {
                 axios.get('http://localhost:8001/user/profile', {
                     headers: {
@@ -40,12 +40,12 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
                     withCredentials: true,
                 })
                     .then((response) => {
-                        console.log('User Profile:', response.data);
+                        // console.log('User Profile:', response.data);
                         setProfile(response.data);
 
                     })
                     .catch((error) => {
-                        console.error('Error fetching user profile:', error);
+                        // console.error('Error fetching user profile:', error);
                     });
             }
         }

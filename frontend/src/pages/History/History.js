@@ -25,13 +25,13 @@ function History() {
                 withCredentials: true,
             })
                 .then((response) => {
-                    console.log('List Printer:', response.data);
+                    // console.log('List Printer:', response.data);
                     setUseLog(response.data);
                     setLoading(false);
 
                 })
                 .catch((error) => {
-                    console.error('Error fetching user profile:', error);
+                    // console.error('Error fetching user profile:', error);
                 });
         }
 
