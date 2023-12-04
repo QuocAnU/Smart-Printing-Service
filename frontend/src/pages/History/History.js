@@ -1,19 +1,17 @@
 
 import React, { useState, useEffect } from 'react';
-
-import { Container, Row, Col, Form, Modal } from 'react-bootstrap';
-import Buttons from 'react-bootstrap/Button';
+import { Container, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
-
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import SearchBox from "../../components/Search/Search";
+import './History.css'
 
 function History() {
 
     const [useLog, setUseLog] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 8;
+    const itemsPerPage = 16;
 
     useEffect(() => {
         const accessToken = localStorage.getItem('accessToken');
@@ -29,6 +27,7 @@ function History() {
                 .then((response) => {
                     console.log('List Printer:', response.data);
                     setUseLog(response.data);
+                    setLoading(false);
 
                 })
                 .catch((error) => {
@@ -68,16 +67,17 @@ function History() {
     const totalPages = Math.ceil(totalFilteredResults / itemsPerPage);
     const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
 
-
-    const displayedPrinters = filteredPrinters.slice(startIndex, endIndex);
-
-
-
+    const sortedPrinters = filteredPrinters.sort((a, b) => {
+        const timeA = new Date(a.timeStart).getTime();
+        const timeB = new Date(b.timeStart).getTime();
+        return timeA - timeB;
+    });
+    const displayedPrinters = sortedPrinters.reverse().slice(startIndex, endIndex);
+    if (loading) {
+        return <div>Loading...</div>;
+    }
     return (
-
-
         <Container>
-
             <Row style={{ marginTop: '30px' }}>
                 <Row>
                     <Col xs={1}></Col>
@@ -113,9 +113,10 @@ function History() {
                                         <TableCell id="text" >ID</TableCell>
                                         <TableCell id="text" >FILE IN</TableCell>
                                         <TableCell id="text" >SỐ TRANG IN</TableCell>
+                                        <TableCell id="text" >SỐ TRANG CÒN LẠI</TableCell>
                                         <TableCell id="text" >GỬI IN LÚC</TableCell>
                                         <TableCell id="text" >IN XONG LÚC</TableCell>
-                                        <TableCell id="text" >SỐ TRANG CÒN LẠI</TableCell>
+
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -124,9 +125,10 @@ function History() {
                                             <TableCell id="text_list">{ }</TableCell>
                                             <TableCell id="text_list">{ }</TableCell>
                                             <TableCell id="text_list">{useLog.numPrintedPage}</TableCell>
+                                            <TableCell id="text_list">{ }</TableCell>
                                             <TableCell id="text_list">{useLog.timeStart}</TableCell>
                                             <TableCell id="text_list">{useLog.timeEnd}</TableCell>
-                                            <TableCell id="text_list">{ }</TableCell>
+
                                         </TableRow>
                                     ))}
                                 </TableBody>
