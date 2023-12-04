@@ -1,5 +1,5 @@
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 import './Header.css';
 import Image from 'react-bootstrap/Image';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -23,6 +23,7 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
     const plus = require('./../../assets/Image/plus_icon.png')
     const bell = require('./../../assets/Image/bell_icon.png')
     const [profile, setProfile] = useState(null);
+    const navigate = useNavigate();
     const [showNotificationModal, setShowNotificationModal] = useState(false);
     const dispatch = useDispatch();
 
@@ -30,7 +31,7 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
     useEffect(() => {
         if (isLoggedIn) {
             const accessToken = localStorage.getItem('accessToken');
-            console.log("Access token:", accessToken);
+            // console.log("Access token:", accessToken);
             if (accessToken) {
                 axios.get('http://localhost:8001/user/profile', {
                     headers: {
@@ -39,12 +40,12 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
                     withCredentials: true,
                 })
                     .then((response) => {
-                        console.log('User Profile:', response.data);
+                        // console.log('User Profile:', response.data);
                         setProfile(response.data);
 
                     })
                     .catch((error) => {
-                        console.error('Error fetching user profile:', error);
+                        // console.error('Error fetching user profile:', error);
                     });
             }
         }
@@ -57,12 +58,14 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
         setIsLoggedIn(false);
         localStorage.setItem('isLoggedIn', false);
         localStorage.setItem('accessToken', '');
-
+        
         // When user logged out the system, clear countdownTargetDate stored in the session
         if (sessionStorage.getItem('countdownTargetDate')) {
             sessionStorage.removeItem('countdownTargetDate');
         }
+        
         dispatch(logout());
+        //navigate("/login");
     };
 
     if (!showHeader) {
@@ -102,7 +105,7 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
                             </button>
                         </Link>
                     </Col>
-                    
+
                     <Col xs={2} className='lg' >
                         <Link to={isLoggedIn ? '/history' : '/login'} >
                             <button className='styles'
@@ -110,29 +113,33 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
                         </Link>
                     </Col>
                     <Col xs={2} className='lg' >
-                        <Link to={isLoggedIn === false && '/login'} >
+                        {profile ? (<Link to={isLoggedIn === false && '/login'} >
                             <button className='styles' onClick={handleNotificationClick}
-                            ><img src={bell} className = 'bell' alt='Thông Báo'/></button>
-                        </Link>
+                            ><img src={bell} className='bell' alt='Thông Báo' /></button>
+                        </Link>) : (undefined)
+                        }
+
                     </Col>
                     <Col xs={2} className='lg' >
-                        
-                        <div style={{ display: 'flex' }}>
-                                        <img src={paper} className = 'balance' alt=''/>
-                                        <p className='balance_text'>{profile.PaperBalance}</p>
-                                        <Link to={isLoggedIn ? '/' : '/login'} >
-                                            <button className='styles'>
-                                        <img src={plus} className = 'balance' alt=''/></button>
-                                        </Link>
-                        </div>
-                        
+                        {profile ? (<div style={{ display: 'flex' }}>
+                            <img src={paper} className='balance' alt='' />
+                            <p className='balance_text'>{profile.PaperBalance}</p>
+                            <Link to={isLoggedIn ? '/' : '/login'} >
+                                <button className='styles'>
+                                    <img src={plus} className='balance' alt='' /></button>
+                            </Link>
+                        </div>) : (undefined)
+                        }
+
+
                     </Col>
                     <Col xs={2} className='lg'>
                         {profile ? (
                             // User is logged in, display name and logout button
                             <div className='styles' style={{ display: 'flex' }}>
-                                <div style={{ marginRight: '20px' }}>{profile.FullName}</div>
-                                <Link to='/' onClick={handleLogout} > Logout
+                                <div style={{ marginRight: '20px', color: 'black', fontWeight: 'bold', }}>
+                                    {profile.FullName}</div>
+                                <Link to='/login' onClick={handleLogout} > Logout
                                 </Link>
 
                             </div>

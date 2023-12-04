@@ -25,13 +25,13 @@ function History() {
                 withCredentials: true,
             })
                 .then((response) => {
-                    console.log('List Printer:', response.data);
+                    // console.log('List Printer:', response.data);
                     setUseLog(response.data);
                     setLoading(false);
 
                 })
                 .catch((error) => {
-                    console.error('Error fetching user profile:', error);
+                    // console.error('Error fetching user profile:', error);
                 });
         }
 
@@ -110,10 +110,9 @@ function History() {
                             <Table>
                                 <TableHead>
                                     <TableRow style={{ backgroundColor: '#3C8DBC', textAlign: 'center', padding: '5px' }} >
-                                        <TableCell id="text" >ID</TableCell>
                                         <TableCell id="text" >FILE IN</TableCell>
                                         <TableCell id="text" >SỐ TRANG IN</TableCell>
-                                        <TableCell id="text" >SỐ TRANG CÒN LẠI</TableCell>
+                                        <TableCell id="text" >SỐ DƯ CÒN LẠI</TableCell>
                                         <TableCell id="text" >GỬI IN LÚC</TableCell>
                                         <TableCell id="text" >IN XONG LÚC</TableCell>
 
@@ -121,13 +120,12 @@ function History() {
                                 </TableHead>
                                 <TableBody>
                                     {displayedPrinters.map((useLog) => (
-                                        <TableRow key={useLog.timeStart}>
-                                            <TableCell id="text_list">{ }</TableCell>
-                                            <TableCell id="text_list">{ }</TableCell>
-                                            <TableCell id="text_list">{useLog.numPrintedPage}</TableCell>
-                                            <TableCell id="text_list">{ }</TableCell>
-                                            <TableCell id="text_list">{useLog.timeStart}</TableCell>
-                                            <TableCell id="text_list">{useLog.timeEnd}</TableCell>
+                                        <TableRow key={useLog._id}>
+                                            <TableCell style={{ width: '10%' }} id="text_list">{useLog?.fileName}</TableCell>
+                                            <TableCell style={{ width: '15%' }} id="text_list">{useLog.numPrintedPage}</TableCell>
+                                            <TableCell style={{ width: '25%' }} id="text_list">{useLog.userBalance}</TableCell>
+                                            <TableCell style={{ width: '25%' }} id="text_list">{useLog.timeStart}</TableCell>
+                                            <TableCell style={{ width: '25%' }} id="text_list">{useLog.timeEnd}</TableCell>
 
                                         </TableRow>
                                     ))}

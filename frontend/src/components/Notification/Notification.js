@@ -23,13 +23,13 @@ function Notifications() {
                 withCredentials: true,
             })
                 .then((response) => {
-                    console.log('List Printer:', response.data);
+                    // console.log('List Printer:', response.data);
                     setUseLog(response.data);
                     setLoading(false);
 
                 })
                 .catch((error) => {
-                    console.error('Error fetching user profile:', error);
+                    // console.error('Error fetching user profile:', error);
                 });
         }
 
@@ -38,10 +38,16 @@ function Notifications() {
         return <div>Loading...</div>;
     }
     return (
-        <Row style={{ display: 'flex' }}>
-            <p>File: {useLog.fileName} </p>
-            <p> Đã được in xong vào lúc: {useLog.timeEnd}</p>
-        </Row>
+        <Row style={{ display: 'flex' }} >
+            {useLog.fileName ? (
+                <Row>
+                    <p>File: {useLog.fileName} </p>
+                    <p> Đã được in xong vào lúc: {useLog.timeEnd}</p>
+                </Row>
+            ) : (
+                <p>Không có thông báo</p>
+            )}
+        </Row >
 
     );
 }

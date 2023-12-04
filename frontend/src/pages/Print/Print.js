@@ -15,7 +15,7 @@ import SearchBox from "../../components/Search/Search";
 
 function Print() {
 
-    const targetDate = Date.now() + 5 * 60 * 1000;
+    const targetDate = Date.now() + 15 * 60 * 1000;
 
     const [selectedFile, setSelectedFile] = useState(null);
     const [confirm, setConfirm] = useState(null);
@@ -42,7 +42,9 @@ function Print() {
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
     const [selectedPrinterId, setSelectedPrinterId] = useState(null);
 
-    const handleChoosePrinter = async (id) => {
+    const [errorStatusPrinter, setErrorStatusPrinter] = useState(false);
+
+    const handleChoosePrinter = async (id, status) => {
         // Set the selected printer id
         setSelectedPrinterId(id);
         const PrinterToChoose = printer.find((print) => print._id === id);
@@ -57,7 +59,13 @@ function Print() {
             setChoosePrinter(dataJson);
 
             // Show the confirmation modal
-            setShowConfirmationModal(true);
+            if (status === 'Error') {
+                setErrorStatusPrinter(true);
+            }
+            else {
+                setShowConfirmationModal(true);
+            }
+
         };
     };
     const handleCloseConfirmationModal = () => {
@@ -119,9 +127,9 @@ function Print() {
                         RoomLocation: PrinterToChoose.location.RoomLocation,
 
                     };
-                    console.log("Data printer:", dataJson);
+                    // console.log("Data printer:", dataJson);
 
-                    const responseApi = await axios.post(
+                    await axios.post(
                         'http://localhost:8001/printing-setup/set-printer',
                         dataJson,
                         {
@@ -134,12 +142,12 @@ function Print() {
                         }
                     );
 
-                    console.log('Response from API:', responseApi.data);
+                    // console.log('Response from API:', responseApi.data);
                     setShowSuccessModal2(true);
                 }
             }
         } catch (error) {
-            console.error('Error:', error);
+            // console.error('Error:', error);
             setErrorMessage('Choose Printer failed. Please try again.'); // Set an appropriate error message
             setShowErrorModal(true);
         } finally {
@@ -171,15 +179,15 @@ function Print() {
     const handleUpload = async () => {
         try {
             const accessToken = localStorage.getItem('accessToken');
-            console.log(accessToken);
+            // console.log(accessToken);
             if (accessToken) {
 
-                console.log("Test File", selectedFile)
+                // console.log("Test File", selectedFile)
 
                 const formData = new FormData();
                 formData.append('file', selectedFile);
-                console.log("Data Test:", [...formData]);
-                const responseApi = await axios.post(
+                // console.log("Data Test:", [...formData]);
+                await axios.post(
                     'http://localhost:8001/printing-setup/upload',
                     formData,
                     {
@@ -194,7 +202,7 @@ function Print() {
 
 
 
-                console.log('Response from API:', responseApi.data);
+                // console.log('Response from API:', responseApi.data);
 
                 // If file is uploaded successfully, reset countdown timer
                 if (sessionStorage.getItem('countdownTargetDate')) {
@@ -203,7 +211,7 @@ function Print() {
                 setShowSuccessModal(true);
             }
         } catch (error) {
-            console.error('Error:', error);
+            // console.error('Error:', error);
             setErrorMessage('File upload failed. Please try again.'); // Set an appropriate error message
             setShowErrorModal(true);
         }
@@ -217,15 +225,15 @@ function Print() {
         try {
             // Gửi selectedFile lên API1
             const accessToken = localStorage.getItem('accessToken');
-            console.log(accessToken);
+            // console.log(accessToken);
             if (accessToken) {
-                console.log("Test config", printConfig.pageSize)
+                // console.log("Test config", printConfig.pageSize)
                 const configData = {
                     PaperSize: printConfig.pageSize,
                     IsTwoSide: Boolean(printConfig.duplex),
                     NumberCopy: printConfig.copyCount,
                 };
-                console.log("Data", configData);
+                // console.log("Data", configData);
                 const responseApi = await axios.post('http://localhost:8001/printing-setup/setup-config',
                     configData, {
                     headers: {
@@ -235,18 +243,19 @@ function Print() {
                     withCredentials: true,
                 });
 
-                console.log('Response from API:', responseApi.data);
+                // console.log('Response from API:', responseApi.data);
                 setConfirm(responseApi.data);
                 setShowSuccessModal1(true);
             }
         } catch (error) {
-            console.error('Error:', error.response.data.message);
-            if (error.response.data.message === "Not enough pasge!") {
+            // console.error('Error:', error.response.data.message);
+            if (error.response.data.message === "Not enough page!") {
                 setShowErrorModalBuy(true)
+                setErrorMessage('Không đủ giấy, bạn có muốn mua thêm không?');
             } else {
                 setShowErrorModal(true);
+                setErrorMessage('Config setup failed. Please try again.');
             }
-            setErrorMessage('Config setup failed. Please try again.'); // Set an appropriate error message
 
         }
     };
@@ -262,7 +271,7 @@ function Print() {
                 withCredentials: true,
             })
                 .then((response) => {
-                    console.log('List Printer:', response.data);
+                    // console.log('List Printer:', response.data);
                     setPrinter(response.data);
 
                 })
@@ -277,7 +286,13 @@ function Print() {
         setShowSuccessModal(false);
         setShowErrorModal(false);
         setShowErrorModalBuy(false);
-        setActiveTab('upload');
+        if (errorStatusPrinter) {
+            setActiveTab('printer');
+        }
+        else {
+            setActiveTab('upload');
+        }
+        setErrorStatusPrinter(false);
     };
 
     const handleCloseModalUpload = () => {
@@ -306,28 +321,12 @@ function Print() {
             <Tab eventKey="upload" title="Upload File">
                 <Container className="mt-5">
                     <Row className="mb-3">
-                        <Col xs={3}>
-                            <h2 className="mb-4"   >Tải file lên hệ thống</h2> </Col>
-
-                        {selectedFile ? (
-                            <Col xs={2} style={{ textAlign: 'right' }}>
-                                <Form.Control
-                                    style={{ width: '53%' }}
-                                    type="file"
-                                    accept=".pdf"
-                                    onChange={handleFileChange}
-                                />
-                            </Col>
-
-                        ) : (
-                            <Col xs={2}>
-                            </Col>
-                        )}
-                        <Col xs={2} style={{ textAlign: 'left' }}>
-                            <Buttons variant="primary" onClick={handleUpload}>
-                                Upload File
-                            </Buttons></Col>
+                        <Col xs={6}></Col>
+                        <Col xs={12} sm={6}>
+                            <h2 className="mb-4" style={{ textAlign: 'left' }}   >Tải file lên hệ thống</h2>
+                        </Col>
                     </Row>
+
                     <Row className="mb-3">
                         <Col xs={6} style={{ border: '1px solid', borderRadius: '10px' }}>
                             {/* PDF Preview container */}
@@ -344,22 +343,37 @@ function Print() {
                                     <div
                                         className="file-input-container"
                                     >
-                                        <Form.Control style={{ marginTop: '300px', marginBottom: '300px', marginLeft: '150px', width: '50%', }} type="file" accept=".pdf" onChange={handleFileChange} />
                                     </div>
                                 </div>
                             )}
                         </Col>
-                        <Col xs={1}></Col>
-                        <Col xs={5} style={{ marginTop: '100px' }} >
-                            {selectedFile && (
-                                <Row>
-                                    <Col xs={12} md={6}>
-                                        <h2 className="mb-4 " style={{ textAlign: 'left' }}> File in:</h2>
-                                        <span className='file'>{selectedFile.name}</span>
-                                    </Col>
-                                </Row>
-                            )}
+                        <Col xs={6}>
+                            <Row className='mb-5' style={{ display: 'flex' }}>
+                                <Col xs={9}>
+                                    <Form.Control style={{ marginLeft: '20px', width: '100%', }} type="file" accept=".pdf" onChange={handleFileChange} />
+                                </Col>
+                                <Col xs={3}><Buttons variant="primary" onClick={handleUpload}>
+                                    Upload File
+                                </Buttons></Col>
+                            </Row>
+                            <Row >
+                                <Col xs={12} style={{ marginTop: '50px' }} >
+                                    {selectedFile && (
+                                        <Row>
+                                            <Col xs={12} md={12} >
+                                                <h2 className="mb-4" style={{ marginLeft: '30px', textAlign: 'left' }}> File in:</h2>
+                                                <p className='file'>{selectedFile.name}</p>
+                                            </Col>
+                                        </Row>
+                                    )}
+                                </Col>
+                            </Row>
+                            <Col xs={2} style={{ textAlign: 'left' }}>
+                            </Col>
                         </Col>
+
+
+
                     </Row>
                     <Row style={{ height: '20px' }}>
                     </Row>
@@ -604,22 +618,14 @@ function Print() {
                                             {displayedPrinters.map((printer) => (
                                                 <TableRow key={printer._id}>
                                                     <TableCell id="text_list">{printer.PrinterModel}</TableCell>
-                                                    {/* <TableCell id="text_list">{printer.id}</TableCell> */}
                                                     <TableCell id="text_list">{printer.location.CampusLocation}</TableCell>
-                                                    {/* <TableCell id="text_list">{printer.location.BuildingLocation} {printer.location.RoomLocation}</TableCell> */}
                                                     <TableCell id="text_list">{`${printer.location.BuildingLocation}_${printer.location.RoomLocation}`}</TableCell>
-
-                                                    {/* <TableCell id="text_list">{printer.status}</TableCell> */}
-
                                                     <TableCell id="text_list" style={{ display: 'flex', justifyContent: 'center' }}>
                                                         <span className={`status-indicator ${printer.PrinterStatus}`} />
-
                                                     </TableCell>
                                                     <TableCell id="text_list" align="center" >
-
-                                                        <Button id="text_r" style={{ padding: '2px' }} onClick={() => handleChoosePrinter(printer._id)}
+                                                        <Button id="text_r" style={{ padding: '2px' }} onClick={() => handleChoosePrinter(printer._id, printer.PrinterStatus)}
                                                         >Chọn</Button>
-
                                                     </TableCell>
                                                 </TableRow>
                                             ))}
@@ -732,6 +738,20 @@ function Print() {
 
                     </Modal>
 
+                    <Modal show={errorStatusPrinter} onHide={handleCloseModal}>
+                        <Modal.Header className='modal-header-error'>
+                            <Modal.Title>Error!</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <p>Máy in đang bảo trì</p>
+                            <p>Vui lòng chọn máy in khác</p>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Buttons variant="secondary" onClick={handleCloseModal}>
+                                Close
+                            </Buttons>
+                        </Modal.Footer>
+                    </Modal>
                     <Modal show={showErrorModal} onHide={handleCloseModal}>
                         <Modal.Header className='modal-header-error'>
                             <Modal.Title>Error!</Modal.Title>
