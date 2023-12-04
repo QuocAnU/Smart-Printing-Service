@@ -14,10 +14,12 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import SearchBox from "../../components/Search/Search";
 
 function Print() {
-    
-    const targetDate = Date.now() + 0.2 * 60 * 1000;
-    
+
+    const targetDate = Date.now() + 5 * 60 * 1000;
+
     const [selectedFile, setSelectedFile] = useState(null);
+    const [confirm, setConfirm] = useState(null);
+    const [choosePrinter, setChoosePrinter] = useState(null);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [showSuccessModal1, setShowSuccessModal1] = useState(false);
     const [showErrorModal, setShowErrorModal] = useState(false);
@@ -37,6 +39,31 @@ function Print() {
     const [printer, setPrinter] = useState([]);
     const [showSuccessModal2, setShowSuccessModal2] = useState(false);
 
+    const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+    const [selectedPrinterId, setSelectedPrinterId] = useState(null);
+
+    const handleChoosePrinter = async (id) => {
+        // Set the selected printer id
+        setSelectedPrinterId(id);
+        const PrinterToChoose = printer.find((print) => print._id === id);
+
+        if (PrinterToChoose && PrinterToChoose.location) {
+            const dataJson = {
+                CampusLocation: PrinterToChoose.location.CampusLocation,
+                BuildingLocation: PrinterToChoose.location.BuildingLocation,
+                RoomLocation: PrinterToChoose.location.RoomLocation,
+
+            };
+            setChoosePrinter(dataJson);
+
+            // Show the confirmation modal
+            setShowConfirmationModal(true);
+        };
+    };
+    const handleCloseConfirmationModal = () => {
+        // Close the confirmation modal
+        setShowConfirmationModal(false);
+    };
 
     const [searchKeyword, setSearchKeyword] = useState('');
     const handleNextPage = () => {
@@ -77,7 +104,7 @@ function Print() {
 
     const displayedPrinters = filteredPrinters.slice(startIndex, endIndex);
 
-    const handleChoosePrinter = async (id) => {
+    const handleConfirmChoosePrinter = async (id) => {
         try {
             const accessToken = localStorage.getItem('accessToken');
             // console.log(accessToken);
@@ -92,9 +119,6 @@ function Print() {
                         RoomLocation: PrinterToChoose.location.RoomLocation,
 
                     };
-
-
-
                     console.log("Data printer:", dataJson);
 
                     const responseApi = await axios.post(
@@ -118,6 +142,9 @@ function Print() {
             console.error('Error:', error);
             setErrorMessage('Choose Printer failed. Please try again.'); // Set an appropriate error message
             setShowErrorModal(true);
+        } finally {
+            // Close the confirmation modal regardless of success or failure
+            setShowConfirmationModal(false);
         }
     };
     const handleFileChange = (e) => {
@@ -165,10 +192,10 @@ function Print() {
                     }
                 );
 
-                
+
 
                 console.log('Response from API:', responseApi.data);
-                
+
                 // If file is uploaded successfully, reset countdown timer
                 if (sessionStorage.getItem('countdownTargetDate')) {
                     sessionStorage.removeItem('countdownTargetDate');
@@ -198,7 +225,6 @@ function Print() {
                     IsTwoSide: Boolean(printConfig.duplex),
                     NumberCopy: printConfig.copyCount,
                 };
-
                 console.log("Data", configData);
                 const responseApi = await axios.post('http://localhost:8001/printing-setup/setup-config',
                     configData, {
@@ -210,6 +236,7 @@ function Print() {
                 });
 
                 console.log('Response from API:', responseApi.data);
+                setConfirm(responseApi.data);
                 setShowSuccessModal1(true);
             }
         } catch (error) {
@@ -370,11 +397,14 @@ function Print() {
 
 
             <Tab eventKey="config" title="Setup Config">
-                <Container className="mt-5">
-                    <Row className="mb-3">
-                        <Col xs={5}>
-                            {/* <h2 style={{ textAlign: 'left' }} className="mb-4"   >Tải file lên hệ thống</h2>  */}
-                        </Col>
+                <Container>
+                    <Row>
+                        <Col xs={11}></Col>
+                        <Col xs={1}>  {activeTab === 'config' && <CountDownTimer targetDate={targetDate} />}</Col>
+
+                    </Row>
+                    <Row className="mb-3 mt-5">
+                        <Col xs={5}> </Col>
                         <Col xs={2} style={{ textAlign: 'left' }}></Col>
                         <Col style={{ textAlign: 'left' }} >  <h2 className="mb-4"   >Thông số in </h2> </Col>
                         <Col xs={2}>
@@ -398,9 +428,7 @@ function Print() {
                             }
                         </Col>
                         <Col xs={1}></Col>
-                        <Col xs={3}>
-                            <CountDownTimer targetDate={targetDate}/>
-                        </Col>
+
                         <Col xs={5} className='printconfig'>
                             {/* <div className='printconfig'> */}
                             <Row>
@@ -521,125 +549,162 @@ function Print() {
                 </Container>
             </Tab>
 
-
-
             <Tab eventKey="printer" title="Choose Printer">
-
                 <Container>
-                    <Row xs={12}>
-                        <Row style={{ marginTop: '30px' }}>
-                            <strong style={{ textAlign: "left", fontSize: "20px", fontWeight: "500" }}>Trở lại</strong>
-                        </Row>
-                        <Row style={{ marginTop: '30px' }}>
+                    <Row>
+                        <Col style={{ display: 'flex', justifyContent: 'right' }}>
+                            {activeTab === 'printer' && <CountDownTimer targetDate={targetDate} />}</Col>
 
-                            <Row>
-                                <Col xs={1}></Col>
-                                <Col xs={5} style={{ display: "flex" }}>
-                                    <strong style={{ textAlign: "left", fontSize: "40px", fontWeight: "700" }}>MÁY IN KHẢ DỤNG</strong>
-                                </Col>
-                                <Col xs={5} style={{ display: "flex", alignItems: 'right' }}>
-                                    <Col xs={10} style={{
-                                        display: 'flex',
-                                        justifyContent: 'center', flexDirection: 'column'
-                                    }} >
-
-                                        <SearchBox style={{ borderRadius: '8px' }} onSearch={handleSearch} />
-
-                                    </Col>
-                                    <Col style={{
-                                        display: 'flex',
-                                        justifyContent: 'center', flexDirection: 'column'
-                                    }} xs={2}>
-                                        <Button variant="outlined" color="primary" style={{ width: "80px", marginRight: "20px" }}>Search</Button>
-                                    </Col>
-                                </Col>
-                                <Col xs={1}></Col>
-
-                            </Row>
-                            <Row style={{ width: "102%", marginTop: "30px" }}>
-                                <Col xs={1}></Col>
-                                <Col xs={10}>
-                                    <TableContainer component={Paper} style={{ border: "3px solid grey" }}>
-                                        <Table>
-                                            <TableHead>
-                                                <TableRow style={{ backgroundColor: '#3C8DBC', textAlign: 'center', padding: '5px' }} >
-                                                    <TableCell id="text" >Model</TableCell>
-                                                    {/* <TableCell id="text" >ID</TableCell> */}
-                                                    <TableCell id="text" >CƠ SỞ</TableCell>
-                                                    <TableCell id="text" > VỊ TRÍ</TableCell>
-                                                    <TableCell id="text" >TÌNH TRẠNG</TableCell>
-                                                    <TableCell id="text" >Action</TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                                {displayedPrinters.map((printer) => (
-                                                    <TableRow key={printer._id}>
-                                                        <TableCell id="text_list">{printer.PrinterModel}</TableCell>
-                                                        {/* <TableCell id="text_list">{printer.id}</TableCell> */}
-                                                        <TableCell id="text_list">{printer.location.CampusLocation}</TableCell>
-                                                        {/* <TableCell id="text_list">{printer.location.BuildingLocation} {printer.location.RoomLocation}</TableCell> */}
-                                                        <TableCell id="text_list">{`${printer.location.BuildingLocation}_${printer.location.RoomLocation}`}</TableCell>
-
-                                                        {/* <TableCell id="text_list">{printer.status}</TableCell> */}
-
-                                                        <TableCell id="text_list" style={{ display: 'flex', justifyContent: 'center' }}>
-                                                            <span className={`status-indicator ${printer.PrinterStatus}`} />
-
-                                                        </TableCell>
-                                                        <TableCell id="text_list" align="center" >
-
-                                                            <Button id="text_r" style={{ padding: '2px' }} onClick={() => handleChoosePrinter(printer._id)}
-                                                            >Chọn</Button>
-
-                                                        </TableCell>
-                                                    </TableRow>
-                                                ))}
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
-                                </Col>
-                                <Col xs={1} ></Col>
-
-                            </Row>
-
-
-                        </Row>
+                    </Row>
+                    <Row style={{ marginTop: '30px' }}>
                         <Row>
-                            <Col xs={12} style={{ display: "flex", justifyContent: "center", marginTop: "15px" }}>
+                            <Col xs={1}></Col>
+                            <Col xs={5} style={{ display: "flex" }}>
+                                <strong style={{ textAlign: "left", fontSize: "40px", fontWeight: "700" }}>MÁY IN KHẢ DỤNG</strong>
+                            </Col>
+                            <Col xs={5} style={{ display: "flex", alignItems: 'right' }}>
+                                <Col xs={10} style={{
+                                    display: 'flex',
+                                    justifyContent: 'center', flexDirection: 'column'
+                                }} >
+
+                                    <SearchBox style={{ borderRadius: '8px' }} onSearch={handleSearch} />
+
+                                </Col>
+                                <Col style={{
+                                    display: 'flex',
+                                    justifyContent: 'center', flexDirection: 'column'
+                                }} xs={2}>
+                                    <Button variant="outlined" color="primary" style={{ width: "80px", marginRight: "20px" }}>Search</Button>
+                                </Col>
+                            </Col>
+                            <Col xs={1}></Col>
+
+                        </Row>
+                        <Row style={{ width: "102%", marginTop: "30px" }}>
+                            <Col xs={1}></Col>
+                            <Col xs={10}>
+                                <TableContainer component={Paper} style={{ border: "3px solid grey" }}>
+                                    <Table>
+                                        <TableHead>
+                                            <TableRow style={{ backgroundColor: '#3C8DBC', textAlign: 'center', padding: '5px' }} >
+                                                <TableCell id="text" >Model</TableCell>
+                                                {/* <TableCell id="text" >ID</TableCell> */}
+                                                <TableCell id="text" >CƠ SỞ</TableCell>
+                                                <TableCell id="text" > VỊ TRÍ</TableCell>
+                                                <TableCell id="text" >TÌNH TRẠNG</TableCell>
+                                                <TableCell id="text" >Action</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {displayedPrinters.map((printer) => (
+                                                <TableRow key={printer._id}>
+                                                    <TableCell id="text_list">{printer.PrinterModel}</TableCell>
+                                                    {/* <TableCell id="text_list">{printer.id}</TableCell> */}
+                                                    <TableCell id="text_list">{printer.location.CampusLocation}</TableCell>
+                                                    {/* <TableCell id="text_list">{printer.location.BuildingLocation} {printer.location.RoomLocation}</TableCell> */}
+                                                    <TableCell id="text_list">{`${printer.location.BuildingLocation}_${printer.location.RoomLocation}`}</TableCell>
+
+                                                    {/* <TableCell id="text_list">{printer.status}</TableCell> */}
+
+                                                    <TableCell id="text_list" style={{ display: 'flex', justifyContent: 'center' }}>
+                                                        <span className={`status-indicator ${printer.PrinterStatus}`} />
+
+                                                    </TableCell>
+                                                    <TableCell id="text_list" align="center" >
+
+                                                        <Button id="text_r" style={{ padding: '2px' }} onClick={() => handleChoosePrinter(printer._id)}
+                                                        >Chọn</Button>
+
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </Col>
+                            <Col xs={1} ></Col>
+
+                        </Row>
+
+
+                    </Row>
+                    <Row>
+                        <Col xs={12} style={{ display: "flex", justifyContent: "center", marginTop: "15px" }}>
+                            <Button
+                                variant="outlined"
+                                // color="success"
+                                style={{ marginRight: "10px" }}
+                                onClick={handlePreviousPage}
+                                disabled={currentPage === 1}
+                            >
+                                Previous
+                            </Button>
+                            {pageNumbers.map((number) => (
                                 <Button
-                                    variant="outlined"
+                                    key={number}
+                                    variant={number === currentPage ? "contained" : "outlined"}
                                     // color="success"
                                     style={{ marginRight: "10px" }}
-                                    onClick={handlePreviousPage}
-                                    disabled={currentPage === 1}
+                                    onClick={() => setCurrentPage(number)}
                                 >
-                                    Previous
+                                    {number}
                                 </Button>
-                                {pageNumbers.map((number) => (
-                                    <Button
-                                        key={number}
-                                        variant={number === currentPage ? "contained" : "outlined"}
-                                        // color="success"
-                                        style={{ marginRight: "10px" }}
-                                        onClick={() => setCurrentPage(number)}
-                                    >
-                                        {number}
-                                    </Button>
-                                ))}
-                                <Button
-                                    variant="outlined"
-                                    // color="success"
-                                    onClick={handleNextPage}
-                                    disabled={endIndex >= totalFilteredResults}
-                                >
-                                    Next
-                                </Button>
-                            </Col>
-                        </Row>
-                        <Col xs={3}>
-                            <CountDownTimer targetDate={targetDate} />  {/* Add the CountDownTimer component */}
+                            ))}
+                            <Button
+                                variant="outlined"
+                                // color="success"
+                                onClick={handleNextPage}
+                                disabled={endIndex >= totalFilteredResults}
+                            >
+                                Next
+                            </Button>
                         </Col>
                     </Row>
+                    <Modal show={showConfirmationModal} onHide={handleCloseConfirmationModal}>
+                        <Modal.Header className='modal-header'>
+                            <Modal.Title>Xác nhận</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <Row>
+                                <p>Bạn muốn gửi file: </p>
+                                <p>{selectedFile?.name}</p>
+                            </Row>
+                            <Row>
+                                <p>Với các thông số như:</p>
+                            </Row>
+                            <Row style={{ display: 'flex' }}>
+                                <Col>
+                                    <p style={{ textAlign: 'center' }}>Loại giấy: </p>
+                                    <p style={{ textAlign: 'center' }}>{confirm?.PaperSize} </p>
+                                </Col>
+                                <Col>
+                                    <p style={{ textAlign: 'center' }}> In hai mặt:   </p>
+                                    <p style={{ textAlign: 'center' }}> {confirm?.TwoSide === 'true' ? 'Có' : 'Không'}  </p>
+                                </Col>
+                                <Col>
+                                    <p style={{ textAlign: 'center' }}>Số trang in:  </p>
+                                    <p style={{ textAlign: 'center' }}>{confirm?.FileNumberOfPage}  </p>
+                                </Col>
+                                <Col>
+                                    <p style={{ textAlign: 'center' }}>Số bản sao:  </p>
+                                    <p style={{ textAlign: 'center' }}> {confirm?.CopyNum} </p>
+                                </Col>
+                            </Row>
+
+                            <p>Tại máy in có địa chỉ: {choosePrinter?.CampusLocation} {choosePrinter?.BuildingLocation} {choosePrinter?.RoomLocation} </p>
+
+
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Buttons variant="secondary" onClick={handleCloseConfirmationModal}>
+                                Hủy bỏ
+                            </Buttons>
+                            <Buttons variant="primary" onClick={() => handleConfirmChoosePrinter(selectedPrinterId)}>
+                                Xác nhận
+                            </Buttons>
+                        </Modal.Footer>
+                    </Modal>
                     <Modal show={showSuccessModal2} onHide={handleCloseSuccessModal2}>
                         <Modal.Header className='modal-header'>
                             <Modal.Title>Successful!</Modal.Title>
