@@ -135,7 +135,7 @@ const Login = ({ isLoggedIn, setIsLoggedIn, hideHeader }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (localStorage.getItem('isLoggedIn')){
+    if (localStorage.getItem('isLoggedIn') && localStorage.getItem('accessToken')!==''){
       navigate("/")
     }
     else hideHeader(); // Gọi hideHeader trong useEffect để đảm bảo rằng trạng thái đã được cập nhật
