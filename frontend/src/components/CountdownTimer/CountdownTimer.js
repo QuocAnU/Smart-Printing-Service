@@ -16,13 +16,13 @@ const ExpiredNotice = () => {
 };
 
 const ShowCounter = ({ minutes, seconds }) => {
-  
+
   const clockImage = require('./../../assets/Image/clock.png')
 
   return (
     <Stack direction='horizontal' gap={2}>
       <Image src={clockImage} alt='Clock image' className='Clock-image'></Image>
-      
+
       <DateTimeDisplay value={minutes} type={'phút'} isDanger={false} />
       <p className='m-0'>:</p>
       <DateTimeDisplay value={seconds} type={'giây'} isDanger={false} />
@@ -31,7 +31,7 @@ const ShowCounter = ({ minutes, seconds }) => {
 };
 
 const CountdownTimer = ({ targetDate }) => {
-  const [days, hours, minutes, seconds] = useCountdown(targetDate);
+  const [minutes, seconds] = useCountdown(targetDate);
 
   if (minutes + seconds <= 0) {
     return <ExpiredNotice />;
