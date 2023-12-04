@@ -1,11 +1,11 @@
+import React, { useState, useEffect } from "react";
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-
+import { useNavigate } from 'react-router-dom';
 // import CountdownTimer from '../../components/CountdownTimer/CountdownTimer'
 import './Homepage.css'
-
-const HomePage = ({ isLoggedIn, setIsLoggedIn }) => {
+const HomePage = ({ showHeader }) => {
     const slide1 = require('./../../assets/Image/slide1.png')
     const build = require('./../../assets/Image/building.png')
     const crowd = require('./../../assets/Image/crowd-of-users.png')
@@ -14,11 +14,15 @@ const HomePage = ({ isLoggedIn, setIsLoggedIn }) => {
     const gg = require('./../../assets/Image/google-maps.png')
     const call = require('./../../assets/Image/call.png')
     const logoBK = require('./../../assets/Image/logoBK.png')
+    const navigate = useNavigate();
 
-    // const FIFTEEN_MINUTE_IN_MS = 15 * 60 * 1000;
-    // const NOW_IN_MS = new Date().getTime();
+    useEffect(() => {
+        console.log(localStorage.getItem('isLoggedIn'))
+        if (localStorage.getItem('accessToken') === '') {
+            navigate("/login");
+        }
+    }, []);
 
-    // const dateTimeAfterThreeDays = NOW_IN_MS + FIFTEEN_MINUTE_IN_MS;
     return (
         <>
             <Container className='mt-12'>
