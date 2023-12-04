@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col'
 // import CountdownTimer from '../../components/CountdownTimer/CountdownTimer'
 import './Homepage.css'
 
-const HomePage = ({ isLoggedIn, setIsLoggedIn }) => {
+const HomePage = ({ showHeader }) => {
     const slide1 = require('./../../assets/Image/slide1.png')
     const build = require('./../../assets/Image/building.png')
     const crowd = require('./../../assets/Image/crowd-of-users.png')
@@ -15,10 +15,6 @@ const HomePage = ({ isLoggedIn, setIsLoggedIn }) => {
     const call = require('./../../assets/Image/call.png')
     const logoBK = require('./../../assets/Image/logoBK.png')
 
-    // const FIFTEEN_MINUTE_IN_MS = 15 * 60 * 1000;
-    // const NOW_IN_MS = new Date().getTime();
-
-    // const dateTimeAfterThreeDays = NOW_IN_MS + FIFTEEN_MINUTE_IN_MS;
     return (
         <>
             <Container className='mt-12'>
