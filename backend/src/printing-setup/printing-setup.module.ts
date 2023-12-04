@@ -32,7 +32,9 @@ import { AdminModule } from "src/Admin/Admin.module";
                 schema: PrintLogSchema,
             },
         ]),
-        CacheModule.register(),
+        CacheModule.register({
+            isGlobal: true,
+        }),
         AccountModule,
     ],
     controllers: [PrintingSetupController],

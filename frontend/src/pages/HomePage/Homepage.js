@@ -6,8 +6,7 @@ import { useNavigate } from 'react-router-dom';
 // import CountdownTimer from '../../components/CountdownTimer/CountdownTimer'
 import './Homepage.css'
 
-
-const HomePage = ({ isLoggedIn, setIsLoggedIn }) => {
+const HomePage = ({ showHeader }) => {
     const slide1 = require('./../../assets/Image/slide1.png')
     const build = require('./../../assets/Image/building.png')
     const crowd = require('./../../assets/Image/crowd-of-users.png')
