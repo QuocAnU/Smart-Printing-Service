@@ -92,7 +92,7 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
                         </Link>
                     </Col>
                     <Col xs={2} className='lg' >
-                        <Link to='/'  >
+                        <Link to='/history'  >
                             <button className='styles'
                             >Xem lịch sử</button>
                         </Link>

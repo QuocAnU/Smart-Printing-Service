@@ -5,6 +5,7 @@ import Header from './../components/Header/Header.js';
 import Login from './../pages/Login/Login.js';
 import HomePage from './../pages/HomePage/Homepage.js';
 import Print from '../pages/Print/Print.js';
+import History from '../pages/History/History.js';
 
 const AppRoutes = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
     return (
@@ -17,6 +18,7 @@ const AppRoutes = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
                 <Route path="/login" element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
                 <Route path="/" element={<HomePage />} />
                 <Route path='/print' element={<Print />} />
+                <Route path='/history' element={<History />} />
             </Routes>
         </Router>
     );

@@ -29,7 +29,7 @@ function Print() {
     const [activeTab, setActiveTab] = useState('upload');
     const setDefaultCount = "All"
     const [printConfig, setPrintConfig] = useState({
-        pageSize: 2,
+        pageSize: 4,
         duplex: 1,
         copyCount: 1,
     });
@@ -434,7 +434,7 @@ function Print() {
                             <Row>
                                 <Col xs={6}>
                                     <Form.Group controlId="pageSize" style={{ marginTop: '10px' }}>
-                                        <Form.Label>Kích thước trang:</Form.Label>
+                                        <Form.Label>Kích thước trang: A?</Form.Label>
                                         <Form.Control
                                             // type="number"
                                             as="select"
@@ -442,8 +442,12 @@ function Print() {
                                             value={printConfig.pageSize}
                                             onChange={(e) => handlePrintConfigChange('pageSize', e.target.value)}
                                         >
+                                            <option value={0}>0</option>
+                                            <option value={1}>1</option>
                                             <option value={2}>2</option>
                                             <option value={3}>3</option>
+                                            <option value={4}>4</option>
+                                            <option value={5}>5</option>
                                         </Form.Control>
                                     </Form.Group>
                                 </Col>
@@ -676,7 +680,13 @@ function Print() {
                             <Row style={{ display: 'flex' }}>
                                 <Col>
                                     <p style={{ textAlign: 'center' }}>Loại giấy: </p>
-                                    <p style={{ textAlign: 'center' }}>{confirm?.PaperSize} </p>
+                                    {confirm?.PaperSize === 0 && <p style={{ textAlign: 'center' }} >A0</p>}
+                                    {confirm?.PaperSize === 1 && <p style={{ textAlign: 'center' }} >A1</p>}
+                                    {confirm?.PaperSize === 2 && <p style={{ textAlign: 'center' }} >A2</p>}
+                                    {confirm?.PaperSize === 3 && <p style={{ textAlign: 'center' }} >A3</p>}
+                                    {confirm?.PaperSize === 4 && <p style={{ textAlign: 'center' }} >A4</p>}
+                                    {confirm?.PaperSize === 5 && <p style={{ textAlign: 'center' }} >A5</p>}
+
                                 </Col>
                                 <Col>
                                     <p style={{ textAlign: 'center' }}> In hai mặt:   </p>
