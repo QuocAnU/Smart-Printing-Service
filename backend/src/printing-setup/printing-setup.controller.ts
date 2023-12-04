@@ -134,10 +134,10 @@ export class PrintingSetupController {
             const userPaperBalance = req.user["PaperBalance"];
 
             if (dto.IsTwoSide) {
-                if (Math.floor(newFileP.FileNumberOfPage / 2) > userPaperBalance)
+                if (Math.floor(newFileP.FileNumberOfPage / 2) * newFileP.CopyNum > userPaperBalance)
                     throw new HttpException("Not enough page!", HttpStatus.FORBIDDEN);
             } else {
-                if (newFileP.FileNumberOfPage > userPaperBalance)
+                if (newFileP.FileNumberOfPage * newFileP.CopyNum > userPaperBalance)
                     throw new HttpException("Not enough page!", HttpStatus.FORBIDDEN);
             }
             //
@@ -175,8 +175,9 @@ export class PrintingSetupController {
                 };
             }
             let newUserPaperBalance = user_fileP.TwoSide
-                ? req.user["PaperBalance"] - Math.floor(user_fileP.FileNumberOfPage / 2)
-                : req.user["PaperBalance"] - user_fileP.FileNumberOfPage;
+                ? req.user["PaperBalance"] -
+                  Math.floor(user_fileP.FileNumberOfPage / 2) * user_fileP.CopyNum
+                : req.user["PaperBalance"] - user_fileP.FileNumberOfPage * user_fileP.CopyNum;
             await this.userService.updateUserPaperBalance(req.user["BKNetID"], newUserPaperBalance);
 
             //TODO: add fileP to chosen printer queue
