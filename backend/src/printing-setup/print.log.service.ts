@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { time } from "console";
 import { Model } from "mongoose";
 import { PrintLogDocument } from "src/schemas/Log.schema";
+import { PrinterService } from "./printer.service";
 
 @Injectable({})
 export class PrintLogService {
@@ -31,5 +31,16 @@ export class PrintLogService {
             numPrintedPage: _numPrintedPge,
         });
         return newPrLog.save();
+    }
+    async get_log(_id: string) {
+        let ret = await this.model.find({ Owner: _id });
+        let userLogList = [];
+        for (let index = 0; index < ret.length; index++) {
+            userLogList.push(ret[index].toObject());
+        }
+        for (let index = 0; index < userLogList.length; index++) {
+            delete userLogList[index]["_id"];
+        }
+        return userLogList;
     }
 }

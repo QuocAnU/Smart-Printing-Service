@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import { FilePService } from "./file.service";
 import { PrinterService } from "./printer.service";
 
 @Injectable()

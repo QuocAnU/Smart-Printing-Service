@@ -4,8 +4,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { PrinterLocationDto } from "src/Account/DTO/printer.dto";
 import { FilePService } from "./file.service";
-import * as fs from "file-system";
-import * as ftp from "basic-ftp";
+
 import { PrintLogService } from "./print.log.service";
 
 @Injectable()

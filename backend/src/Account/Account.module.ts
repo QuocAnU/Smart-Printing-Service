@@ -6,7 +6,6 @@ import { UserSchema } from "src/schemas/user.schema";
 import { UserService } from "./user.service";
 import { JwtStrategy } from "./strategy";
 import { JwtModule } from "@nestjs/jwt";
-import { ValidationPipe } from "./DTO/validation.pipe";
 
 @Module({
     imports: [

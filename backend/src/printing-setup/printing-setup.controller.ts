@@ -29,6 +29,7 @@ import { userInfo } from "os";
 import mongoose, { Mongoose } from "mongoose";
 import { PrinterSchedulerService } from "./printerScheduler.service";
 import { Http2ServerResponse } from "http2";
+import { PrintLogService } from "./print.log.service";
 
 @Controller("printing-setup")
 export class PrintingSetupController {
@@ -40,6 +41,7 @@ export class PrintingSetupController {
         private printerService: PrinterService,
         private userService: UserService,
         private printerScheService: PrinterSchedulerService,
+        private printLogService: PrintLogService,
     ) {
         this.fileService.deleteAllFileP().then(() => {
             console.log("Deleted all file");
@@ -124,7 +126,6 @@ export class PrintingSetupController {
         dto: PrintConfigDto,
     ) {
         try {
-            
             console.log("Received request:", req.body);
             console.log("Received data:", dto);
             let file_name = await this.cacheManager.get(req.user["BKNetID"]);
@@ -144,16 +145,10 @@ export class PrintingSetupController {
             }
             //
             let post_file = await this.fileService.saveFileP(newFileP);
-            let newUserPaperBalance = dto.IsTwoSide
-                ? req.user["PaperBalance"] - Math.floor(newFileP.FileNumberOfPage / 2)
-                : req.user["PaperBalance"] - newFileP.FileNumberOfPage;
-            let ownerInfor = await this.userService.updateUserPaperBalance(
-                req.user["BKNetID"],
-                newUserPaperBalance,
-            );
+
             let rtPostFileInfor = post_file.toObject({ versionKey: true, virtuals: false });
             delete rtPostFileInfor["Owner"]["hashString"];
-            return rtPostFileInfor
+            return rtPostFileInfor;
         } catch (error) {
             throw error;
         }
@@ -164,7 +159,6 @@ export class PrintingSetupController {
     async setPrinter(
         @Req()
         req: Request,
-        
         @Body()
         dto: PrinterLocationDto,
     ) {
@@ -178,9 +172,14 @@ export class PrintingSetupController {
                     "Can not find printer in that location",
                     HttpStatus.FORBIDDEN,
                 );
+            //update user page balance
+            const user_fileP = await this.fileService.findFilePByUser(req.user);
+            let newUserPaperBalance = user_fileP.TwoSide
+                ? req.user["PaperBalance"] - Math.floor(user_fileP.FileNumberOfPage / 2)
+                : req.user["PaperBalance"] - user_fileP.FileNumberOfPage;
+            await this.userService.updateUserPaperBalance(req.user["BKNetID"], newUserPaperBalance);
 
             //TODO: add fileP to chosen printer queue
-            const user_fileP = await this.fileService.findFilePByUser(req.user);
             this.printerService.addQueue(user_fileP, chosenPrinter);
             //TODO: chosen printer FileP do not change
             return {
@@ -218,6 +217,31 @@ export class PrintingSetupController {
         try {
             let allPrinter = await this.printerService.getAllPrinter();
             return allPrinter;
+        } catch (error) {
+            throw new HttpException(error, HttpStatus.AMBIGUOUS);
+        }
+    }
+    @Get("get-user-log")
+    @UseGuards(JwtGuard)
+    async getUserLog(@Req() req: Request) {
+        try {
+            let userLogList = await this.printLogService.get_log(req.user["_id"].toString());
+            for (let index = 0; index < userLogList.length; index++) {
+                userLogList[index]["Owner"] = req.user["BKNetID"];
+                try {
+                    let printer = await this.printerService.getPrinterByID(
+                        userLogList[index]["Printer"].toString(),
+                    );
+                    userLogList[index]["Printer"] = {
+                        model: printer["PrinterModel"],
+                        location: printer["location"],
+                        messegae: "Available",
+                    };
+                } catch (error) {
+                    userLogList[index]["Printer"] = { message: "Printer is no longer available" };
+                }
+            }
+            return userLogList;
         } catch (error) {
             throw new HttpException(error, HttpStatus.AMBIGUOUS);
         }
