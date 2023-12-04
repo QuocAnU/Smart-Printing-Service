@@ -7,12 +7,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState, useEffect } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { Modal, Button } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 // import Dropdown from 'react-bootstrap/Dropdown';
 import { useDispatch } from 'react-redux';
 import axios from 'axios'
 import { connect } from 'react-redux';
 import { logout } from '../Store/action';
+import Notifications from '../Notification/Notification';
 const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
     // const Header = ({ showHeader, setShowHeader, isLoggedIn, setIsLoggedIn }) => {
 
@@ -20,6 +22,7 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
     const logoBK = require('./../../assets/Image/logoBK.png');
 
     const [profile, setProfile] = useState(null);
+    const [showNotificationModal, setShowNotificationModal] = useState(false);
     const dispatch = useDispatch();
 
     // console.log("Tests:", isLoggedIn)
@@ -67,6 +70,18 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
     }
 
 
+
+
+
+    const handleNotificationClick = () => {
+        setShowNotificationModal(true);
+    };
+
+    const handleNotificationModalClose = () => {
+        setShowNotificationModal(false);
+    };
+
+
     return (
         <div className='header'>
             <Container>
@@ -99,8 +114,8 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
                         </Link>
                     </Col>
                     <Col xs={2} className='lg' >
-                        <Link to={isLoggedIn ? '/print' : '/login'} >
-                            <button className='styles'
+                        <Link to={isLoggedIn === false && '/login'} >
+                            <button className='styles' onClick={handleNotificationClick}
                             >Thông báo</button>
                         </Link>
                     </Col>
@@ -130,6 +145,19 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
 
                 </Row>
             </Container>
+            <Modal show={showNotificationModal} onHide={handleNotificationModalClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Notifications</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Notifications />
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleNotificationModalClose}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
 
     );
