@@ -38,7 +38,7 @@ const HomePage = ({ showHeader }) => {
                     <Row>
 
                         <div className='container slide2'>
-                            <h1 className='title'>BACH KHOA SMARTPRINTING SERVICES</h1>
+                            <h1 className='title'>BKSPS -  SMART PRINTING SERVICES</h1>
                             <Row>
                                 <Col xs={3}></Col>
                                 <Col xs={2} style={{ display: 'flex', justifyContent: 'center' }}>

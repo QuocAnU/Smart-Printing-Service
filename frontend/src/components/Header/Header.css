@@ -54,6 +54,18 @@ body {
   border: none;
 }
 
+.bell{
+  
+  
+  width: 30px;
+  height: 30px;
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+
+}
 .styles {
   background: none;
   text-decoration: none;
@@ -81,6 +93,23 @@ body {
 
 .site-title {
   font-size: 20px;
+}
+.balance {
+  margin-top: 12px;
+  width: 30px;
+  height: 30px;
+  margin-left: 10px;
+  display: inline-block;
+}
+
+.balance_text {
+  margin-top: 12px;
+  background: none;
+  text-decoration: none;
+  border: none;
+  font-size: 18px;
+  display: inline-block;
+  margin-left: 5px;
 }
 
 /* Media queries for responsiveness */
