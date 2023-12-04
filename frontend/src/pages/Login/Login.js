@@ -145,12 +145,12 @@ const Login = ({ isLoggedIn, setIsLoggedIn, hideHeader }) => {
     localStorage.setItem('isLoggedIn', true);
     // localStorage.setItem('showHeader', true);
     navigate("/");
-    console.log('Login successful');
+    // console.log('Login successful');
   };
 
   const handleLoginError = (errorMessage) => {
     // setShowHeader(false); // or leave it as it is based on your logic
-    console.log(errorMessage);
+    // console.log(errorMessage);
     setAuthErrorMessage(errorMessage); // Set the specific error message
     setAuthError(true); // Set AuthError to true to trigger the ErrorDisplay
   };
@@ -158,17 +158,17 @@ const Login = ({ isLoggedIn, setIsLoggedIn, hideHeader }) => {
   const handleSubmit = (BKNetID, password) => {
     axios.post('http://localhost:8001/acc/login', { BKNetID, password })
       .then((res) => {
-        console.log('Username:', BKNetID);
-        console.log('Password:', password);
-        console.log(res);
-        console.log(res.data.access_token);
+        // console.log('Username:', BKNetID);
+        // console.log('Password:', password);
+        // console.log(res);
+        // console.log(res.data.access_token);
         const token = res.data.access_token;
         localStorage.setItem('accessToken', token);
         handleSuccessfulLogin();
       })
       .catch(err => {
         if (err.response && err.response.status) {
-          console.log(err);
+          // console.log(err);
           handleLoginError("Incorrect Username or Password");
         }
       });

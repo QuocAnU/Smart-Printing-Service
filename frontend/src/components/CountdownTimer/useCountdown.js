@@ -13,7 +13,7 @@ const useCountdown = (targetDateInMilliseconds) => {
     initialTargetDate - new Date().getTime()
   );
 
-  console.log(storedTargetDate, initialTargetDate);
+  // console.log(storedTargetDate, initialTargetDate);
 
   // Store targetDate in sessionStorage if not already present
   useEffect(() => {
