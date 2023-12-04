@@ -696,7 +696,7 @@ function Print() {
                                 </Col>
                                 <Col>
                                     <p style={{ textAlign: 'center' }}> In hai mặt:   </p>
-                                    <p style={{ textAlign: 'center' }}> {confirm?.TwoSide === 'true' ? 'Có' : 'Không'}  </p>
+                                    <p style={{ textAlign: 'center' }}> {confirm?.TwoSide === true ? 'Có' : 'Không'}  </p>
                                 </Col>
                                 <Col>
                                     <p style={{ textAlign: 'center' }}>Số trang in:  </p>
