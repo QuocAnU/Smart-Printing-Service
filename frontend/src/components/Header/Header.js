@@ -110,21 +110,24 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
                         </Link>
                     </Col>
                     <Col xs={2} className='lg' >
-                        <Link to={isLoggedIn === false && '/login'} >
+                        {profile? (<Link to={isLoggedIn === false && '/login'} >
                             <button className='styles' onClick={handleNotificationClick}
                             ><img src={bell} className = 'bell' alt='Thông Báo'/></button>
-                        </Link>
+                        </Link>): (undefined)
+                        }
+                        
                     </Col>
                     <Col xs={2} className='lg' >
-                        
-                        <div style={{ display: 'flex' }}>
+                        {profile? (<div style={{ display: 'flex' }}>
                                         <img src={paper} className = 'balance' alt=''/>
                                         <p className='balance_text'>{profile.PaperBalance}</p>
                                         <Link to={isLoggedIn ? '/' : '/login'} >
                                             <button className='styles'>
                                         <img src={plus} className = 'balance' alt=''/></button>
                                         </Link>
-                        </div>
+                        </div>):(undefined)
+                        }
+                        
                         
                     </Col>
                     <Col xs={2} className='lg'>
