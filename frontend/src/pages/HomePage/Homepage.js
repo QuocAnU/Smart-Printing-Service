@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/Col'
 import { useNavigate } from 'react-router-dom';
 // import CountdownTimer from '../../components/CountdownTimer/CountdownTimer'
 import './Homepage.css'
+import Header from "../../components/Header/Header";
 const HomePage = ({ showHeader }) => {
     const slide1 = require('./../../assets/Image/slide1.png')
     const build = require('./../../assets/Image/building.png')

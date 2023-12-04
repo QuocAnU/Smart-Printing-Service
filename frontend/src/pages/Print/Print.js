@@ -310,6 +310,7 @@ function Print() {
     };
     const handleCloseSuccessModal2 = () => {
         setShowSuccessModal2(false);
+        navigate.navigate("/")
 
     };
     return (
