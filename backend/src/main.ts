@@ -15,6 +15,7 @@ async function bootstrap() {
       'http://localhost:3000',
       'http://localhost:3000/prepare',
       'http://localhost:3000/listprinter',
+      'http://localhost:3000/admin'
     ], 
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,

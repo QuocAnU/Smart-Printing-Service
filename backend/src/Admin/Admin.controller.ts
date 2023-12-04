@@ -35,8 +35,9 @@ import { Http2ServerResponse } from "http2";
 
 export class AdminController {
   constructor(private adminService: AdminService) {}
-  @Post('getlog')
-  async get_log_from_user(@Req() req){
+  @Get('getlog')
+  async get_log_from_user(@Req() req, @Body() username){
+    console.log(req.body)
     return this.adminService.get_log(req.body.username)
 
   }

@@ -4,7 +4,7 @@ import { ConfigModule } from "@nestjs/config";
 import { MongooseModule } from "@nestjs/mongoose";
 import { UserModule } from "./user/user.module";
 import { PrintingSetupModule } from "./printing-setup/printing-setup.module";
-
+import { AdminModule } from "./Admin/Admin.module";
 @Module({
   imports: [
     AccountModule,
@@ -16,6 +16,7 @@ import { PrintingSetupModule } from "./printing-setup/printing-setup.module";
       "mongodb+srv://duy:vlUd1zZUl3TwK922@cluster0.zqrgg5g.mongodb.net/?retryWrites=true&w=majority",
     ),
     PrintingSetupModule,
+    AdminModule
   ],
 })
 export class AppModule {}
