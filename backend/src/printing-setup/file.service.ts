@@ -39,6 +39,9 @@ export class FilePService {
     async findFilePById(id) {
         return this.filePModel.findById(id);
     }
+    async findFileByName(_name) {
+        return this.filePModel.findOne({ name: _name });
+    }
     async transferFileToPdf(filename: string, username: string): Promise<String> {
         //config api
         try {

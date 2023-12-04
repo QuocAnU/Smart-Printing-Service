@@ -50,7 +50,6 @@ export class UserService {
         return this.userModel.findOne({ _id: id });
     }
     public async updateUserPaperBalance(userBKNetID, newPaperBalance) {
-        console.log(userBKNetID + ":" + newPaperBalance);
         let newUser = await this.userModel.findOneAndUpdate(
             { BKNetID: userBKNetID },
             { PaperBalance: newPaperBalance },
