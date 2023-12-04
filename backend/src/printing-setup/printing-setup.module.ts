@@ -10,6 +10,7 @@ import { AccountModule } from "src/Account/Account.module";
 import { PrinterSchedulerService } from "./printerScheduler.service";
 import { PrintLogSchema } from "src/schemas/Log.schema";
 import { PrintLogService } from "./print.log.service";
+import { AdminModule } from "src/Admin/Admin.module";
 
 @Module({
     imports: [
@@ -36,5 +37,6 @@ import { PrintLogService } from "./print.log.service";
     ],
     controllers: [PrintingSetupController],
     providers: [FilePService, PrinterService, PrinterSchedulerService, PrintLogService],
+    exports: [PrintLogService],
 })
 export class PrintingSetupModule {}
