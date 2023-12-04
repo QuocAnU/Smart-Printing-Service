@@ -15,7 +15,7 @@ import SearchBox from "../../components/Search/Search";
 
 function Print() {
     
-    const targetDate = Date.now() + 0.1 * 60 * 1000;
+    const targetDate = Date.now() + 0.2 * 60 * 1000;
     
     const [selectedFile, setSelectedFile] = useState(null);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
