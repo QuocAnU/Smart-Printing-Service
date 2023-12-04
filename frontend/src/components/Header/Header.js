@@ -52,6 +52,7 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
         setProfile(null);
         setIsLoggedIn(false);
         localStorage.setItem('isLoggedIn', false);
+        localStorage.setItem('accessToken', '');
 
         // When user logged out the system, clear countdownTargetDate stored in the session
         if (sessionStorage.getItem('countdownTargetDate')) {
@@ -79,26 +80,26 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
                     </Col>
                     <Col sx={2} sm={1}></Col>
                     <Col sx={2} className='lg' >
-                        <Link to='/print'  >
+                        <Link to={isLoggedIn ? '/print' : '/login'}  >
                             <button className='print'>
                                 Thực hiện in
                             </button>
                         </Link>
                     </Col>
                     <Col xs={2} className='lg' >
-                        <Link to='/buy'  >
+                        <Link to={isLoggedIn ? '/print' : '/login'} >
                             <button className='styles'
                             >Mua thêm giấy</button>
                         </Link>
                     </Col>
                     <Col xs={2} className='lg' >
-                        <Link to='/history'  >
+                        <Link to={isLoggedIn ? '/print' : '/login'} >
                             <button className='styles'
                             >Xem lịch sử</button>
                         </Link>
                     </Col>
                     <Col xs={2} className='lg' >
-                        <Link to='/'  >
+                        <Link to={isLoggedIn ? '/print' : '/login'} >
                             <button className='styles'
                             >Thông báo</button>
                         </Link>
