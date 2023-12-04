@@ -32,6 +32,10 @@ function History() {
                 })
                 .catch((error) => {
                     // console.error('Error fetching user profile:', error);
+                    if (error.response.status === 401){
+                        localStorage.setItem('isLoggedIn', false);
+                        localStorage.setItem('accessToken', '');
+                    }
                 });
         }
 

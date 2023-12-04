@@ -135,7 +135,10 @@ const Login = ({ isLoggedIn, setIsLoggedIn, hideHeader }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    hideHeader(); // Gọi hideHeader trong useEffect để đảm bảo rằng trạng thái đã được cập nhật
+    if (localStorage.getItem('isLoggedIn') && localStorage.getItem('accessToken')!==''){
+      navigate("/")
+    }
+    else hideHeader(); // Gọi hideHeader trong useEffect để đảm bảo rằng trạng thái đã được cập nhật
   }, [hideHeader]);
 
   const handleSuccessfulLogin = () => {
@@ -161,7 +164,7 @@ const Login = ({ isLoggedIn, setIsLoggedIn, hideHeader }) => {
         // console.log('Username:', BKNetID);
         // console.log('Password:', password);
         // console.log(res);
-        // console.log(res.data.access_token);
+        //console.log(res.data.access_token);
         const token = res.data.access_token;
         localStorage.setItem('accessToken', token);
         handleSuccessfulLogin();

@@ -46,6 +46,12 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
                     })
                     .catch((error) => {
                         // console.error('Error fetching user profile:', error);
+                        if (error.response.status === 401){
+                            setIsLoggedIn(false);
+                            localStorage.setItem('isLoggedIn', false);
+                            localStorage.setItem('accessToken', '');
+                            navigate("/login")
+                        }
                     });
             }
         }
@@ -99,18 +105,21 @@ const Header = ({ showHeader, isLoggedIn, setIsLoggedIn }) => {
                     </Col>
                     <Col sx={2} sm={1}></Col>
                     <Col sx={2} className='lg' >
-                        <Link to={isLoggedIn ? '/print' : '/login'}  >
+                        
+                        {profile ? (<Link to={isLoggedIn ? '/print' : '/login'}  >
                             <button className='print'>
                                 Thực hiện in
                             </button>
-                        </Link>
+                        </Link>) : (undefined)
+                        }
                     </Col>
 
                     <Col xs={2} className='lg' >
-                        <Link to={isLoggedIn ? '/history' : '/login'} >
+                        {profile ? (<Link to={isLoggedIn ? '/history' : '/login'} >
                             <button className='styles'
                             >Xem lịch sử</button>
-                        </Link>
+                        </Link>) : (undefined)
+                        }
                     </Col>
                     <Col xs={2} className='lg' >
                         {profile ? (<Link to={isLoggedIn === false && '/login'} >

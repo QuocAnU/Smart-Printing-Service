@@ -5,7 +5,7 @@ import './Print.css';
 import { Container, Row, Col, Form, Modal } from 'react-bootstrap';
 import Buttons from 'react-bootstrap/Button';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 
 
 import CountDownTimer from '../../components/CountdownTimer/CountdownTimer';
@@ -28,6 +28,7 @@ function Print() {
     const [errorMessage, setErrorMessage] = useState('');
     const [activeTab, setActiveTab] = useState('upload');
     const setDefaultCount = "All"
+    const navigate = useNavigate()
     const [printConfig, setPrintConfig] = useState({
         pageSize: 4,
         duplex: 1,
@@ -144,6 +145,7 @@ function Print() {
 
                     // console.log('Response from API:', responseApi.data);
                     setShowSuccessModal2(true);
+                    //navigate("/")
                 }
             }
         } catch (error) {
@@ -293,6 +295,7 @@ function Print() {
             setActiveTab('upload');
         }
         setErrorStatusPrinter(false);
+
     };
 
     const handleCloseModalUpload = () => {
@@ -307,6 +310,7 @@ function Print() {
     };
     const handleCloseSuccessModal2 = () => {
         setShowSuccessModal2(false);
+        navigate.navigate("/")
 
     };
     return (
@@ -696,7 +700,7 @@ function Print() {
                                 </Col>
                                 <Col>
                                     <p style={{ textAlign: 'center' }}> In hai mặt:   </p>
-                                    <p style={{ textAlign: 'center' }}> {confirm?.TwoSide === 'true' ? 'Có' : 'Không'}  </p>
+                                    <p style={{ textAlign: 'center' }}> {confirm?.TwoSide === true ? 'Có' : 'Không'}  </p>
                                 </Col>
                                 <Col>
                                     <p style={{ textAlign: 'center' }}>Số trang in:  </p>
