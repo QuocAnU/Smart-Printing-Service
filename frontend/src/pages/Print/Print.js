@@ -15,7 +15,7 @@ import SearchBox from "../../components/Search/Search";
 
 function Print() {
     
-    const targetDate = Date.now() + 15 * 60 * 1000;
+    const targetDate = Date.now() + 0.2 * 60 * 1000;
     
     const [selectedFile, setSelectedFile] = useState(null);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -165,9 +165,14 @@ function Print() {
                     }
                 );
 
-
+                
 
                 console.log('Response from API:', responseApi.data);
+                
+                // If file is uploaded successfully, reset countdown timer
+                if (sessionStorage.getItem('countdownTargetDate')) {
+                    sessionStorage.removeItem('countdownTargetDate');
+                }
                 setShowSuccessModal(true);
             }
         } catch (error) {
