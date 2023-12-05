@@ -181,8 +181,11 @@ export class PrintingSetupController {
             await this.userService.updateUserPaperBalance(req.user["BKNetID"], newUserPaperBalance);
 
             //TODO: add fileP to chosen printer queue
-
-            await this.printerService.addQueue(user_fileP, chosenPrinter);
+            try {
+                await this.printerService.addQueue(user_fileP, chosenPrinter);
+            } catch (err) {
+                throw new HttpException("Printer error", HttpStatus.SERVICE_UNAVAILABLE);
+            }
             //TODO: chosen printer FileP do not change
             return {
                 message: `${user_fileP.name} was sent to ${chosenPrinter.Brand} ${chosenPrinter.PrinterModel}.`,

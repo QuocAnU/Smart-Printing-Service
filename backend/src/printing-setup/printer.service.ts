@@ -52,7 +52,8 @@ export class PrinterService {
         }
     }
     async addQueue(file, printer: PrinterDocument) {
-        return printer.AddToQueue(file);
+        await printer.AddToQueue(file);
+        return printer.save();
     }
     async getLength(printer: PrinterDocument) {
         return printer.GetQueueLength();

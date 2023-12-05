@@ -16,25 +16,21 @@ export class PrinterSchedulerService {
     }
 
     async startPrintForPrinter(printerID: string) {
-        setInterval(async () => {
+        await setInterval(async () => {
             const printerDoc = await this.printerService.getPrinterByID(printerID);
             try {
                 let rs = await this.printerService.printInPrinterDoc(printerDoc);
             } catch (error) {
                 console.log(error.message);
             }
-        }, 8000);
+        }, 10000);
     }
     async startAllPrinter() {
         let printerDocList = await this.printerService.getAllPrinter();
         for (let index = 0; index < printerDocList.length; index++) {
-            await new Promise<void>((resolve, reject) => {
-                setTimeout(() => {
-                    console.log(printerDocList[index]);
-                    this.startPrintForPrinter(printerDocList[index]["_id"].toString());
-                    resolve();
-                }, 8000);
-            });
+            console.log(printerDocList[index]);
+            await this.startPrintForPrinter(printerDocList[index]["_id"].toString());
         }
+        return;
     }
 }
